@@ -16,6 +16,9 @@ class Page(HTMLParser):
         self.canonicals = []
         self.alternates = {}
         self.h1 = 0
+        self.title = ''
+        self.in_title = False
+        self.description = ''
         self.json_script = False
         self.schema = ''
 
@@ -25,6 +28,8 @@ class Page(HTMLParser):
             assert a['id'] not in self.ids, ('duplicate id', a['id'])
             self.ids.add(a['id'])
         if tag == 'h1': self.h1 += 1
+        if tag == 'title': self.in_title = True
+        if tag == 'meta' and a.get('name') == 'description': self.description = a.get('content', '')
         if tag == 'a' and 'href' in a: self.links.append(a['href'])
         if tag == 'link' and a.get('rel') == 'canonical': self.canonicals.append(a['href'])
         if tag == 'link' and a.get('rel') == 'alternate':
@@ -35,23 +40,34 @@ class Page(HTMLParser):
             self.schema = ''
 
     def handle_data(self, data):
+        if self.in_title: self.title += data
         if self.json_script: self.schema += data
 
     def handle_endtag(self, tag):
+        if tag == 'title': self.in_title = False
         if tag == 'script' and self.json_script:
             json.loads(self.schema)
             self.json_script = False
 
 pages = list(root.rglob('*.html'))
+titles = set()
 for file in pages:
     p = Page(); p.feed(file.read_text())
     assert p.h1 == 1, (file, 'expected one h1')
+    assert p.title.strip(), (file, 'missing title')
+    if file.name == 'index.html':
+        assert p.description.strip(), (file, 'missing description')
+    assert p.title not in titles, (file, 'duplicate title')
+    titles.add(p.title)
     for href in p.links:
         url = urlsplit(href)
         if url.scheme or url.netloc or not url.path: continue
         target = root / url.path.lstrip('/') if url.path.startswith('/') else file.parent / url.path
         if target.is_dir(): target /= 'index.html'
         assert target.exists(), (file, 'broken link', href)
+        if url.fragment and target.suffix == '.html':
+            linked = Page(); linked.feed(target.read_text())
+            assert url.fragment in linked.ids, (file, 'broken fragment', href)
     if file.name == 'index.html':
         route = file.parent.relative_to(root).as_posix()
         expected = base + '/' + (route + '/' if route != '.' else '')

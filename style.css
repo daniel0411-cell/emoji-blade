@@ -1192,19 +1192,25 @@ input[type="range"] {
   color: var(--accent-cyan);
 }
 
-.prose-card p, .prose-card ul {
+.prose-card p, .prose-card ul, .prose-card ol {
   font-size: 15px;
   color: var(--text-muted);
   line-height: 1.8;
   margin-bottom: 16px;
 }
 
-.prose-card ul {
+.prose-card ul, .prose-card ol {
   padding-left: 24px;
 }
 
 .prose-card a {
   color: var(--accent-cyan);
+}
+
+.prose-card a.primary-glow-btn {
+  display: inline-block;
+  color: #040810;
+  text-decoration: none;
 }
 
 /* Footer */
@@ -1339,6 +1345,9 @@ button:disabled, input:disabled, select:disabled {
 }
 
 @media (max-width: 480px) {
+  .prose-container { margin: 24px auto; padding: 0 12px; }
+  .prose-card { padding: 24px 20px; }
+  .prose-card h1 { font-size: 28px; overflow-wrap: anywhere; }
   .arena-canvas-container {
     height: 380px;
   }

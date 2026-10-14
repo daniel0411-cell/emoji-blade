@@ -92,4 +92,13 @@ for (const [slug, emoji] of Object.entries({ fire: '🔥', bomb: '💣', lightni
   const printed = [...html.matchAll(/<strong>(\d+) \/ 100<\/strong>/g)].map(m => Number(m[1]));
   assert.deepEqual(printed, [stats.mass, stats.attack, stats.speed, stats.endurance], `${slug} content must match engine`);
 }
-console.log('PASS: blocked/corrupt storage, emoji graphemes, countdown cleanup, refresh-rate physics, separating collisions, character stats');
+// These published FAQ numbers must be revised if the underlying presets change.
+const faq = fs.readFileSync(path.join(__dirname, '..', 'faq', 'index.html'), 'utf8');
+assert.equal(computeEmojiStats('🗿').mass, 100);
+assert.equal(computeEmojiStats('👹').mass, 110);
+const boss = new EmojiTop(false);
+boss.configure('👹', 'blaze', true);
+assert.equal(boss.stats.mass, 149);
+assert.ok(faq.includes('raises that to 149'));
+assert.ok(faq.includes('28% random chance'));
+console.log('PASS: blocked/corrupt storage, emoji graphemes, countdown cleanup, refresh-rate physics, separating collisions, character stats, FAQ mass values');
