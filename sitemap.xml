@@ -1,21 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!-- Core Home & Multilingual -->
   <url>
     <loc>https://emojiblade.online/</loc>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://emojiblade.online/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://emojiblade.online/"/>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://emojiblade.online/?lang=zh-Hans"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://emojiblade.online/?lang=ja"/>
-    <xhtml:link rel="alternate" hreflang="ko" href="https://emojiblade.online/?lang=ko"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://emojiblade.online/?lang=es"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://emojiblade.online/zh-hans/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://emojiblade.online/ja/"/>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://emojiblade.online/zh-hans/</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://emojiblade.online/ja/</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Key SEO Subpages -->
+  <url>
+    <loc>https://emojiblade.online/tier-list/</loc>
     <lastmod>2026-10-14</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://emojiblade.online/guide/</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://emojiblade.online/characters/</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
   </url>
   <url>
     <loc>https://emojiblade.online/unblocked/</loc>
     <lastmod>2026-10-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Programmatic SEO Character Cards -->
+  <url>
+    <loc>https://emojiblade.online/characters/fire/</loc>
+    <lastmod>2026-10-14</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://emojiblade.online/characters/bomb/</loc>
+    <lastmod>2026-10-14</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://emojiblade.online/characters/lightning/</loc>
+    <lastmod>2026-10-14</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://emojiblade.online/characters/diamond/</loc>
+    <lastmod>2026-10-14</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://emojiblade.online/characters/moai/</loc>
+    <lastmod>2026-10-14</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://emojiblade.online/characters/rocket/</loc>
+    <lastmod>2026-10-14</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://emojiblade.online/characters/skull/</loc>
+    <lastmod>2026-10-14</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://emojiblade.online/characters/clown/</loc>
+    <lastmod>2026-10-14</lastmod>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Compliance & Support -->
+  <url>
+    <loc>https://emojiblade.online/about/</loc>
+    <lastmod>2026-10-14</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://emojiblade.online/contact/</loc>
+    <lastmod>2026-10-14</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://emojiblade.online/privacy/</loc>
+    <lastmod>2026-10-14</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://emojiblade.online/terms/</loc>
+    <lastmod>2026-10-14</lastmod>
+    <priority>0.5</priority>
   </url>
 </urlset>
