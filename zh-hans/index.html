@@ -2,22 +2,22 @@
 <html lang="zh-Hans">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Emoji Blade 表情包陀螺对战 - 免费网页在线玩 (免下载)</title>
   <meta name="description" content="免费在线玩 Emoji Blade 表情包陀螺对战！将你最爱的 Emoji 表情变成战斗陀螺。火焰、炸弹、火箭与钻石在物理竞技场激烈碰撞。无需下载，即点即玩。">
   <meta name="keywords" content="emoji blade, emoji battle game, emoji spinning top, beyblade emoji, online browser game, free physics game, unblocked games">
   
-  <link rel="canonical" href="https://emojiblade.online/">
+  <link rel="canonical" href="https://emojiblade.online/zh-hans/">
+
   <link rel="alternate" hreflang="x-default" href="https://emojiblade.online/">
-  <link rel="alternate" hreflang="zh-Hans" href="https://emojiblade.online/">
+  <link rel="alternate" hreflang="en" href="https://emojiblade.online/">
   <link rel="alternate" hreflang="zh-Hans" href="https://emojiblade.online/zh-hans/">
   <link rel="alternate" hreflang="ja" href="https://emojiblade.online/ja/">
-
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Emoji Blade Online - Free Emoji Spinning Top Battle Game">
-  <meta property="og:description" content="Turn emojis into spinning battle tops! Pull back, release, and clash in an intense physics arena. Free in your browser.">
-  <meta property="og:url" content="https://emojiblade.online/">
+  <meta property="og:title" content="Emoji Blade 表情包陀螺对战 - 免费网页在线玩 (免下载)">
+  <meta property="og:description" content="免费在线玩 Emoji Blade 表情包陀螺对战！将你最爱的 Emoji 表情变成战斗陀螺。火焰、炸弹、火箭与钻石在物理竞技场激烈碰撞。无需下载，即点即玩。">
+  <meta property="og:url" content="https://emojiblade.online/zh-hans/">
   <meta property="og:site_name" content="Emoji Blade">
   <meta name="twitter:card" content="summary_large_image">
 
@@ -29,34 +29,44 @@
   <link rel="stylesheet" href="/style.css">
 
   <!-- Schema.org Structured Data -->
-  <script type="application/ld+json">
-  [
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Emoji Blade Online",
-      "url": "https://emojiblade.online"
+  <script type="application/ld+json">[
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Emoji Blade Online",
+    "url": "https://emojiblade.online"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": [
+      "VideoGame",
+      "WebApplication"
+    ],
+    "name": "Emoji Blade",
+    "url": "https://emojiblade.online/zh-hans/",
+    "description": "免费在线玩 Emoji Blade 表情包陀螺对战！将你最爱的 Emoji 表情变成战斗陀螺。火焰、炸弹、火箭与钻石在物理竞技场激烈碰撞。无需下载，即点即玩。",
+    "applicationCategory": "GameApplication",
+    "operatingSystem": "Web browser",
+    "playMode": [
+      "SinglePlayer",
+      "MultiPlayer"
+    ],
+    "isAccessibleForFree": true,
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
     },
-    {
-      "@context": "https://schema.org",
-      "@type": ["VideoGame", "WebApplication"],
-      "name": "Emoji Blade",
-      "url": "https://emojiblade.online",
-      "description": "A browser physics action game where players transform emojis into custom spinning tops to battle in a high-speed collision ring.",
-      "applicationCategory": "GameApplication",
-      "operatingSystem": "Web browser",
-      "playMode": "SinglePlayer, MultiPlayer",
-      "isAccessibleForFree": true,
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      }
-    }
-  ]
-  </script>
+    "inLanguage": "zh-Hans"
+  }
+]</script>
+<meta property="og:image" content="https://emojiblade.online/social-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://emojiblade.online/social-card.png">
 </head>
 <body>
+  <h1 class="visually-hidden">Emoji Blade - 表情陀螺对战</h1>
 
   <!-- Background Ambience -->
   <div class="bg-glow-orb orb-1"></div>
@@ -85,13 +95,13 @@
       <div class="header-actions">
         <!-- Multilingual Static Links -->
         <div class="lang-switch-links">
-          <a href="/" class="active">EN</a>
-          <a href="/zh-hans/">中文</a>
+          <a href="/">EN</a>
+          <a href="/zh-hans/" class="active">中文</a>
           <a href="/ja/">日本語</a>
         </div>
 
-        <button id="fullscreen-btn" class="icon-pill-btn" title="Toggle Fullscreen">⛶</button>
-        <button id="sound-toggle-btn" class="icon-pill-btn" title="Toggle Sound">
+        <button id="fullscreen-btn" class="icon-pill-btn" aria-label="Toggle fullscreen" title="Toggle Fullscreen">⛶</button>
+        <button id="sound-toggle-btn" class="icon-pill-btn" aria-label="Toggle sound" title="Toggle Sound">
           <span id="sound-icon">🔊</span>
         </button>
       </div>
@@ -111,12 +121,12 @@
           </div>
 
           <div class="stage-badge">
-            <span>STAGE</span>
+            <span>关卡</span>
             <strong id="stage-num">01</strong>
           </div>
 
           <div class="arena-status-msg" id="arena-status">
-            Drag player top or set angle & launch!
+            拖动陀螺，或设置角度后发射！
           </div>
         </div>
 
@@ -131,13 +141,13 @@
             <!-- HUD Overlays -->
             <div class="hud-player-stats hud-left">
               <div class="hud-header">
-                <span class="hud-tag blue">YOU</span>
+                <span class="hud-tag blue">玩家</span>
                 <span class="hud-tier" id="player-tier">A-TIER</span>
               </div>
               <div class="hud-emoji-preview" id="hud-player-emoji">🔥</div>
               <div class="hud-bars">
                 <div class="bar-label">
-                  <span>Spin Energy</span>
+                  <span>旋转能量</span>
                   <span id="player-energy-val">100%</span>
                 </div>
                 <div class="progress-track">
@@ -151,12 +161,12 @@
             <div class="hud-player-stats hud-right">
               <div class="hud-header">
                 <span class="hud-tier" id="enemy-tier">S-TIER</span>
-                <span class="hud-tag red">RIVAL</span>
+                <span class="hud-tag red">对手</span>
               </div>
               <div class="hud-emoji-preview" id="hud-enemy-emoji">💎</div>
               <div class="hud-bars">
                 <div class="bar-label">
-                  <span>Spin Energy</span>
+                  <span>旋转能量</span>
                   <span id="enemy-energy-val">100%</span>
                 </div>
                 <div class="progress-track">
@@ -166,7 +176,7 @@
             </div>
 
             <div class="launch-aim-guide" id="launch-aim-guide">
-              <span class="guide-text">👈 Drag & Pull back on Arena to launch</span>
+              <span class="guide-text">👈 在场内拖动并向后拉动以发射</span>
             </div>
 
             <!-- Battle Victory / Defeat Modal -->
@@ -177,11 +187,11 @@
                 
                 <div class="result-stats-grid">
                   <div class="res-stat-item">
-                    <span class="res-label">Total Hits</span>
+                    <span class="res-label">碰撞次数</span>
                     <strong id="res-hit-count">14</strong>
                   </div>
                   <div class="res-stat-item">
-                    <span class="res-label">Battle Time</span>
+                    <span class="res-label">对战时间</span>
                     <strong id="res-time-val">8.4s</strong>
                   </div>
                   <div class="res-stat-item">
@@ -192,7 +202,7 @@
 
                 <div class="modal-btn-row">
                   <button id="next-battle-btn" class="primary-glow-btn">Next Stage ⚡</button>
-                  <button id="share-card-btn" class="secondary-btn">📸 Share Card</button>
+                  <button id="share-card-btn" class="secondary-btn">📸 分享 Card</button>
                 </div>
               </div>
             </div>
@@ -206,24 +216,24 @@
             <div class="card-title-row">
               <span class="card-icon">⚡</span>
               <h3>配置你的 Emoji 陀螺</h3>
-              <button id="random-player-btn" class="tiny-ghost-btn" title="Random Emoji">🎲 Random</button>
+              <button id="random-player-btn" class="tiny-ghost-btn" title="Random Emoji">🎲 随机</button>
             </div>
 
             <div class="emoji-input-wrapper">
-              <input type="text" id="player-emoji-input" value="🔥" maxlength="4" autocomplete="off" spellcheck="false" aria-label="Input your emoji">
+              <input type="text" id="player-emoji-input" value="🔥" maxlength="128" autocomplete="off" spellcheck="false" aria-label="Input your emoji">
               <div class="blade-style-select">
                 <select id="blade-style-select" aria-label="Blade Blade Ring Style">
-                  <option value="blaze">Inferno Blade Ring</option>
-                  <option value="cyber">Cyber Neon Ring</option>
-                  <option value="gold">Golden Emperor Ring</option>
-                  <option value="obsidian">Dark Void Ring</option>
+                  <option value="blaze">烈焰外观</option>
+                  <option value="cyber">霓虹外观</option>
+                  <option value="gold">黄金外观</option>
+                  <option value="obsidian">暗黑外观</option>
                 </select>
               </div>
             </div>
 
             <!-- Quick Picker Emojis -->
             <div class="quick-picker-group">
-              <span class="picker-label">Quick Picks (Click to equip):</span>
+              <span class="picker-label">快捷选择（点击装备）：</span>
               <div class="quick-emojis" id="quick-emojis-container">
                 <button class="emoji-chip active" data-emoji="🔥">🔥</button>
                 <button class="emoji-chip" data-emoji="💣">💣</button>
@@ -244,7 +254,7 @@
             <div class="stats-preview-grid">
               <div class="stat-cell">
                 <div class="stat-info">
-                  <span class="s-name">Weight (Mass)</span>
+                  <span class="s-name">重量</span>
                   <strong id="stat-weight-val">74</strong>
                 </div>
                 <div class="stat-meter"><div class="stat-fill" id="meter-weight" style="width: 74%"></div></div>
@@ -252,7 +262,7 @@
 
               <div class="stat-cell">
                 <div class="stat-info">
-                  <span class="s-name">Attack (Clash)</span>
+                  <span class="s-name">攻击</span>
                   <strong id="stat-attack-val">95</strong>
                 </div>
                 <div class="stat-meter"><div class="stat-fill" id="meter-attack" style="width: 95%"></div></div>
@@ -260,7 +270,7 @@
 
               <div class="stat-cell">
                 <div class="stat-info">
-                  <span class="s-name">Speed (RPM)</span>
+                  <span class="s-name">速度</span>
                   <strong id="stat-speed-val">88</strong>
                 </div>
                 <div class="stat-meter"><div class="stat-fill" id="meter-speed" style="width: 88%"></div></div>
@@ -268,7 +278,7 @@
 
               <div class="stat-cell">
                 <div class="stat-info">
-                  <span class="s-name">Endurance (Spin)</span>
+                  <span class="s-name">耐力</span>
                   <strong id="stat-endurance-val">68</strong>
                 </div>
                 <div class="stat-meter"><div class="stat-fill" id="meter-endurance" style="width: 68%"></div></div>
@@ -277,7 +287,7 @@
 
             <!-- Trophies Shelf -->
             <div class="trophies-container">
-              <span class="trophy-title">🏆 Unlocked Champion Emojis:</span>
+              <span class="trophy-title">🏆 已解锁徽章：</span>
               <div class="trophies-shelf" id="trophies-shelf">
                 <span class="trophy-item">🔥</span>
               </div>
@@ -290,37 +300,37 @@
               <span class="card-icon">🎯</span>
               <h3>发射装置与对手</h3>
               <div class="mode-toggles">
-                <button id="mode-single-btn" class="pill-tab active">Streak AI</button>
-                <button id="mode-2p-btn" class="pill-tab">2P Local Duel</button>
+                <button id="mode-single-btn" class="pill-tab active">单人连胜</button>
+                <button id="mode-2p-btn" class="pill-tab">本地双人</button>
               </div>
             </div>
 
             <div class="rival-selector-row">
-              <label for="rival-mode-select">Opponent:</label>
+              <label for="rival-mode-select">对手：</label>
               <select id="rival-mode-select">
-                <option value="progression">Ascending Bosses (Stage Mode)</option>
-                <option value="random">Random Challenger</option>
-                <option value="custom">Custom Challenger</option>
+                <option value="progression">关卡挑战</option>
+                <option value="random">随机对手</option>
+                <option value="custom">自定义对手</option>
               </select>
-              <input type="text" id="custom-enemy-input" value="💎" maxlength="4" style="display:none;" title="Custom rival emoji">
+              <input type="text" id="custom-enemy-input" value="💎" maxlength="128" style="display:none;" title="Custom rival emoji">
             </div>
 
             <!-- Sliders for Launch -->
             <div class="launch-sliders">
               <div class="slider-group">
                 <div class="slider-label">
-                  <span>Launch Power:</span>
+                  <span>发射力度：</span>
                   <strong id="power-display">85%</strong>
                 </div>
-                <input type="range" id="power-slider" min="30" max="100" value="85">
+                <input type="range" aria-label="Launch power" id="power-slider" min="30" max="100" value="85">
               </div>
 
               <div class="slider-group">
                 <div class="slider-label">
-                  <span>Launch Angle:</span>
+                  <span>发射角度：</span>
                   <strong id="angle-display">-35°</strong>
                 </div>
-                <input type="range" id="angle-slider" min="-180" max="180" value="-35">
+                <input type="range" aria-label="Launch angle" id="angle-slider" min="-180" max="180" value="-35">
               </div>
             </div>
 
@@ -331,165 +341,20 @@
               </button>
             </div>
             
+            <button id="cancel-launch-btn" class="secondary-btn">取消发射</button>
             <p class="launch-tip">
-              💡 Tip: Click & drag directly on your top in the arena to pull, aim & slingshot!
+              💡 提示：拖动场内陀螺即可瞄准并发射！
             </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- TIER LIST PREVIEW SECTION (Links to /tier-list/) -->
-    <section class="content-section">
-      <div class="section-container">
-        <div class="section-head">
-          <span class="sub-badge">EMOJI META ANALYSIS</span>
-          <h2>Emoji Blade Power Rankings (强度天梯榜)</h2>
-          <p>Discover the most competitive spinning top emojis, their weight distributions, and hidden collision mechanics.</p>
-        </div>
-
-        <div class="tier-grid">
-          <div class="tier-card tier-s">
-            <div class="tier-header">
-              <span class="tier-rank">S TIER</span>
-              <span class="tier-desc">Supreme Clashers</span>
-            </div>
-            <div class="tier-emojis">
-              <a href="/characters/diamond/" class="tier-item">
-                <span class="t-emoji">💎</span>
-                <strong>Diamond Core</strong>
-                <small>Massive defense & high density mass. Resists ring outs.</small>
-              </a>
-              <a href="/characters/moai/" class="tier-item">
-                <span class="t-emoji">🗿</span>
-                <strong>Moai Fortress</strong>
-                <small>100 Max Mass, unshakeable center of gravity.</small>
-              </a>
-              <a href="/characters/lightning/" class="tier-item">
-                <span class="t-emoji">⚡</span>
-                <strong>Lightning Volt</strong>
-                <small>99 RPM Speed, frequent critical shocks dealing 1.5x.</small>
-              </a>
-            </div>
-          </div>
-
-          <div class="tier-card tier-a">
-            <div class="tier-header">
-              <span class="tier-rank">A TIER</span>
-              <span class="tier-desc">Aggressive Strikers</span>
-            </div>
-            <div class="tier-emojis">
-              <a href="/characters/fire/" class="tier-item">
-                <span class="t-emoji">🔥</span>
-                <strong>Inferno Fire</strong>
-                <small>High recoil attack, explosive ring momentum.</small>
-              </a>
-              <a href="/characters/bomb/" class="tier-item">
-                <span class="t-emoji">💣</span>
-                <strong>Heavy Bomb</strong>
-                <small>High impact kinetic shock on direct clash.</small>
-              </a>
-              <a href="/characters/rocket/" class="tier-item">
-                <span class="t-emoji">🚀</span>
-                <strong>Cosmic Rocket</strong>
-                <small>Extreme velocity, devastating corner pins.</small>
-              </a>
-            </div>
-          </div>
-
-          <div class="tier-card tier-b">
-            <div class="tier-header">
-              <span class="tier-rank">B TIER</span>
-              <span class="tier-desc">Tricky Tactics</span>
-            </div>
-            <div class="tier-emojis">
-              <a href="/characters/clown/" class="tier-item">
-                <span class="t-emoji">🤡</span>
-                <strong>Chaos Clown</strong>
-                <small>Irregular wobble pattern confounds AI aim.</small>
-              </a>
-              <a href="/characters/tornado/" class="tier-item">
-                <span class="t-emoji">🌪️</span>
-                <strong>Vortex Tornado</strong>
-                <small>Long spin stamina, excels at outspinning.</small>
-              </a>
-              <a href="/characters/pizza/" class="tier-item">
-                <span class="t-emoji">🍕</span>
-                <strong>Pizza Wheel</strong>
-                <small>Balanced circular slice, steady rotational curve.</small>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div style="text-align: center; margin-top: 30px;">
-          <a href="/tier-list/" class="primary-glow-btn" style="display: inline-block; text-decoration: none;">View Full 强度天梯榜 & Strategy Guide ↗</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- EMBED SECTION -->
-    <section class="content-section embed-section">
-      <div class="section-container">
-        <div class="embed-box">
-          <div class="embed-info">
-            <span class="sub-badge">FREE FOR WEBMASTERS</span>
-            <h2>Embed Emoji Blade on Your Website</h2>
-            <p>Boost your gaming blog, school portal, or unblocked games hub with this instant, lightweight interactive widget.</p>
-          </div>
-          <div class="embed-code-block">
-            <textarea id="embed-code-text" readonly><iframe src="https://emojiblade.online/" width="100%" height="750" style="border:none; border-radius:16px; overflow:hidden;" title="Emoji Blade Online" allow="autoplay; fullscreen"></iframe></textarea>
-            <button id="copy-embed-btn" class="secondary-btn">📋 Copy Embed Code</button>
-          </div>
-        </div>
-      </div>
-    </section>
+<section class="content-section"><div class="section-container"><h2>怎么玩 Emoji Blade</h2><p>选择表情陀螺，设置发射角度和力度，或在场内拖动陀螺发射。让对手先耗尽旋转能量即可获胜。场地边缘会反弹，不存在出界获胜。</p><h2>属性与暴击</h2><p>重量影响碰撞伤害，攻击影响对手能量损失，速度影响初始移动和旋转，耐力影响能量消耗。暴击由随机概率或较高碰撞相对速度触发，伤害为 1.5 倍。外环造型不改变碰撞形状。</p><h2>单人和双人模式</h2><p>单人关卡模式每五关遇到 Boss。本地双人模式由玩家一先设置发射参数，再由玩家二设置，随后同时发射；双人对战不计入单人连胜和徽章。</p><p><a href="/characters/">角色属性（英文）</a> · <a href="/guide/">详细指南（英文）</a></p></div></section>
   </main>
 
   <!-- MULTI-COLUMN FOOTER WITH LEGAL & NAV -->
-  <footer class="site-footer">
-    <div class="section-container footer-inner">
-      <div class="footer-brand">
-        <span class="logo-emoji">🌀</span>
-        <strong>Emoji Blade Online</strong>
-        <p>A fast, free, browser-based emoji spinning top clash physics simulator.</p>
-        <small class="disclaimer">Inspired by Japanese Beyblade and spinning top battle culture. Independent browser toy.</small>
-      </div>
-
-      <div class="footer-links-group">
-        <div class="footer-col">
-          <strong>Play & Modes</strong>
-          <a href="/">Play Online</a>
-          <a href="/unblocked/">Unblocked Edition</a>
-          <a href="/tier-list/">强度天梯榜</a>
-          <a href="/characters/">角色图鉴 Library</a>
-        </div>
-
-        <div class="footer-col">
-          <strong>Guides & Info</strong>
-          <a href="/guide/">玩法攻略</a>
-          <a href="/about/">About Us</a>
-          <a href="/contact/">Contact Us</a>
-        </div>
-
-        <div class="footer-col">
-          <strong>Legal & Compliance</strong>
-          <a href="/privacy/">Privacy Policy</a>
-          <a href="/terms/">Terms of Service</a>
-        </div>
-
-        <div class="footer-col">
-          <strong>Languages</strong>
-          <a href="/">English</a>
-          <a href="/zh-hans/">简体中文</a>
-          <a href="/ja/">日本語</a>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© 2026 Emoji Blade Online (emojiblade.online). All rights reserved. Free web game for everyone.</p>
-    </div>
-  </footer>
+  <footer class="site-footer"><div class="section-container"><p>Emoji Blade 是免费的浏览器表情陀螺对战游戏，无需下载。独立作品，与 Beyblade 品牌无关联。</p><p><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a> · <a href="/contact/">Contact</a></p><p><a href="/">English</a> · <a href="/zh-hans/">简体中文</a> · <a href="/ja/">日本語</a></p></div></footer>
 
   <script src="/game.js"></script>
 </body>

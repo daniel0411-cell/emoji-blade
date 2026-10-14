@@ -3,10 +3,6 @@
   <!-- Core Home & Multilingual -->
   <url>
     <loc>https://emojiblade.online/</loc>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://emojiblade.online/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://emojiblade.online/"/>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://emojiblade.online/zh-hans/"/>
-    <xhtml:link rel="alternate" hreflang="ja" href="https://emojiblade.online/ja/"/>
     <lastmod>2026-10-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
@@ -113,4 +109,6 @@
     <lastmod>2026-10-14</lastmod>
     <priority>0.5</priority>
   </url>
+  <url><loc>https://emojiblade.online/characters/pizza/</loc><lastmod>2026-10-14</lastmod></url>
+  <url><loc>https://emojiblade.online/characters/tornado/</loc><lastmod>2026-10-14</lastmod></url>
 </urlset>

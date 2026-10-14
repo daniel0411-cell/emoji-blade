@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Emoji Blade Online - Free Emoji Spinning Top Battle Game</title>
   <meta name="description" content="Play Emoji Blade online for free! Turn your favorite emojis into battle spinning tops. Clash with fire, bombs, rockets, and diamonds in an epic physics arena. No download required.">
   <meta name="keywords" content="emoji blade, emoji battle game, emoji spinning top, beyblade emoji, online browser game, free physics game, unblocked games">
@@ -45,7 +45,7 @@
       "description": "A browser physics action game where players transform emojis into custom spinning tops to battle in a high-speed collision ring.",
       "applicationCategory": "GameApplication",
       "operatingSystem": "Web browser",
-      "playMode": "SinglePlayer, MultiPlayer",
+      "playMode": ["SinglePlayer", "MultiPlayer"],
       "isAccessibleForFree": true,
       "offers": {
         "@type": "Offer",
@@ -55,8 +55,13 @@
     }
   ]
   </script>
+<meta property="og:image" content="https://emojiblade.online/social-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://emojiblade.online/social-card.png">
 </head>
 <body>
+  <h1 class="visually-hidden">Emoji Blade - Browser Spinning Top Battles</h1>
 
   <!-- Background Ambience -->
   <div class="bg-glow-orb orb-1"></div>
@@ -90,8 +95,8 @@
           <a href="/ja/">日本語</a>
         </div>
 
-        <button id="fullscreen-btn" class="icon-pill-btn" title="Toggle Fullscreen">⛶</button>
-        <button id="sound-toggle-btn" class="icon-pill-btn" title="Toggle Sound">
+        <button id="fullscreen-btn" class="icon-pill-btn" aria-label="Toggle fullscreen" title="Toggle Fullscreen">⛶</button>
+        <button id="sound-toggle-btn" class="icon-pill-btn" aria-label="Toggle sound" title="Toggle Sound">
           <span id="sound-icon">🔊</span>
         </button>
       </div>
@@ -210,7 +215,7 @@
             </div>
 
             <div class="emoji-input-wrapper">
-              <input type="text" id="player-emoji-input" value="🔥" maxlength="4" autocomplete="off" spellcheck="false" aria-label="Input your emoji">
+              <input type="text" id="player-emoji-input" value="🔥" maxlength="128" autocomplete="off" spellcheck="false" aria-label="Input your emoji">
               <div class="blade-style-select">
                 <select id="blade-style-select" aria-label="Blade Blade Ring Style">
                   <option value="blaze">Inferno Blade Ring</option>
@@ -260,7 +265,7 @@
 
               <div class="stat-cell">
                 <div class="stat-info">
-                  <span class="s-name">Speed (RPM)</span>
+                  <span class="s-name">Speed (Rating)</span>
                   <strong id="stat-speed-val">88</strong>
                 </div>
                 <div class="stat-meter"><div class="stat-fill" id="meter-speed" style="width: 88%"></div></div>
@@ -302,7 +307,7 @@
                 <option value="random">Random Challenger</option>
                 <option value="custom">Custom Challenger</option>
               </select>
-              <input type="text" id="custom-enemy-input" value="💎" maxlength="4" style="display:none;" title="Custom rival emoji">
+              <input type="text" id="custom-enemy-input" value="💎" maxlength="128" style="display:none;" title="Custom rival emoji">
             </div>
 
             <!-- Sliders for Launch -->
@@ -312,7 +317,7 @@
                   <span>Launch Power:</span>
                   <strong id="power-display">85%</strong>
                 </div>
-                <input type="range" id="power-slider" min="30" max="100" value="85">
+                <input type="range" aria-label="Launch power" id="power-slider" min="30" max="100" value="85">
               </div>
 
               <div class="slider-group">
@@ -320,7 +325,7 @@
                   <span>Launch Angle:</span>
                   <strong id="angle-display">-35°</strong>
                 </div>
-                <input type="range" id="angle-slider" min="-180" max="180" value="-35">
+                <input type="range" aria-label="Launch angle" id="angle-slider" min="-180" max="180" value="-35">
               </div>
             </div>
 
@@ -331,6 +336,7 @@
               </button>
             </div>
             
+            <button id="cancel-launch-btn" class="secondary-btn">Cancel launch</button>
             <p class="launch-tip">
               💡 Tip: Click & drag directly on your top in the arena to pull, aim & slingshot!
             </p>
@@ -345,7 +351,7 @@
         <div class="section-head">
           <span class="sub-badge">EMOJI META ANALYSIS</span>
           <h2>Emoji Blade Power Rankings (Tier List)</h2>
-          <p>Discover the most competitive spinning top emojis, their weight distributions, and hidden collision mechanics.</p>
+          <p>Discover the most competitive spinning top emojis, their weight distributions, and preset stats and shared collision rules.</p>
         </div>
 
         <div class="tier-grid">
@@ -358,7 +364,7 @@
               <a href="/characters/diamond/" class="tier-item">
                 <span class="t-emoji">💎</span>
                 <strong>Diamond Core</strong>
-                <small>Massive defense & high density mass. Resists ring outs.</small>
+                <small>Massive defense & high density mass. High mass reduces collision damage.</small>
               </a>
               <a href="/characters/moai/" class="tier-item">
                 <span class="t-emoji">🗿</span>
@@ -368,7 +374,7 @@
               <a href="/characters/lightning/" class="tier-item">
                 <span class="t-emoji">⚡</span>
                 <strong>Lightning Volt</strong>
-                <small>99 RPM Speed, frequent critical shocks dealing 1.5x.</small>
+                <small>99 Speed for fast launches; shared 1.5x critical rule.</small>
               </a>
             </div>
           </div>
@@ -406,7 +412,7 @@
               <a href="/characters/clown/" class="tier-item">
                 <span class="t-emoji">🤡</span>
                 <strong>Chaos Clown</strong>
-                <small>Irregular wobble pattern confounds AI aim.</small>
+                <small>Balanced preset; wobble is a visual effect.</small>
               </a>
               <a href="/characters/tornado/" class="tier-item">
                 <span class="t-emoji">🌪️</span>

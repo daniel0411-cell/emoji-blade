@@ -14,6 +14,37 @@
 (function () {
   'use strict';
 
+  function readStored(key, fallback) {
+    try { return localStorage.getItem(key) ?? fallback; } catch { return fallback; }
+  }
+  function writeStored(key, value) {
+    try { localStorage.setItem(key, value); } catch { /* Storage is optional. */ }
+  }
+  function normalizeEmoji(value) {
+    const text = String(value || '').trim().slice(0, 128);
+    if (!text) return '🔥';
+    if (typeof Intl.Segmenter === 'function') {
+      return new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(text)[Symbol.iterator]().next().value.segment;
+    }
+    return Array.from(text)[0];
+  }
+
+  function translate(text) {
+    const lang = document.documentElement?.lang;
+    const messages = {
+      'Drag player top or set angle & launch!': ['拖动陀螺，或设置角度后发射！', 'コマをドラッグするか、角度を設定して発射！'],
+      '⚠️ WARNING: BOSS APPROACHING!': ['⚠️ Boss 来袭！', '⚠️ ボスが登場！'],
+      '👉 PLAYER 2 TURN: Aim Rival & Launch!': ['👉 玩家二：设置角度和力度后发射！', '👉 プレイヤー2：角度とパワーを設定して発射！'],
+      '⚡ CLASH IN PROGRESS!': ['⚡ 对战进行中！', '⚡ 対戦中！'],
+      'VICTORY! 🏆': ['胜利！🏆', '勝利！🏆'], 'DEFEAT 💥': ['落败 💥', '敗北 💥'],
+      'PLAYER 1 WINS!': ['玩家一获胜！', 'プレイヤー1の勝利！'],
+      'PLAYER 2 WINS!': ['玩家二获胜！', 'プレイヤー2の勝利！'],
+      'DRAW': ['平局', '引き分け'], 'Both tops stopped together. Play again!': ['双方同时停止，再来一场！', '両方のコマが止まりました。もう一度！'],
+      'Outspun': ['耐力获胜', '持久力勝利'], 'Spin Depleted': ['能量耗尽', 'エネルギー切れ'],
+    };
+    return messages[text]?.[lang === 'zh-Hans' ? 0 : lang === 'ja' ? 1 : 2] || text;
+  }
+
   // --- AUDIO SYNTHESIZER ---
   class SoundFX {
     constructor() {
@@ -27,7 +58,7 @@
         if (AudioCtx) this.ctx = new AudioCtx();
       }
       if (this.ctx && this.ctx.state === 'suspended') {
-        this.ctx.resume();
+        this.ctx.resume().catch(() => {});
       }
     }
 
@@ -155,9 +186,9 @@
     }
     const absH = Math.abs(hash);
     const mass = 55 + (absH % 45);
-    const attack = 60 + ((absH >> 3) % 40);
-    const speed = 60 + ((absH >> 5) % 40);
-    const endurance = 55 + ((absH >> 7) % 45);
+    const attack = 60 + ((absH >>> 3) % 40);
+    const speed = 60 + ((absH >>> 5) % 40);
+    const endurance = 55 + ((absH >>> 7) % 45);
 
     const score = mass + attack + speed + endurance;
     let tier = 'B';
@@ -284,6 +315,7 @@
     }
 
     configure(emoji, style = 'blaze', isBoss = false) {
+      emoji = normalizeEmoji(emoji);
       this.emoji = emoji;
       this.style = style;
       this.isBoss = isBoss;
@@ -468,8 +500,12 @@
 
       this.stage = 1;
       this.winStreak = 0;
-      this.bestStreak = parseInt(localStorage.getItem('emojiblade_best_streak') || '0', 10);
-      this.unlockedBadges = JSON.parse(localStorage.getItem('emojiblade_badges') || '["🔥"]');
+      this.bestStreak = Math.max(0, Math.min(1000000, parseInt(readStored('emojiblade_best_streak', '0'), 10) || 0));
+      this.unlockedBadges = ['🔥'];
+      try {
+        const badges = JSON.parse(readStored('emojiblade_badges', '[]'));
+        if (Array.isArray(badges)) this.unlockedBadges = [...new Set(['🔥', ...badges.filter(x => typeof x === 'string').slice(0, 100).map(normalizeEmoji)])];
+      } catch { /* Keep defaults when an old save is invalid. */ }
 
       this.battleState = 'ready'; // 'ready', 'aiming', 'countdown', 'battling', 'finished'
       this.battleStartTime = 0;
@@ -534,7 +570,7 @@
       const params = new URLSearchParams(window.location.search);
       const urlEmoji = params.get('emoji');
       if (urlEmoji) {
-        this.playerInput.value = urlEmoji;
+        this.playerInput.value = normalizeEmoji(urlEmoji);
         this.playerTop.configure(urlEmoji, 'blaze');
       }
     }
@@ -562,6 +598,13 @@
     }
 
     setupStage() {
+      clearInterval(this.countdownTimer);
+      clearTimeout(this.resultTimer);
+      this.countdownTimer = null;
+      this.isPullAiming = false;
+      this.countdownOverlay.style.display = 'none';
+      this.countdownOverlay.classList.remove('go-shoot');
+      this.setConfigurationLocked(false);
       this.stageNumEl.textContent = String(this.stage).padStart(2, '0');
       this.streakCounter.textContent = this.winStreak;
 
@@ -579,6 +622,7 @@
       }
 
       this.enemyTop.configure(enemyConfig.emoji, enemyConfig.style, !!enemyConfig.isBoss);
+      if (this.is2PMode) this.enemyTop.configure(enemyConfig.emoji, enemyConfig.style, false);
       this.resetPositions();
       this.battleState = 'ready';
       this.battleHits = 0;
@@ -592,7 +636,15 @@
       document.getElementById('enemy-tier').textContent = enemyConfig.isBoss ? '🔥 BOSS' : `${this.enemyTop.stats.tier}-TIER`;
 
       this.updateHudBars();
-      this.statusMsg.textContent = enemyConfig.isBoss ? '⚠️ WARNING: BOSS APPROACHING!' : 'Drag player top or set angle & launch!';
+      this.statusMsg.textContent = translate(enemyConfig.isBoss ? '⚠️ WARNING: BOSS APPROACHING!' : 'Drag player top or set angle & launch!');
+    }
+
+    setConfigurationLocked(locked) {
+      document.querySelectorAll('.emoji-chip, #player-emoji-input, #random-player-btn, #blade-style-select, #rival-mode-select, #custom-enemy-input, #mode-streak-btn, #mode-2p-btn').forEach(el => { el.disabled = locked; });
+      [this.playerInput, this.randomPlayerBtn, this.bladeStyleSelect, this.rivalModeSelect, this.customEnemyInput, this.modeStreakBtn, this.mode2PBtn].forEach(el => { if (el) el.disabled = locked; });
+      this.powerSlider.disabled = locked;
+      this.angleSlider.disabled = locked;
+      this.launchBtn.disabled = locked;
     }
 
     updateStatsUI() {
@@ -626,6 +678,11 @@
 
     initEvents() {
       window.addEventListener('resize', () => this.resizeCanvas());
+      const cancelLaunch = () => {
+        if (this.battleState === 'countdown' || (this.is2PMode && this.turn2P === 2 && this.battleState === 'ready')) this.setupStage();
+      };
+      document.getElementById('cancel-launch-btn')?.addEventListener('click', cancelLaunch);
+      window.addEventListener('keydown', event => { if (event.key === 'Escape') cancelLaunch(); });
 
       // Sound toggle
       const soundBtn = document.getElementById('sound-toggle-btn');
@@ -641,9 +698,9 @@
         fsBtn.addEventListener('click', () => {
           const container = document.querySelector('.arena-viewport-wrapper');
           if (!document.fullscreenElement) {
-            container.requestFullscreen().catch(() => {});
+            container.requestFullscreen?.().catch(() => {});
           } else {
-            document.exitFullscreen();
+            document.exitFullscreen?.().catch(() => {});
           }
         });
       }
@@ -781,6 +838,9 @@
         this.startLaunchSequence();
       };
 
+      window.addEventListener('touchcancel', () => { this.isPullAiming = false; if (this.battleState === 'aiming') this.battleState = 'ready'; });
+      window.addEventListener('blur', () => { this.isPullAiming = false; if (this.battleState === 'aiming') this.battleState = 'ready'; });
+
       this.canvas.addEventListener('mousedown', startPull);
       window.addEventListener('mousemove', movePull);
       window.addEventListener('mouseup', endPull);
@@ -795,10 +855,10 @@
         copyBtn.addEventListener('click', () => {
           const text = document.getElementById('embed-code-text');
           text.select();
-          navigator.clipboard.writeText(text.value).then(() => {
+          navigator.clipboard?.writeText(text.value).then(() => {
             copyBtn.textContent = '✅ Copied to Clipboard!';
             setTimeout(() => { copyBtn.textContent = '📋 Copy Embed Code'; }, 2000);
-          });
+          }).catch(() => { copyBtn.textContent = 'Select and copy the code'; });
         });
       }
     }
@@ -808,12 +868,14 @@
 
       // In 2P Mode: If Player 1 launches, queue P1 and prompt Player 2
       if (this.is2PMode && this.turn2P === 1) {
+        [this.playerInput, this.randomPlayerBtn, this.bladeStyleSelect, this.rivalModeSelect, this.customEnemyInput, this.modeStreakBtn, this.mode2PBtn].forEach(el => { if (el) el.disabled = true; });
+        document.querySelectorAll('.emoji-chip').forEach(el => { el.disabled = true; });
         this.p1LaunchConfig = {
           power: parseInt(this.powerSlider.value, 10),
           angle: parseInt(this.angleSlider.value, 10)
         };
         this.turn2P = 2;
-        this.statusMsg.textContent = '👉 PLAYER 2 TURN: Aim Rival & Launch!';
+        this.statusMsg.textContent = translate('👉 PLAYER 2 TURN: Aim Rival & Launch!');
         this.angleSlider.value = -145;
         this.angleDisplay.textContent = '-145°';
         return;
@@ -827,6 +889,8 @@
       }
 
       // Start "3, 2, 1, GO SHOOT!" Countdown Ceremony
+      this.singleLaunchConfig = { power: Number(this.powerSlider.value), angle: Number(this.angleSlider.value) };
+      this.setConfigurationLocked(true);
       this.battleState = 'countdown';
       this.countdownValue = 3;
       const overlay = this.countdownOverlay;
@@ -834,7 +898,9 @@
       overlay.textContent = '3';
       sfx.playCountdown(440);
 
-      this.countdownTimer = setInterval(() => {
+      clearInterval(this.countdownTimer);
+      const timer = setInterval(() => {
+        if (this.battleState !== 'countdown') { clearInterval(timer); return; }
         this.countdownValue--;
         if (this.countdownValue === 2) {
           overlay.textContent = '2';
@@ -847,15 +913,18 @@
           overlay.classList.add('go-shoot');
           sfx.playCountdown(880);
         } else {
-          clearInterval(this.countdownTimer);
+          clearInterval(timer);
+          this.countdownTimer = null;
           overlay.style.display = 'none';
           overlay.classList.remove('go-shoot');
           this.executeLaunch();
         }
       }, 700);
+      this.countdownTimer = timer;
     }
 
     executeLaunch() {
+      if (this.battleState !== 'countdown') return;
       this.battleState = 'battling';
       this.battleStartTime = performance.now();
       this.battleHits = 0;
@@ -864,8 +933,8 @@
         this.playerTop.launch(this.p1LaunchConfig.angle, this.p1LaunchConfig.power);
         this.enemyTop.launch(this.p2LaunchConfig.angle, this.p2LaunchConfig.power);
       } else {
-        const pPower = parseInt(this.powerSlider.value, 10);
-        const pAngle = parseInt(this.angleSlider.value, 10);
+        const pPower = this.singleLaunchConfig.power;
+        const pAngle = this.singleLaunchConfig.angle;
         this.playerTop.launch(pAngle, pPower);
 
         // Intelligent AI launch
@@ -875,7 +944,7 @@
         this.enemyTop.launch(eAngle, ePower);
       }
 
-      this.statusMsg.textContent = '⚡ CLASH IN PROGRESS!';
+      this.statusMsg.textContent = translate('⚡ CLASH IN PROGRESS!');
     }
 
     handleTopCollisions() {
@@ -887,7 +956,6 @@
       const minDist = this.playerTop.radius + this.enemyTop.radius;
 
       if (dist < minDist && dist > 0) {
-        this.battleHits++;
         const nx = dx / dist;
         const ny = dy / dist;
 
@@ -901,6 +969,8 @@
         // Relative velocity
         const kx = this.playerTop.vx - this.enemyTop.vx;
         const ky = this.playerTop.vy - this.enemyTop.vy;
+        if (nx * kx + ny * ky <= 0) return;
+        this.battleHits++;
         const p = 2 * (nx * kx + ny * ky) / (this.playerTop.stats.mass + this.enemyTop.stats.mass);
 
         this.playerTop.vx -= p * this.enemyTop.stats.mass * nx * 1.3;
@@ -950,13 +1020,14 @@
     checkBattleOutcome() {
       if (this.battleState !== 'battling') return;
 
-      const playerStopped = !this.playerTop.isSpinning;
-      const enemyStopped = !this.enemyTop.isSpinning;
+      const playerStopped = !this.playerTop.isSpinning || this.playerTop.energy <= 0;
+      const enemyStopped = !this.enemyTop.isSpinning || this.enemyTop.energy <= 0;
 
       if (playerStopped || enemyStopped) {
         this.battleState = 'finished';
         const battleDuration = ((performance.now() - this.battleStartTime) / 1000).toFixed(1);
         const playerWon = this.playerTop.energy > this.enemyTop.energy;
+        const draw = Math.max(0, this.playerTop.energy) === Math.max(0, this.enemyTop.energy);
 
         const banner = document.getElementById('result-banner');
         const summary = document.getElementById('result-summary');
@@ -964,36 +1035,49 @@
         document.getElementById('res-time-val').textContent = `${battleDuration}s`;
         document.getElementById('res-type-val').textContent = playerWon ? 'Outspun' : 'Spin Depleted';
 
-        if (playerWon) {
-          banner.textContent = 'VICTORY! 🏆';
+        if (draw) {
+          banner.textContent = 'DRAW';
+          banner.className = 'result-banner';
+          summary.textContent = 'Both tops stopped together. Play again!';
+        } else if (playerWon) {
+          banner.textContent = this.is2PMode ? 'PLAYER 1 WINS!' : 'VICTORY! 🏆';
           banner.className = 'result-banner';
           summary.textContent = `${this.playerTop.emoji} crushed ${this.enemyTop.emoji}'s stamina!`;
-          this.winStreak++;
-          if (this.winStreak > this.bestStreak) {
+          if (!this.is2PMode && this.rivalModeSelect.value === 'progression') this.winStreak++;
+          if (!this.is2PMode && this.rivalModeSelect.value === 'progression' && this.winStreak > this.bestStreak) {
             this.bestStreak = this.winStreak;
-            localStorage.setItem('emojiblade_best_streak', String(this.bestStreak));
+            writeStored('emojiblade_best_streak', String(this.bestStreak));
             this.bestStreakEl.textContent = this.bestStreak;
           }
 
           // Unlock trophy badge
-          if (!this.unlockedBadges.includes(this.playerTop.emoji)) {
+          if (!this.is2PMode && this.rivalModeSelect.value === 'progression' && !this.unlockedBadges.includes(this.playerTop.emoji)) {
             this.unlockedBadges.push(this.playerTop.emoji);
-            localStorage.setItem('emojiblade_badges', JSON.stringify(this.unlockedBadges));
+            writeStored('emojiblade_badges', JSON.stringify(this.unlockedBadges));
             this.renderBadges();
           }
 
-          this.stage++;
+          if (!this.is2PMode && this.rivalModeSelect.value === 'progression') this.stage++;
           sfx.playWin();
           this.particles.emitSparks(this.playerTop.x, this.playerTop.y, '#ffd32a', 36, 9);
         } else {
-          banner.textContent = 'DEFEAT 💥';
+          banner.textContent = this.is2PMode ? 'PLAYER 2 WINS!' : 'DEFEAT 💥';
           banner.className = 'result-banner defeat';
           summary.textContent = `${this.enemyTop.emoji} outlasted your blade in the final clash!`;
-          this.winStreak = 0;
+          if (!this.is2PMode && this.rivalModeSelect.value === 'progression') this.winStreak = 0;
         }
 
         this.streakCounter.textContent = this.winStreak;
-        setTimeout(() => {
+        banner.textContent = translate(banner.textContent);
+        document.getElementById('res-type-val').textContent = translate(draw ? 'DRAW' : playerWon ? 'Outspun' : 'Spin Depleted');
+        if (document.documentElement.lang !== 'en' && !draw) {
+          summary.textContent = `${playerWon ? this.playerTop.emoji : this.enemyTop.emoji} ${document.documentElement.lang === 'ja' ? 'の勝利！' : '获胜！'}`;
+        } else if (draw) {
+          summary.textContent = translate(summary.textContent);
+        }
+        this.setConfigurationLocked(false);
+        this.resultTimer = setTimeout(() => {
+          if (this.battleState !== 'finished') return;
           this.resultModal.style.display = 'flex';
         }, 600);
       }
@@ -1128,13 +1212,19 @@
       link.click();
     }
 
-    loop() {
+    loop(timestamp = performance.now()) {
+      // Keep physics at 60 Hz; cap catch-up after a suspended browser tab.
+      const elapsed = this.lastFrameTime === undefined ? 0 : Math.min(100, Math.max(0, timestamp - this.lastFrameTime));
+      this.lastFrameTime = timestamp;
+      this.physicsAccumulator = (this.physicsAccumulator || 0) + elapsed;
       const rect = this.canvas.parentElement.getBoundingClientRect();
       this.ctx.clearRect(0, 0, rect.width, rect.height);
 
       this.drawArena();
 
-      if (this.battleState === 'battling') {
+      while (this.physicsAccumulator >= 1000 / 60) {
+        this.physicsAccumulator -= 1000 / 60;
+        if (this.battleState !== 'battling') continue;
         this.playerTop.update(this.arenaCenterX, this.arenaCenterY, this.arenaRadius);
         this.enemyTop.update(this.arenaCenterX, this.arenaCenterY, this.arenaRadius);
         this.handleTopCollisions();

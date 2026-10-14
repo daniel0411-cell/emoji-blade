@@ -1294,7 +1294,9 @@ input[type="range"] {
   }
 
   .nav-links {
-    display: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .arena-canvas-container {
@@ -1314,6 +1316,26 @@ input[type="range"] {
     flex-direction: column;
     gap: 30px;
   }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+button:disabled, input:disabled, select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 900px) {
+  .header-container { flex-wrap: wrap; gap: 12px; }
+  .nav-links { width: 100%; order: 3; }
 }
 
 @media (max-width: 480px) {
