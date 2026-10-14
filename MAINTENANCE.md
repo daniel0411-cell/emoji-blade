@@ -7,3 +7,5 @@
 5. Verify production HTML and game.js, language canonicals, sitemap, and a random missing URL returning 404.
 
 Character stats and mechanics in game.js are authoritative. Armor artwork does not change collision geometry. Do not advertise ring-outs, filter bypass guarantees, or AI behaviors that are not implemented.
+
+The CI template is `.github/check.yml.example`. Enable it as `.github/workflows/check.yml` using a GitHub login with workflow-write permission. Until enabled, run all three checks locally before every release.
