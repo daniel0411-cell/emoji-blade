@@ -43,6 +43,7 @@
       'Outspun': ['耐力获胜', '持久力勝利'], 'Spin Depleted': ['能量耗尽', 'エネルギー切れ'],
       'Play Again ⚡': ['再来一局 ⚡', 'もう一度対戦 ⚡'],
       'Next Stage ⚡': ['下一关 ⚡', '次のステージ ⚡'],
+      'Retry Stage ⚡': ['重试本关 ⚡', 'このステージを再挑戦 ⚡'],
     };
     return messages[text]?.[lang === 'zh-Hans' ? 0 : lang === 'ja' ? 1 : 2] || text;
   }
@@ -1039,6 +1040,10 @@
         const battleDuration = ((performance.now() - this.battleStartTime) / 1000).toFixed(1);
         const playerWon = this.playerTop.energy > this.enemyTop.energy;
         const draw = Math.max(0, this.playerTop.energy) === Math.max(0, this.enemyTop.energy);
+        const progression = !this.is2PMode && this.rivalModeSelect.value === 'progression';
+        this.nextBattleBtn.textContent = translate(progression
+          ? (playerWon && !draw ? 'Next Stage ⚡' : 'Retry Stage ⚡')
+          : 'Play Again ⚡');
 
         const banner = document.getElementById('result-banner');
         const summary = document.getElementById('result-summary');

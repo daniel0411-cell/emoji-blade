@@ -19,6 +19,7 @@ class Page(HTMLParser):
         self.title = ''
         self.in_title = False
         self.description = ''
+        self.social = {}
         self.json_script = False
         self.schema = ''
 
@@ -30,6 +31,8 @@ class Page(HTMLParser):
         if tag == 'h1': self.h1 += 1
         if tag == 'title': self.in_title = True
         if tag == 'meta' and a.get('name') == 'description': self.description = a.get('content', '')
+        if tag == 'meta' and a.get('property') in ('og:title', 'og:description'):
+            self.social[a['property']] = a.get('content', '')
         if tag == 'a' and 'href' in a: self.links.append(a['href'])
         if tag == 'link' and a.get('rel') == 'canonical': self.canonicals.append(a['href'])
         if tag == 'link' and a.get('rel') == 'alternate':
@@ -59,6 +62,10 @@ for file in pages:
         assert p.description.strip(), (file, 'missing description')
     assert p.title not in titles, (file, 'duplicate title')
     titles.add(p.title)
+    if 'og:title' in p.social:
+        assert p.social['og:title'] == p.title, (file, 'share title differs from title')
+    if 'og:description' in p.social:
+        assert p.social['og:description'] == p.description, (file, 'share description differs from description')
     for href in p.links:
         url = urlsplit(href)
         if url.scheme or url.netloc or not url.path: continue

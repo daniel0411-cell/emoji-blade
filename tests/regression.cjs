@@ -78,7 +78,7 @@ for (const [twoPlayers, mode, expected] of [[true, 'progression', 4], [false, 'c
   Object.assign(g, { battleState: 'battling', is2PMode: twoPlayers, rivalModeSelect: { value: mode },
     playerTop: new EmojiTop(true), enemyTop: new EmojiTop(false),
     winStreak: 4, bestStreak: 4, stage: 4, battleHits: 0, battleStartTime: 0,
-    unlockedBadges: ['🔥'], bestStreakEl: {}, streakCounter: {}, particles: { emitSparks() {} } });
+    unlockedBadges: ['🔥'], bestStreakEl: {}, streakCounter: {}, nextBattleBtn: element(), particles: { emitSparks() {} } });
   g.playerTop.isSpinning = true;
   g.enemyTop.energy = 0;
   g.checkBattleOutcome();
@@ -86,6 +86,32 @@ for (const [twoPlayers, mode, expected] of [[true, 'progression', 4], [false, 'c
   assert.equal(g.stage, expected);
   assert.equal(g.bestStreak, expected);
 }
+for (const [lang, next, retry, again] of [
+  ['en', 'Next Stage ⚡', 'Retry Stage ⚡', 'Play Again ⚡'],
+  ['zh-Hans', '下一关 ⚡', '重试本关 ⚡', '再来一局 ⚡'],
+  ['ja', '次のステージ ⚡', 'このステージを再挑戦 ⚡', 'もう一度対戦 ⚡']
+]) {
+  context.document.documentElement.lang = lang;
+  for (const [twoPlayers, mode] of [[false, 'progression'], [false, 'custom'], [false, 'random'], [true, 'progression']]) {
+    for (const outcome of ['win', 'loss', 'draw']) {
+      const g = game();
+      Object.assign(g, { battleState: 'battling', is2PMode: twoPlayers, rivalModeSelect: { value: mode },
+        playerTop: new EmojiTop(true), enemyTop: new EmojiTop(false),
+        winStreak: 4, bestStreak: 4, stage: 4, battleHits: 0, battleStartTime: 0,
+        unlockedBadges: ['🔥'], bestStreakEl: {}, streakCounter: {}, nextBattleBtn: element(),
+        particles: { emitSparks() {} } });
+      g.playerTop.isSpinning = g.enemyTop.isSpinning = true;
+      g.playerTop.energy = outcome === 'win' ? 50 : 0;
+      g.enemyTop.energy = outcome === 'loss' ? 50 : 0;
+      g.checkBattleOutcome();
+      const progression = !twoPlayers && mode === 'progression';
+      assert.equal(g.nextBattleBtn.textContent, progression ? (outcome === 'win' ? next : retry) : again);
+      assert.equal(g.stage, progression && outcome === 'win' ? 5 : 4);
+      assert.equal(g.winStreak, progression ? (outcome === 'win' ? 5 : outcome === 'loss' ? 0 : 4) : 4);
+    }
+  }
+}
+context.document.documentElement.lang = 'en';
 for (const [slug, emoji] of Object.entries({ fire: '🔥', bomb: '💣', lightning: '⚡', diamond: '💎', moai: '🗿', rocket: '🚀', skull: '💀', clown: '🤡', pizza: '🍕', tornado: '🌪️' })) {
   const html = fs.readFileSync(path.join(__dirname, '..', 'characters', slug, 'index.html'), 'utf8');
   const stats = computeEmojiStats(emoji);
@@ -144,3 +170,4 @@ for (const twoPlayers of [false, true]) {
 }
 console.log('PASS: blocked/corrupt storage, emoji graphemes, countdown cleanup, refresh-rate physics, separating collisions, character stats, FAQ mass values');
 console.log('PASS: local 2P deep links, unknown-mode fallback, all 16 published preset ratings, local Boss labels');
+console.log('PASS: 36 result-button cases across languages, modes and outcomes; stage and streak preservation');
