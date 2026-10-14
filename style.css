@@ -950,6 +950,15 @@ input[type="range"] {
   border-bottom: 1px solid var(--bg-card-border);
 }
 
+.player-info-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.player-info-card { padding: 26px; border: 1px solid var(--bg-card-border); border-radius: var(--radius-lg); background: var(--bg-card); }
+.player-info-card h2 { font-size: 22px; line-height: 1.4; margin-bottom: 14px; }
+.player-info-card p { color: var(--text-muted); font-size: 15px; line-height: 1.9; }
+.player-resource-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.player-resource-links a { color: var(--accent-cyan); text-decoration: none; padding: 10px 14px; border: 1px solid var(--bg-card-border); border-radius: var(--radius-md); font-size: 14px; }
+.player-resource-links a:hover { background: rgba(0, 240, 255, 0.08); }
+.embed-instructions-code { display: block; width: 100%; min-height: 170px; margin: 12px 0 16px; padding: 16px; resize: vertical; color: var(--accent-cyan); background: var(--bg-primary); border: 1px solid var(--bg-card-border); border-radius: var(--radius-md); font-family: var(--font-mono); font-size: 13px; line-height: 1.7; }
+
 .section-head {
   text-align: center;
   max-width: 680px;
@@ -1231,7 +1240,9 @@ input[type="range"] {
 }
 
 .footer-inner {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(180px, 0.8fr) minmax(0, 2fr);
+  gap: 36px;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 40px;
@@ -1259,8 +1270,9 @@ input[type="range"] {
 }
 
 .footer-links-group {
-  display: flex;
-  gap: 40px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
 }
 
 .footer-col {
@@ -1282,6 +1294,8 @@ input[type="range"] {
   text-decoration: none;
   font-size: 13px;
   transition: color 0.15s ease;
+  overflow-wrap: anywhere;
+  line-height: 1.6;
 }
 
 .footer-col a:hover {
@@ -1300,6 +1314,9 @@ input[type="range"] {
    RESPONSIVE DESIGN (MOBILE & TABLET)
    ========================================================================== */
 @media (max-width: 900px) {
+  .player-info-grid { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .footer-links-group { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .game-control-panel {
     grid-template-columns: 1fr;
   }

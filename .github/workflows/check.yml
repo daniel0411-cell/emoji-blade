@@ -11,5 +11,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node --check game.js && node tests/regression.cjs
+      - run: node --check game.js && node --check embed.js && node tests/regression.cjs
       - run: python3 tests/site.py

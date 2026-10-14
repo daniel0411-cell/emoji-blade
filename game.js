@@ -861,18 +861,6 @@
       window.addEventListener('touchmove', movePull, { passive: false });
       window.addEventListener('touchend', endPull);
 
-      // Copy Embed Code Button
-      const copyBtn = document.getElementById('copy-embed-btn');
-      if (copyBtn) {
-        copyBtn.addEventListener('click', () => {
-          const text = document.getElementById('embed-code-text');
-          text.select();
-          navigator.clipboard?.writeText(text.value).then(() => {
-            copyBtn.textContent = '✅ Copied to Clipboard!';
-            setTimeout(() => { copyBtn.textContent = '📋 Copy Embed Code'; }, 2000);
-          }).catch(() => { copyBtn.textContent = 'Select and copy the code'; });
-        });
-      }
     }
 
     startLaunchSequence() {

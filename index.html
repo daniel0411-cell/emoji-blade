@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="/style.css?v=20261014-4">
+  <link rel="stylesheet" href="/style.css?v=20261014-6">
 
   <!-- Schema.org Structured Data -->
   <script type="application/ld+json">
@@ -435,19 +435,10 @@
     </section>
 
     <!-- EMBED SECTION -->
-    <section class="content-section embed-section">
+    <section class="content-section player-info-section" aria-label="Explore the game">
       <div class="section-container">
-        <div class="embed-box">
-          <div class="embed-info">
-            <span class="sub-badge">FREE FOR WEBMASTERS</span>
-            <h2>Embed Emoji Blade on Your Website</h2>
-            <p>Boost your gaming blog, school portal, or unblocked games hub with this instant, lightweight interactive widget.</p>
-          </div>
-          <div class="embed-code-block">
-            <textarea id="embed-code-text" readonly><iframe src="https://emojiblade.online/" width="100%" height="750" style="border:none; border-radius:16px; overflow:hidden;" title="Emoji Blade Online" allow="autoplay; fullscreen"></iframe></textarea>
-            <button id="copy-embed-btn" class="secondary-btn">📋 Copy Embed Code</button>
-          </div>
-        </div>
+        <div class="player-info-grid"><article class="player-info-card"><h2>How to play Emoji Blade</h2><p>Choose an emoji top, set launch angle and power, or pull backward from your top in the arena and release. Win when the rival runs out of energy first. Walls rebound the tops; there are no ring-out wins.</p></article><article class="player-info-card"><h2>Stats and critical clashes</h2><p>Mass affects collision response and damage, attack contributes to damage, speed affects launch velocity and the spin animation, and endurance reduces passive energy drain. Critical clashes apply 1.5x damage to both tops. Ring artwork does not change collision geometry.</p></article><article class="player-info-card"><h2>Solo and local two-player modes</h2><p>Progression includes a Boss every fifth stage. Local players choose launches in turn, then both tops launch together. Local duels do not affect solo streaks or trophies.</p></article></div>
+        <nav class="player-resource-links" aria-label="Explore the game"><a href="/characters/">Character ratings</a><a href="/guide/">Launch guide</a><a href="/2-player-duel/">Local 2-player duel</a><a href="/faq/">FAQ</a><a href="/spinning-top-simulator/">Simulator overview</a></nav>
       </div>
     </section>
   </main>
@@ -455,51 +446,12 @@
   <!-- MULTI-COLUMN FOOTER WITH LEGAL & NAV -->
   <footer class="site-footer">
     <div class="section-container footer-inner">
-      <div class="footer-brand">
-        <span class="logo-emoji">🌀</span>
-        <strong>Emoji Blade Online</strong>
-        <p>A fast, free, browser-based emoji spinning top clash physics simulator.</p>
-        <small class="disclaimer">Inspired by Japanese Beyblade and spinning top battle culture. Independent browser toy.</small>
-      </div>
-
-      <div class="footer-links-group">
-        <div class="footer-col">
-          <strong>Play & Modes</strong>
-          <a href="/">Play Online</a>
-          <a href="/unblocked/">Unblocked Edition</a>
-          <a href="/tier-list/">Tier List</a>
-          <a href="/characters/">Characters Library</a>
-        </div>
-
-        <div class="footer-col">
-          <strong>Guides & Info</strong>
-          <a href="/guide/">How to Play</a>
-          <a href="/2-player-duel/">Local 2-Player Duel</a>
-          <a href="/faq/">FAQ</a>
-          <a href="/spinning-top-simulator/">Spinning-Top Simulator (English)</a>
-          <a href="/about/">About Us</a>
-          <a href="/contact/">Contact Us</a>
-        </div>
-
-        <div class="footer-col">
-          <strong>Legal & Compliance</strong>
-          <a href="/privacy/">Privacy Policy</a>
-          <a href="/terms/">Terms of Service</a>
-        </div>
-
-        <div class="footer-col">
-          <strong>Languages</strong>
-          <a href="/">English</a>
-          <a href="/zh-hans/">简体中文</a>
-          <a href="/ja/">日本語</a>
-        </div>
-      </div>
+      <div class="footer-brand"><span class="logo-emoji" aria-hidden="true">🌀</span><strong>Emoji Blade</strong><p>A free browser emoji spinning-top game. No download or registration required.</p><small class="disclaimer">Independent game; not affiliated with or endorsed by Beyblade or its rights holders.</small></div>
+      <nav class="footer-links-group" aria-label="Explore the game"><div class="footer-col"><strong>Play & modes</strong><a href="/">Play the arena</a><a href="/?mode=2p">Play a local duel</a><a href="/unblocked/">Browser access</a></div><div class="footer-col"><strong>Guides & info</strong><a href="/characters/">Character ratings</a><a href="/guide/">Launch guide</a><a href="/faq/">FAQ</a><a href="/spinning-top-simulator/">Simulator overview</a></div><div class="footer-col"><strong>Legal & support</strong><a href="/about/">About</a><a href="/contact/">Contact</a><a href="/privacy/">Privacy policy</a><a href="/terms/">Terms of service</a><a href="/embed/">Embed the game</a></div><div class="footer-col"><strong>Languages</strong><a href="/">English</a><a href="/zh-hans/">简体中文</a><a href="/ja/">日本語</a></div></nav>
     </div>
-    <div class="footer-bottom">
-      <p>© 2026 Emoji Blade Online (emojiblade.online). All rights reserved. Free web game for everyone.</p>
-    </div>
+    <div class="footer-bottom"><p>© 2026 Emoji Blade</p></div>
   </footer>
 
-  <script src="/game.js?v=20261014-5"></script>
+  <script src="/game.js?v=20261014-6"></script>
 </body>
 </html>

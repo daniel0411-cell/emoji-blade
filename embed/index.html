@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Embed Emoji Blade - Website Integration Guide</title>
+  <meta name="description" content="Copy the Emoji Blade iframe code for your website. Learn sizing, scroll behavior, HTTPS and integration limits before embedding the browser game.">
+  <link rel="canonical" href="https://emojiblade.online/embed/">
+  <link rel="stylesheet" href="/style.css?v=20261014-6">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-container">
+      <a href="/" class="brand-logo">
+        <span class="logo-emoji">🌀</span>
+        <div class="logo-text">
+          <span class="logo-title">EMOJI<span class="accent-text">BLADE</span></span>
+          <span class="logo-sub">OFFICIAL GUIDE</span>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="/" class="nav-link">Play Arena</a>
+        <a href="/tier-list/" class="nav-link">Tier List</a>
+        <a href="/characters/" class="nav-link">Characters</a>
+        <a href="/guide/" class="nav-link">How to Play</a>
+        <a href="/unblocked/" class="nav-link" style="color: #10b981;">Unblocked ⚡</a>
+      </nav>
+      <div class="header-actions">
+        <a href="/" class="primary-glow-btn" style="padding: 6px 14px; font-size: 13px; text-decoration: none;">Play Now ↗</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="prose-container"><article class="prose-card">
+    <span class="sub-badge">FOR WEBSITE OWNERS</span><h1>Embed Emoji Blade on Your Website</h1>
+    <p>Use this iframe to display the official game on your site. This is the full game page, not a compact arena-only widget. Ordinary players can <a href="/">play directly in the arena</a>.</p>
+    <label for="embed-code-text">HTML embed code</label>
+    <textarea id="embed-code-text" class="embed-instructions-code" readonly spellcheck="false">&lt;iframe src=&quot;https://emojiblade.online/&quot; width=&quot;100%&quot; height=&quot;750&quot; style=&quot;border:0; border-radius:16px;&quot; title=&quot;Emoji Blade spinning-top battle game&quot; allow=&quot;fullscreen&quot;&gt;&lt;/iframe&gt;</textarea>
+    <button id="copy-embed-btn" class="secondary-btn" type="button">Copy embed code</button>
+    <p id="embed-copy-status" role="status" aria-live="polite"></p>
+    <h2>Size and scrolling</h2><p>The default width follows your container and the height is 750 pixels. Adjust the height for your layout; the complete page is taller and scrolls inside the iframe. It does not automatically resize to its content. Keep scrolling enabled so controls and navigation remain reachable, especially on phones.</p>
+    <h2>Integration limits</h2><ul><li>Use HTTPS. Your own site's security policy must allow frames from https://emojiblade.online.</li><li>Your browser and network must permit loading the game. Embedding does not bypass filters.</li><li>This example requests fullscreen permission, not automatic audio playback. Sound requires a user interaction and browser support.</li><li>Browser privacy settings can restrict saved progress inside third-party frames.</li><li>Do not overlay advertisements or other clickable elements on the game controls.</li></ul>
+    <p>If embedding fails, offer a <a href="/">direct link to Emoji Blade</a> instead. Test the result on both desktop and mobile before publishing.</p>
+  </article></main>
+  <footer class="site-footer">
+    <div class="section-container footer-bottom">
+      <p>© 2026 Emoji Blade Online. All rights reserved. <a href="/" style="color:var(--accent-cyan);">Back to Game</a></p>
+    </div>
+  </footer>
+  <script src="/embed.js?v=20261014-1"></script>
+</body>
+</html>

@@ -88,4 +88,10 @@ assert len(urls) == len(set(urls))
 expected_urls = {base + '/' + (p.parent.relative_to(root).as_posix()+'/' if p.parent != root else '') for p in pages if p.name == 'index.html'}
 assert set(urls) == expected_urls
 assert (root/'404.html').exists()
+for route in ('index.html', 'zh-hans/index.html', 'ja/index.html'):
+    source = (root/route).read_text()
+    assert 'class="player-info-grid"' in source, (route, 'missing shared information cards')
+    assert source.count('class="footer-col"') == 4, (route, 'missing shared footer columns')
+    assert 'href="/embed/"' in source, (route, 'missing embed navigation')
+    assert 'id="embed-code-text"' not in source, (route, 'embed code must not be on homepage')
 print(f'PASS: {len(pages)} pages; links, h1, canonical, reciprocal languages, JSON-LD, sitemap')

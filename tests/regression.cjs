@@ -171,3 +171,24 @@ for (const twoPlayers of [false, true]) {
 console.log('PASS: blocked/corrupt storage, emoji graphemes, countdown cleanup, refresh-rate physics, separating collisions, character stats, FAQ mass values');
 console.log('PASS: local 2P deep links, unknown-mode fallback, all 16 published preset ratings, local Boss labels');
 console.log('PASS: 36 result-button cases across languages, modes and outcomes; stage and streak preservation');
+(async () => {
+  const embedSource = fs.readFileSync(path.join(__dirname, '..', 'embed.js'), 'utf8');
+  for (const result of ['success', 'denied', 'missing']) {
+    let click, selected = false, copied = '';
+    const code = { value: '<iframe></iframe>', focus() {}, select() { selected = true; } };
+    const status = {};
+    const button = { addEventListener(name, handler) { click = handler; } };
+    const clipboard = result === 'missing' ? undefined : { async writeText(value) {
+      if (result === 'denied') throw Error('denied');
+      copied = value;
+    } };
+    vm.runInNewContext(embedSource, { navigator: { clipboard }, document: { getElementById(id) {
+      return id === 'copy-embed-btn' ? button : id === 'embed-code-text' ? code : status;
+    } } });
+    await click();
+    assert.equal(selected, true);
+    assert.equal(copied, result === 'success' ? code.value : '');
+    assert.ok(status.textContent.includes(result === 'success' ? 'copied' : 'unavailable'));
+  }
+  console.log('PASS: embed clipboard success, denial and unavailable fallback');
+})().catch(error => { console.error(error); process.exitCode = 1; });
