@@ -8,4 +8,4 @@
 
 Character stats and mechanics in game.js are authoritative. Armor artwork does not change collision geometry. Do not advertise ring-outs, filter bypass guarantees, or AI behaviors that are not implemented.
 
-The CI template is `.github/check.yml.example`. Enable it as `.github/workflows/check.yml` using a GitHub login with workflow-write permission. Until enabled, run all three checks locally before every release.
+CI is enabled in `.github/workflows/check.yml` for pushes and pull requests. It checks JavaScript syntax, game regressions, and static-site consistency with read-only repository permissions. Require a successful run before releasing; CI does not deploy the site.
