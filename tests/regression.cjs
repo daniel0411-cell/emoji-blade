@@ -170,6 +170,46 @@ for (const twoPlayers of [false, true]) {
 }
 console.log('PASS: blocked/corrupt storage, emoji graphemes, countdown cleanup, refresh-rate physics, separating collisions, character stats, FAQ mass values');
 console.log('PASS: local 2P deep links, unknown-mode fallback, all 16 published preset ratings, local Boss labels');
+
+// Published matchup links must select the promised presets, not a random/progression opponent.
+const expandedPresets = { crown: '👑', dragon: '🐉', oni: '👹', invader: '👾', diamond: '💎', bomb: '💣', lightning: '⚡', moai: '🗿', fire: '🔥' };
+for (const locale of ['', 'zh-hans/', 'ja/']) {
+  for (const slug of ['crown', 'dragon', 'oni', 'invader']) {
+    const html = fs.readFileSync(path.join(__dirname, '..', locale, 'characters', slug, 'index.html'), 'utf8');
+    const row = html.match(new RegExp(`<tr data-preset="${slug}">([\\s\\S]*?)</tr>`));
+    const numbers = [...row[1].matchAll(/<td>(\d+)<\/td>/g)].map(m => Number(m[1]));
+    const stats = computeEmojiStats(expandedPresets[slug]);
+    assert.deepEqual(numbers, [stats.mass, stats.attack, stats.speed, stats.endurance]);
+  }
+  for (const slug of ['diamond-vs-bomb', 'lightning-vs-moai', 'fire-vs-diamond']) {
+    const html = fs.readFileSync(path.join(__dirname, '..', locale, 'vs', slug, 'index.html'), 'utf8');
+    const [left, right] = slug.split('-vs-');
+    for (const preset of [left, right]) {
+      const row = html.match(new RegExp(`<tr data-preset="${preset}">([\\s\\S]*?)</tr>`));
+      const numbers = [...row[1].matchAll(/<td>(\d+)<\/td>/g)].map(m => Number(m[1]));
+      const stats = computeEmojiStats(expandedPresets[preset]);
+      assert.deepEqual(numbers, [stats.mass, stats.attack, stats.speed, stats.endurance]);
+    }
+    const href = html.match(/href="([^"]*\?mode=2p[^"]*)"/)[1].replaceAll('&amp;', '&');
+    const target = new URL(href, 'https://emojiblade.online');
+    assert.equal(target.pathname, '/' + locale);
+    context.window.location = { search: target.search };
+    const g = game();
+    Object.assign(g, { playerInput: element(), playerTop: new EmojiTop(true),
+      rivalModeSelect: { value: 'progression' }, customEnemyInput: element(),
+      mode2PBtn: element(), modeStreakBtn: element() });
+    g.checkUrlDeepLink();
+    assert.equal(g.is2PMode, true);
+    assert.equal(g.playerTop.emoji, expandedPresets[left]);
+    assert.equal(g.customEnemyInput.value, expandedPresets[right]);
+    assert.equal(g.rivalModeSelect.value, 'custom');
+  }
+}
+const invaderBoss = new EmojiTop(false);
+invaderBoss.configure('👾', 'blaze', true);
+assert.equal(invaderBoss.stats.mass, 97);
+assert.equal(invaderBoss.stats.attack, 108);
+console.log('PASS: three-language expansion ratings, all nine matchup launch links, stage 10 Boss ratings');
 console.log('PASS: 36 result-button cases across languages, modes and outcomes; stage and streak preservation');
 for (const locale of ['zh-hans', 'ja']) {
   for (const route of ['characters', 'tier-list']) {

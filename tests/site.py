@@ -79,6 +79,15 @@ for file in pages:
         route = file.parent.relative_to(root).as_posix()
         expected = base + '/' + (route + '/' if route != '.' else '')
         assert p.canonicals == [expected], (file, p.canonicals)
+        content_route = route.removeprefix('zh-hans/').removeprefix('ja/')
+        expanded_routes = {'vs', 'vs/diamond-vs-bomb', 'vs/lightning-vs-moai', 'vs/fire-vs-diamond',
+                           'characters/crown', 'characters/dragon', 'characters/oni', 'characters/invader'}
+        if content_route in expanded_routes:
+            assert p.alternates == {
+                'x-default': base+'/'+content_route+'/', 'en': base+'/'+content_route+'/',
+                'zh-Hans': base+'/zh-hans/'+content_route+'/', 'ja': base+'/ja/'+content_route+'/'
+            }, (file, 'missing reciprocal expansion languages')
+            assert p.schema, (file, 'missing structured data')
         if route in ('.', 'zh-hans', 'ja'): assert p.alternates == alternates
         topic = route.split('/')[-1]
         if topic in ('characters', 'guide', 'faq', '2-player-duel', 'spinning-top-simulator', 'tier-list', 'unblocked'):
@@ -103,6 +112,15 @@ urls = [el.text for el in tree.findall('s:url/s:loc', ns)]
 assert len(urls) == len(set(urls))
 expected_urls = {base + '/' + (p.parent.relative_to(root).as_posix()+'/' if p.parent != root else '') for p in pages if p.name == 'index.html'}
 assert set(urls) == expected_urls
+for prefix in ('', 'zh-hans/', 'ja/'):
+    home = (root/prefix/'index.html').read_text()
+    characters = (root/prefix/'characters/index.html').read_text()
+    matchups = (root/prefix/'vs/index.html').read_text()
+    assert f'href="/{prefix}vs/"' in home, (prefix, 'matchup hub missing from home')
+    for slug in ('crown', 'dragon', 'oni', 'invader'):
+        assert f'href="/{prefix}characters/{slug}/"' in characters, (prefix, slug, 'detail missing from library')
+    for slug in ('diamond-vs-bomb', 'lightning-vs-moai', 'fire-vs-diamond'):
+        assert f'href="/{prefix}vs/{slug}/"' in matchups, (prefix, slug, 'matchup missing from hub')
 assert (root/'404.html').exists()
 for route in ('index.html', 'zh-hans/index.html', 'ja/index.html'):
     source = (root/route).read_text()
