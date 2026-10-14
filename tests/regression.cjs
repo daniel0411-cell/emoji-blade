@@ -10,7 +10,7 @@ const context = {
   document: { querySelectorAll: () => [] }, requestAnimationFrame() {},
   localStorage: { getItem() { throw Error('blocked'); }, setItem() { throw Error('blocked'); } },
   setInterval(fn) { timers.set(++nextTimer, fn); return nextTimer; },
-  clearInterval(id) { timers.delete(id); }, clearTimeout() {}, Intl,
+  clearInterval(id) { timers.delete(id); }, clearTimeout() {}, Intl, URLSearchParams,
 };
 vm.createContext(context);
 vm.runInContext(source.replace("  window.addEventListener('DOMContentLoaded'", "  window.audit = { EmojiTop, EmojiBladeGame, readStored, writeStored, normalizeEmoji, computeEmojiStats };\n  window.addEventListener('DOMContentLoaded'"), context);
@@ -101,4 +101,46 @@ boss.configure('👹', 'blaze', true);
 assert.equal(boss.stats.mass, 149);
 assert.ok(faq.includes('raises that to 149'));
 assert.ok(faq.includes('28% random chance'));
+for (const search of ['?mode=2p', '?mode=2p&emoji=%F0%9F%94%A5&rival=%F0%9F%94%A5', '?mode=remote']) {
+  context.window.location = { search };
+  const g = game();
+  const active = new Set(['single']);
+  Object.assign(g, { playerInput: element(), playerTop: new EmojiTop(true),
+    rivalModeSelect: { value: 'progression' }, customEnemyInput: element(),
+    mode2PBtn: { classList: { add() { active.add('2p'); } } },
+    modeStreakBtn: { classList: { remove() { active.delete('single'); } } } });
+  g.checkUrlDeepLink();
+  const local = search.includes('mode=2p');
+  assert.equal(g.is2PMode, local);
+  assert.equal(active.has('2p'), local);
+  assert.equal(active.has('single'), !local);
+  assert.equal(g.rivalModeSelect.value, local ? 'custom' : 'progression');
+  if (local) {
+    assert.equal(g.customEnemyInput.style.display, 'inline-block');
+    assert.equal(g.customEnemyInput.value, search.includes('rival=') ? '🔥' : '💎');
+  }
+  if (search.includes('emoji=')) assert.equal(g.playerTop.emoji, '🔥');
+}
+const library = fs.readFileSync(path.join(__dirname, '..', 'characters', 'index.html'), 'utf8');
+const rows = [...library.matchAll(/<tr data-preset="([^"]+)">.*?<td>([^<]+)<\/td><td>(\d+)<\/td><td>(\d+)<\/td><td>(\d+)<\/td><td>(\d+)<\/td><\/tr>/g)];
+assert.equal(rows.length, 16);
+assert.equal(new Set(rows.map(row => row[1])).size, 16);
+for (const [, emoji, tier, ...numbers] of rows) {
+  const stats = computeEmojiStats(emoji);
+  assert.equal(tier, stats.tier);
+  assert.deepEqual(numbers.map(Number), [stats.mass, stats.attack, stats.speed, stats.endurance]);
+}
+for (const twoPlayers of [false, true]) {
+  const g = game();
+  Object.assign(g, { stage: 5, winStreak: 0, stageNumEl: element(), streakCounter: element(),
+    rivalModeSelect: { value: 'progression' }, playerTop: new EmojiTop(true), enemyTop: new EmojiTop(false),
+    particles: { clear() {} }, resultModal: element(), nextBattleBtn: element(),
+    resetPositions() {}, updateHudBars() {}, is2PMode: twoPlayers });
+  g.setupStage();
+  assert.equal(g.enemyTop.stats.mass, twoPlayers ? 110 : 149);
+  assert.equal(g.enemyTop.isBoss, !twoPlayers);
+  assert.equal(g.statusMsg.textContent.includes('BOSS APPROACHING'), !twoPlayers);
+  assert.equal(g.nextBattleBtn.textContent, twoPlayers ? 'Play Again ⚡' : 'Next Stage ⚡');
+}
 console.log('PASS: blocked/corrupt storage, emoji graphemes, countdown cleanup, refresh-rate physics, separating collisions, character stats, FAQ mass values');
+console.log('PASS: local 2P deep links, unknown-mode fallback, all 16 published preset ratings, local Boss labels');

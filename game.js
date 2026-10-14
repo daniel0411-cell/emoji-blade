@@ -41,6 +41,8 @@
       'PLAYER 2 WINS!': ['玩家二获胜！', 'プレイヤー2の勝利！'],
       'DRAW': ['平局', '引き分け'], 'Both tops stopped together. Play again!': ['双方同时停止，再来一场！', '両方のコマが止まりました。もう一度！'],
       'Outspun': ['耐力获胜', '持久力勝利'], 'Spin Depleted': ['能量耗尽', 'エネルギー切れ'],
+      'Play Again ⚡': ['再来一局 ⚡', 'もう一度対戦 ⚡'],
+      'Next Stage ⚡': ['下一关 ⚡', '次のステージ ⚡'],
     };
     return messages[text]?.[lang === 'zh-Hans' ? 0 : lang === 'ja' ? 1 : 2] || text;
   }
@@ -573,6 +575,14 @@
         this.playerInput.value = normalizeEmoji(urlEmoji);
         this.playerTop.configure(urlEmoji, 'blaze');
       }
+      if (params.get('mode') === '2p') {
+        this.is2PMode = true;
+        this.mode2PBtn.classList.add('active');
+        this.modeStreakBtn.classList.remove('active');
+        this.rivalModeSelect.value = 'custom';
+        this.customEnemyInput.style.display = 'inline-block';
+        this.customEnemyInput.value = normalizeEmoji(params.get('rival') || '💎');
+      }
     }
 
     resizeCanvas() {
@@ -633,10 +643,11 @@
       document.getElementById('hud-player-emoji').textContent = this.playerTop.emoji;
       document.getElementById('hud-enemy-emoji').textContent = this.enemyTop.emoji;
       document.getElementById('player-tier').textContent = `${this.playerTop.stats.tier}-TIER`;
-      document.getElementById('enemy-tier').textContent = enemyConfig.isBoss ? '🔥 BOSS' : `${this.enemyTop.stats.tier}-TIER`;
+      document.getElementById('enemy-tier').textContent = this.enemyTop.isBoss ? '🔥 BOSS' : `${this.enemyTop.stats.tier}-TIER`;
 
       this.updateHudBars();
-      this.statusMsg.textContent = translate(enemyConfig.isBoss ? '⚠️ WARNING: BOSS APPROACHING!' : 'Drag player top or set angle & launch!');
+      this.statusMsg.textContent = translate(this.enemyTop.isBoss ? '⚠️ WARNING: BOSS APPROACHING!' : 'Drag player top or set angle & launch!');
+      this.nextBattleBtn.textContent = translate(!this.is2PMode && this.rivalModeSelect.value === 'progression' ? 'Next Stage ⚡' : 'Play Again ⚡');
     }
 
     setConfigurationLocked(locked) {
@@ -1038,7 +1049,7 @@
         if (draw) {
           banner.textContent = 'DRAW';
           banner.className = 'result-banner';
-          summary.textContent = 'Both tops stopped together. Play again!';
+          summary.textContent = translate('Both tops stopped together. Play again!');
         } else if (playerWon) {
           banner.textContent = this.is2PMode ? 'PLAYER 1 WINS!' : 'VICTORY! 🏆';
           banner.className = 'result-banner';

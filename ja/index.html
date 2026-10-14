@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Emoji Blade（絵文字ブレード）- 無料の絵文字コマ対戦ゲーム オンライン</title>
-  <meta name="description" content="絵文字ブレード（Emoji Blade）をブラウザで無料プレイ！好きな絵文字を3Dコマに変身させてアリーナで激突。炎、爆弾、稲妻、ダイヤなど多彩なコマで連勝を目指そう。ダウンロード不要。">
+  <meta name="description" content="絵文字ブレード（Emoji Blade）をブラウザで無料プレイ！好きな絵文字のコマで、シンプルな2D物理によるアリーナ対戦。炎、爆弾、稲妻、ダイヤなど多彩なコマで連勝を目指そう。ダウンロード不要。">
   <meta name="keywords" content="emoji blade, emoji battle game, emoji spinning top, beyblade emoji, online browser game, free physics game, unblocked games">
   
   <link rel="canonical" href="https://emojiblade.online/ja/">
@@ -16,7 +16,7 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Emoji Blade（絵文字ブレード）- 無料の絵文字コマ対戦ゲーム オンライン">
-  <meta property="og:description" content="絵文字ブレード（Emoji Blade）をブラウザで無料プレイ！好きな絵文字を3Dコマに変身させてアリーナで激突。炎、爆弾、稲妻、ダイヤなど多彩なコマで連勝を目指そう。ダウンロード不要。">
+  <meta property="og:description" content="絵文字ブレード（Emoji Blade）をブラウザで無料プレイ！好きな絵文字のコマで、シンプルな2D物理によるアリーナ対戦。炎、爆弾、稲妻、ダイヤなど多彩なコマで連勝を目指そう。ダウンロード不要。">
   <meta property="og:url" content="https://emojiblade.online/ja/">
   <meta property="og:site_name" content="Emoji Blade">
   <meta name="twitter:card" content="summary_large_image">
@@ -26,7 +26,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="/style.css?v=20261014-3">
+  <link rel="stylesheet" href="/style.css?v=20261014-4">
 
   <!-- Schema.org Structured Data -->
   <script type="application/ld+json">[
@@ -44,7 +44,7 @@
     ],
     "name": "Emoji Blade",
     "url": "https://emojiblade.online/ja/",
-    "description": "絵文字ブレード（Emoji Blade）をブラウザで無料プレイ！好きな絵文字を3Dコマに変身させてアリーナで激突。炎、爆弾、稲妻、ダイヤなど多彩なコマで連勝を目指そう。ダウンロード不要。",
+    "description": "絵文字ブレード（Emoji Blade）をブラウザで無料プレイ！好きな絵文字のコマで、シンプルな2D物理によるアリーナ対戦。炎、爆弾、稲妻、ダイヤなど多彩なコマで連勝を目指そう。ダウンロード不要。",
     "applicationCategory": "GameApplication",
     "operatingSystem": "Web browser",
     "playMode": [
@@ -89,7 +89,7 @@
         <a href="/tier-list/" class="nav-link">最強Tier表</a>
         <a href="/characters/" class="nav-link">キャラクター一覧</a>
         <a href="/guide/" class="nav-link">遊び方ガイド</a>
-        <a href="/unblocked/" class="nav-link" style="color: #10b981;">Unblocked ⚡</a>
+        <a href="/unblocked/" class="nav-link" style="color: #10b981;">ブラウザでのアクセス（英語）</a>
       </nav>
 
       <div class="header-actions">
@@ -100,8 +100,8 @@
           <a href="/ja/" class="active">日本語</a>
         </div>
 
-        <button id="fullscreen-btn" class="icon-pill-btn" aria-label="Toggle fullscreen" title="Toggle Fullscreen">⛶</button>
-        <button id="sound-toggle-btn" class="icon-pill-btn" aria-label="Toggle sound" title="Toggle Sound">
+        <button id="fullscreen-btn" class="icon-pill-btn" aria-label="全画面表示を切り替える" title="全画面表示を切り替える">⛶</button>
+        <button id="sound-toggle-btn" class="icon-pill-btn" aria-label="効果音を切り替える" title="効果音を切り替える">
           <span id="sound-icon">🔊</span>
         </button>
       </div>
@@ -117,7 +117,7 @@
             <span class="streak-fire">🔥</span>
             <span>連勝記録:</span>
             <strong id="streak-counter">0</strong>
-            <small class="best-streak">(Best: <span id="best-streak">0</span>)</small>
+            <small class="best-streak">(最高記録： <span id="best-streak">0</span>)</small>
           </div>
 
           <div class="stage-badge">
@@ -195,14 +195,14 @@
                     <strong id="res-time-val">8.4s</strong>
                   </div>
                   <div class="res-stat-item">
-                    <span class="res-label">Finish Type</span>
-                    <strong id="res-type-val">Outspun</strong>
+                    <span class="res-label">決着の種類</span>
+                    <strong id="res-type-val">持久力勝利</strong>
                   </div>
                 </div>
 
                 <div class="modal-btn-row">
-                  <button id="next-battle-btn" class="primary-glow-btn">Next Stage ⚡</button>
-                  <button id="share-card-btn" class="secondary-btn">📸 共有 Card</button>
+                  <button id="next-battle-btn" class="primary-glow-btn">次のステージ ⚡</button>
+                  <button id="share-card-btn" class="secondary-btn">📸 対戦結果を共有</button>
                 </div>
               </div>
             </div>
@@ -215,14 +215,14 @@
           <div class="panel-card player-config">
             <div class="card-title-row">
               <span class="card-icon">⚡</span>
-              <h3>絵文字ブレード設定</h3>
-              <button id="random-player-btn" class="tiny-ghost-btn" title="Random Emoji">🎲 ランダム</button>
+              <h3>絵文字コマの設定</h3>
+              <button id="random-player-btn" class="tiny-ghost-btn" title="絵文字をランダムに選ぶ">🎲 ランダム</button>
             </div>
 
             <div class="emoji-input-wrapper">
-              <input type="text" id="player-emoji-input" value="🔥" maxlength="128" autocomplete="off" spellcheck="false" aria-label="Input your emoji">
+              <input type="text" id="player-emoji-input" value="🔥" maxlength="128" autocomplete="off" spellcheck="false" aria-label="自分の絵文字を入力">
               <div class="blade-style-select">
-                <select id="blade-style-select" aria-label="Blade Blade Ring Style">
+                <select id="blade-style-select" aria-label="コマのリングデザイン">
                   <option value="blaze">炎のリング</option>
                   <option value="cyber">ネオンリング</option>
                   <option value="gold">黄金リング</option>
@@ -298,7 +298,7 @@
           <div class="panel-card launch-config">
             <div class="card-title-row">
               <span class="card-icon">🎯</span>
-              <h3>発射設定 & 対戦相手</h3>
+              <h3>発射設定と対戦相手</h3>
               <div class="mode-toggles">
                 <button id="mode-single-btn" class="pill-tab active">連勝モード</button>
                 <button id="mode-2p-btn" class="pill-tab">ローカル2人対戦</button>
@@ -312,7 +312,7 @@
                 <option value="random">ランダム対戦</option>
                 <option value="custom">カスタム対戦</option>
               </select>
-              <input type="text" id="custom-enemy-input" value="💎" maxlength="128" style="display:none;" title="Custom rival emoji">
+              <input type="text" id="custom-enemy-input" value="💎" maxlength="128" style="display:none;" title="相手の絵文字" aria-label="相手の絵文字">
             </div>
 
             <!-- Sliders for Launch -->
@@ -322,7 +322,7 @@
                   <span>発射パワー：</span>
                   <strong id="power-display">85%</strong>
                 </div>
-                <input type="range" aria-label="Launch power" id="power-slider" min="30" max="100" value="85">
+                <input type="range" aria-label="発射パワー" id="power-slider" min="30" max="100" value="85">
               </div>
 
               <div class="slider-group">
@@ -330,7 +330,7 @@
                   <span>発射角度：</span>
                   <strong id="angle-display">-35°</strong>
                 </div>
-                <input type="range" aria-label="Launch angle" id="angle-slider" min="-180" max="180" value="-35">
+                <input type="range" aria-label="発射角度" id="angle-slider" min="-180" max="180" value="-35">
               </div>
             </div>
 
@@ -350,12 +350,12 @@
       </div>
     </section>
 
-<section class="content-section"><div class="section-container"><h2>Emoji Blade の遊び方</h2><p>絵文字コマを選び、発射角度とパワーを設定するか、アリーナでコマを引っ張って発射します。相手の回転エネルギーが先になくなると勝利です。壁では跳ね返り、場外勝利はありません。</p><h2>ステータスとクリティカル</h2><p>重さは衝突ダメージ、攻撃は相手のエネルギー損失、速度は初速と回転、持久力はエネルギー消費に影響します。クリティカルは確率または高い相対衝突速度で発生し、ダメージが1.5倍になります。リングの見た目は衝突形状を変えません。</p><h2>1人・2人モード</h2><p>ステージモードでは5ステージごとにボスが登場します。2人対戦ではプレイヤー1、プレイヤー2の順に発射設定を行い、同時に発射します。2人対戦は1人モードの連勝やバッジに影響しません。</p><p><a href="/characters/">キャラクター情報（英語）</a> · <a href="/guide/">詳細ガイド（英語）</a> · <a href="/faq/">FAQ（英語）</a> · <a href="/spinning-top-simulator/">コマシミュレーター紹介（英語）</a></p></div></section>
+<section class="content-section"><div class="section-container"><h2>Emoji Blade の遊び方</h2><p>絵文字コマを選び、発射角度とパワーを設定するか、アリーナでコマを引っ張って発射します。相手の回転エネルギーが先になくなると勝利です。壁では跳ね返り、場外勝利はありません。</p><h2>ステータスとクリティカル</h2><p>重さは衝突ダメージ、攻撃は相手のエネルギー損失、速度は初速と回転、持久力はエネルギー消費に影響します。クリティカルは確率または高い相対衝突速度で発生し、ダメージが1.5倍になります。リングの見た目は衝突形状を変えません。</p><h2>1人・2人モード</h2><p>ステージモードでは5ステージごとにボスが登場します。2人対戦ではプレイヤー1、プレイヤー2の順に発射設定を行い、同時に発射します。2人対戦は1人モードの連勝やバッジに影響しません。</p><p><a href="/characters/">キャラクター情報（英語）</a> · <a href="/guide/">詳細ガイド（英語）</a> · <a href="/2-player-duel/">ローカル2人対戦ガイド（英語）</a> · <a href="/faq/">FAQ（英語）</a> · <a href="/spinning-top-simulator/">コマシミュレーター紹介（英語）</a></p></div></section>
   </main>
 
   <!-- MULTI-COLUMN FOOTER WITH LEGAL & NAV -->
   <footer class="site-footer"><div class="section-container"><p>Emoji Blade はダウンロード不要の無料ブラウザ絵文字コマゲームです。Beyblade ブランドとは関係のない独立作品です。</p><p><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a> · <a href="/contact/">Contact</a></p><p><a href="/">English</a> · <a href="/zh-hans/">简体中文</a> · <a href="/ja/">日本語</a></p></div></footer>
 
-  <script src="/game.js?v=20261014-2"></script>
+  <script src="/game.js?v=20261014-4"></script>
 </body>
 </html>

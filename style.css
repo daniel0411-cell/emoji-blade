@@ -1213,6 +1213,15 @@ input[type="range"] {
   text-decoration: none;
 }
 
+.stats-table-scroll { overflow-x: auto; margin: 24px 0; }
+.stats-table-scroll:focus-visible { outline: 2px solid var(--accent-cyan); }
+.character-stats-table { width: 100%; border-collapse: collapse; min-width: 610px; font-size: 14px; }
+.character-stats-table caption { text-align: left; padding: 12px 0; color: var(--text-muted); }
+.character-stats-table th, .character-stats-table td { padding: 12px; border-bottom: 1px solid var(--bg-card-border); text-align: left; }
+.character-stats-table thead { color: var(--accent-cyan); }
+.character-stats-table tbody tr:hover { background: rgba(0, 240, 255, 0.04); }
+.prose-card h2[id] { scroll-margin-top: 220px; }
+
 /* Footer */
 .site-footer {
   background: #050810;
