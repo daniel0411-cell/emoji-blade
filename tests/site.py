@@ -80,6 +80,22 @@ for file in pages:
         expected = base + '/' + (route + '/' if route != '.' else '')
         assert p.canonicals == [expected], (file, p.canonicals)
         if route in ('.', 'zh-hans', 'ja'): assert p.alternates == alternates
+        topic = route.split('/')[-1]
+        if topic in ('characters', 'guide', 'faq', '2-player-duel', 'spinning-top-simulator', 'tier-list', 'unblocked'):
+            expected_alternates = {
+                'x-default': base+'/'+topic+'/', 'en': base+'/'+topic+'/',
+                'zh-Hans': base+'/zh-hans/'+topic+'/', 'ja': base+'/ja/'+topic+'/'
+            }
+            assert p.alternates == expected_alternates, (file, 'missing reciprocal topic languages')
+            if route.startswith(('zh-hans/', 'ja/')):
+                locale = route.split('/')[0]
+                for href in p.links:
+                    url = urlsplit(href)
+                    if url.scheme or url.netloc: continue
+                    target_topic = url.path.strip('/')
+                    # The English language switch intentionally targets this topic's English page.
+                    if target_topic == topic and p.links.count(href) == 1: continue
+                    assert target_topic not in ('characters', 'guide', 'faq', '2-player-duel', 'spinning-top-simulator', 'tier-list', 'unblocked'), (file, 'topic navigation must stay localized', href)
 
 tree = ET.parse(root/'sitemap.xml')
 ns = {'s': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
@@ -94,4 +110,9 @@ for route in ('index.html', 'zh-hans/index.html', 'ja/index.html'):
     assert source.count('class="footer-col"') == 4, (route, 'missing shared footer columns')
     assert 'href="/embed/"' in source, (route, 'missing embed navigation')
     assert 'id="embed-code-text"' not in source, (route, 'embed code must not be on homepage')
+    if route != 'index.html':
+        locale = route.split('/')[0]
+        for topic in ('characters', 'guide', 'faq', '2-player-duel', 'spinning-top-simulator', 'tier-list', 'unblocked'):
+            assert f'href="/{topic}/"' not in source, (route, 'English topic link left on localized home')
+        assert '（英文）' not in source and '（英語）' not in source
 print(f'PASS: {len(pages)} pages; links, h1, canonical, reciprocal languages, JSON-LD, sitemap')

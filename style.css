@@ -1302,6 +1302,11 @@ input[type="range"] {
   color: var(--accent-cyan);
 }
 
+.support-language-note { color: var(--text-muted); font-size: 12px; line-height: 1.7; }
+.localized-content-header .header-container { flex-wrap: wrap; gap: 12px; }
+.localized-content-header .lang-switch-links { margin-left: auto; }
+.localized-content-header .nav-links { order: 3; width: 100%; flex-wrap: wrap; justify-content: center; }
+
 .footer-bottom {
   text-align: center;
   border-top: 1px solid rgba(255, 255, 255, 0.04);
