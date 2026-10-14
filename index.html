@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Emoji Blade Online - Free Emoji Spinning Top Battle Game</title>
+  <meta name="description" content="Play Emoji Blade online for free! Turn your favorite emojis into battle spinning tops. Clash with fire, bombs, rockets, and diamonds in an epic physics arena. No download required.">
+  <meta name="keywords" content="emoji blade, emoji battle game, emoji spinning top, beyblade emoji, online browser game, free physics game, unblocked games">
+  
+  <!-- Canonical & Alternate Hreflang for SEO -->
+  <link rel="canonical" href="https://emojiblade.online/">
+  <link rel="alternate" hreflang="x-default" href="https://emojiblade.online/">
+  <link rel="alternate" hreflang="en" href="https://emojiblade.online/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://emojiblade.online/?lang=zh-Hans">
+  <link rel="alternate" hreflang="ja" href="https://emojiblade.online/?lang=ja">
+  <link rel="alternate" hreflang="ko" href="https://emojiblade.online/?lang=ko">
+  <link rel="alternate" hreflang="es" href="https://emojiblade.online/?lang=es">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Emoji Blade Online - Free Emoji Spinning Top Battle Game">
+  <meta property="og:description" content="Turn emojis into spinning battle tops! Pull back, release, and clash in an intense physics arena. Free in your browser.">
+  <meta property="og:url" content="https://emojiblade.online/">
+  <meta property="og:site_name" content="Emoji Blade">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Schema.org Structured Data -->
+  <script type="application/ld+json">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Emoji Blade Online",
+      "url": "https://emojiblade.online",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://emojiblade.online/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": ["VideoGame", "WebApplication"],
+      "name": "Emoji Blade",
+      "url": "https://emojiblade.online",
+      "description": "A browser physics action game where players transform emojis into custom spinning tops to battle in a high-speed collision ring.",
+      "applicationCategory": "GameApplication",
+      "operatingSystem": "All modern browsers",
+      "playMode": "SinglePlayer, MultiPlayer",
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does Emoji Blade calculate spinning top stats?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Every emoji has calculated attributes including Mass, Attack Sharpness, Agility Speed, and Spin Endurance based on its visual traits and emoji class."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Emoji Blade free to play without download?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, Emoji Blade runs directly in web browsers on mobile phones, tablets, and desktop computers with zero installation or account sign-up."
+          }
+        }
+      ]
+    }
+  ]
+  </script>
+</head>
+<body>
+
+  <!-- Background Ambience -->
+  <div class="bg-glow-orb orb-1"></div>
+  <div class="bg-glow-orb orb-2"></div>
+  <div class="bg-grid-pattern"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="#" class="brand-logo">
+        <span class="logo-emoji">🌀</span>
+        <div class="logo-text">
+          <span class="logo-title">EMOJI<span class="accent-text">BLADE</span></span>
+          <span class="logo-sub">SPINNING CLASH</span>
+        </div>
+      </a>
+      
+      <nav class="nav-links">
+        <a href="#arena-section" class="nav-link active" data-i18n="navPlay">Play Now</a>
+        <a href="#tier-section" class="nav-link" data-i18n="navTier">Tier List</a>
+        <a href="#guide-section" class="nav-link" data-i18n="navGuide">How to Play</a>
+        <a href="#faq-section" class="nav-link" data-i18n="navFaq">FAQ</a>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Language Switcher -->
+        <div class="lang-dropdown">
+          <button id="lang-btn" class="icon-pill-btn" aria-label="Select Language">
+            <span class="lang-icon">🌐</span>
+            <span id="current-lang-label">English</span>
+            <span class="dropdown-arrow">▾</span>
+          </button>
+          <div class="lang-menu" id="lang-menu">
+            <button data-set-lang="en">English (EN)</button>
+            <button data-set-lang="zh-Hans">简体中文 (CN)</button>
+            <button data-set-lang="zh-Hant">繁體中文 (TW)</button>
+            <button data-set-lang="ja">日本語 (JA)</button>
+            <button data-set-lang="ko">한국어 (KO)</button>
+            <button data-set-lang="es">Español (ES)</button>
+          </div>
+        </div>
+
+        <button id="sound-toggle-btn" class="icon-pill-btn" title="Toggle Sound">
+          <span id="sound-icon">🔊</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO & ARENA SECTION -->
+    <section id="arena-section" class="arena-section">
+      <div class="section-container">
+        <div class="arena-top-bar">
+          <div class="streak-badge">
+            <span class="streak-fire">🔥</span>
+            <span data-i18n="streakLabel">Win Streak:</span>
+            <strong id="streak-counter">0</strong>
+            <small class="best-streak">(Best: <span id="best-streak">0</span>)</small>
+          </div>
+
+          <div class="stage-badge">
+            <span data-i18n="stageLabel">STAGE</span>
+            <strong id="stage-num">01</strong>
+          </div>
+
+          <div class="arena-status-msg" id="arena-status" data-i18n="statusReady">
+            Drag player top or set angle & launch!
+          </div>
+        </div>
+
+        <!-- The Battle Canvas Arena Shell -->
+        <div class="arena-viewport-wrapper">
+          <div class="arena-canvas-container" id="arena-container">
+            <canvas id="battleCanvas" width="800" height="600"></canvas>
+            
+            <!-- HUD Overlays -->
+            <div class="hud-player-stats hud-left">
+              <div class="hud-header">
+                <span class="hud-tag blue" data-i18n="playerTag">YOU</span>
+                <span class="hud-tier" id="player-tier">A-TIER</span>
+              </div>
+              <div class="hud-emoji-preview" id="hud-player-emoji">🔥</div>
+              <div class="hud-bars">
+                <div class="bar-label">
+                  <span data-i18n="spinEnergy">Spin Energy</span>
+                  <span id="player-energy-val">100%</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill blue-fill" id="player-energy-bar" style="width: 100%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hud-vs-center">VS</div>
+
+            <div class="hud-player-stats hud-right">
+              <div class="hud-header">
+                <span class="hud-tier" id="enemy-tier">S-TIER</span>
+                <span class="hud-tag red" data-i18n="enemyTag">RIVAL</span>
+              </div>
+              <div class="hud-emoji-preview" id="hud-enemy-emoji">💎</div>
+              <div class="hud-bars">
+                <div class="bar-label">
+                  <span data-i18n="spinEnergy">Spin Energy</span>
+                  <span id="enemy-energy-val">100%</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill red-fill" id="enemy-energy-bar" style="width: 100%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Launch Dragging Overlay Guide -->
+            <div class="launch-aim-guide" id="launch-aim-guide">
+              <span class="guide-text" data-i18n="slingshotHint">👈 Drag & Pull back to launch</span>
+            </div>
+
+            <!-- Battle Victory / Defeat Modal -->
+            <div class="battle-overlay-modal" id="result-modal" style="display: none;">
+              <div class="modal-card">
+                <div class="result-banner" id="result-banner">VICTORY!</div>
+                <div class="clash-summary" id="result-summary">Fire burned through Diamond's defense!</div>
+                
+                <div class="result-stats-grid">
+                  <div class="res-stat-item">
+                    <span class="res-label" data-i18n="resHits">Total Hits</span>
+                    <strong id="res-hit-count">14</strong>
+                  </div>
+                  <div class="res-stat-item">
+                    <span class="res-label" data-i18n="resDuration">Battle Time</span>
+                    <strong id="res-time-val">8.4s</strong>
+                  </div>
+                  <div class="res-stat-item">
+                    <span class="res-label" data-i18n="resKnockout">Finish Type</span>
+                    <strong id="res-type-val">Outspun</strong>
+                  </div>
+                </div>
+
+                <div class="modal-btn-row">
+                  <button id="next-battle-btn" class="primary-glow-btn" data-i18n="btnNextStage">Next Stage ⚡</button>
+                  <button id="share-card-btn" class="secondary-btn" data-i18n="btnShareCard">📸 Share Card</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- CONTROLS & EMOJI DOCK -->
+        <div class="game-control-panel">
+          <!-- Left: Player Selection -->
+          <div class="panel-card player-config">
+            <div class="card-title-row">
+              <span class="card-icon">⚡</span>
+              <h3 data-i18n="customPlayerTitle">Your Emoji Blade</h3>
+              <button id="random-player-btn" class="tiny-ghost-btn" title="Random Emoji">🎲 Random</button>
+            </div>
+
+            <div class="emoji-input-wrapper">
+              <input type="text" id="player-emoji-input" value="🔥" maxlength="4" autocomplete="off" spellcheck="false" aria-label="Input your emoji">
+              <div class="blade-style-select">
+                <select id="blade-style-select" aria-label="Blade Blade Ring Style">
+                  <option value="blaze">Inferno Blade Ring</option>
+                  <option value="cyber">Cyber Neon Ring</option>
+                  <option value="gold">Golden Emperor Ring</option>
+                  <option value="obsidian">Dark Void Ring</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Quick Picker Emojis -->
+            <div class="quick-picker-group">
+              <span class="picker-label" data-i18n="quickPick">Quick Picks:</span>
+              <div class="quick-emojis" id="quick-emojis-container">
+                <!-- Dynamically generated or static quick picks -->
+                <button class="emoji-chip active" data-emoji="🔥">🔥</button>
+                <button class="emoji-chip" data-emoji="💣">💣</button>
+                <button class="emoji-chip" data-emoji="⚡">⚡</button>
+                <button class="emoji-chip" data-emoji="💎">💎</button>
+                <button class="emoji-chip" data-emoji="🚀">🚀</button>
+                <button class="emoji-chip" data-emoji="🥊">🥊</button>
+                <button class="emoji-chip" data-emoji="🤡">🤡</button>
+                <button class="emoji-chip" data-emoji="💀">💀</button>
+                <button class="emoji-chip" data-emoji="🗿">🗿</button>
+                <button class="emoji-chip" data-emoji="🍕">🍕</button>
+                <button class="emoji-chip" data-emoji="👑">👑</button>
+                <button class="emoji-chip" data-emoji="🌪️">🌪️</button>
+              </div>
+            </div>
+
+            <!-- Radar Stats Display -->
+            <div class="stats-preview-grid">
+              <div class="stat-cell">
+                <div class="stat-info">
+                  <span class="s-name" data-i18n="statWeight">Weight (Mass)</span>
+                  <strong id="stat-weight-val">74</strong>
+                </div>
+                <div class="stat-meter"><div class="stat-fill" id="meter-weight" style="width: 74%"></div></div>
+              </div>
+
+              <div class="stat-cell">
+                <div class="stat-info">
+                  <span class="s-name" data-i18n="statAttack">Attack (Clash)</span>
+                  <strong id="stat-attack-val">92</strong>
+                </div>
+                <div class="stat-meter"><div class="stat-fill" id="meter-attack" style="width: 92%"></div></div>
+              </div>
+
+              <div class="stat-cell">
+                <div class="stat-info">
+                  <span class="s-name" data-i18n="statSpeed">Speed (RPM)</span>
+                  <strong id="stat-speed-val">85</strong>
+                </div>
+                <div class="stat-meter"><div class="stat-fill" id="meter-speed" style="width: 85%"></div></div>
+              </div>
+
+              <div class="stat-cell">
+                <div class="stat-info">
+                  <span class="s-name" data-i18n="statEndurance">Endurance (Spin)</span>
+                  <strong id="stat-endurance-val">68</strong>
+                </div>
+                <div class="stat-meter"><div class="stat-fill" id="meter-endurance" style="width: 68%"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Launch & Opponent Controls -->
+          <div class="panel-card launch-config">
+            <div class="card-title-row">
+              <span class="card-icon">🎯</span>
+              <h3 data-i18n="launchConfigTitle">Launch Cannon & Rival</h3>
+              <div class="mode-toggles">
+                <button id="mode-single-btn" class="pill-tab active" data-i18n="modeStreak">Streak AI</button>
+                <button id="mode-2p-btn" class="pill-tab" data-i18n="mode2P">2P Local</button>
+              </div>
+            </div>
+
+            <div class="rival-selector-row">
+              <label for="rival-mode-select" data-i18n="rivalLabel">Opponent:</label>
+              <select id="rival-mode-select">
+                <option value="progression">Ascending Bosses (Stage Mode)</option>
+                <option value="random">Random Challenger</option>
+                <option value="custom">Custom Challenger</option>
+              </select>
+              <input type="text" id="custom-enemy-input" value="💎" maxlength="4" style="display:none;" title="Custom rival emoji">
+            </div>
+
+            <!-- Sliders for Launch -->
+            <div class="launch-sliders">
+              <div class="slider-group">
+                <div class="slider-label">
+                  <span data-i18n="launchPower">Launch Power:</span>
+                  <strong id="power-display">85%</strong>
+                </div>
+                <input type="range" id="power-slider" min="30" max="100" value="85">
+              </div>
+
+              <div class="slider-group">
+                <div class="slider-label">
+                  <span data-i18n="launchAngle">Launch Angle:</span>
+                  <strong id="angle-display">-35°</strong>
+                </div>
+                <input type="range" id="angle-slider" min="-180" max="180" value="-35">
+              </div>
+            </div>
+
+            <!-- Main Launch Action Button -->
+            <div class="action-btn-wrapper">
+              <button id="main-launch-btn" class="massive-clash-btn">
+                <span class="btn-shine"></span>
+                <span class="btn-text" data-i18n="btnLaunch">LET IT RIP! 🚀</span>
+              </button>
+            </div>
+            
+            <p class="launch-tip" data-i18n="launchTipText">
+              💡 Tip: Click & drag directly on your spinning top in the arena to pull and slingshot!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TIER LIST & META SECTION (SEO Content Expansion) -->
+    <section id="tier-section" class="content-section">
+      <div class="section-container">
+        <div class="section-head">
+          <span class="sub-badge" data-i18n="metaTierBadge">EMOJI META ANALYSIS</span>
+          <h2 data-i18n="metaTierTitle">Emoji Blade Power Rankings (Tier List)</h2>
+          <p data-i18n="metaTierDesc">Discover the most competitive spinning top emojis, their weight distributions, and hidden collision mechanics.</p>
+        </div>
+
+        <div class="tier-grid">
+          <!-- S Tier -->
+          <div class="tier-card tier-s">
+            <div class="tier-header">
+              <span class="tier-rank">S TIER</span>
+              <span class="tier-desc">Supreme Clashers</span>
+            </div>
+            <div class="tier-emojis">
+              <div class="tier-item">
+                <span class="t-emoji">💎</span>
+                <strong>Diamond</strong>
+                <small>Massive defense & high density mass.</small>
+              </div>
+              <div class="tier-item">
+                <span class="t-emoji">🗿</span>
+                <strong>Moai</strong>
+                <small>Unshakeable weight, resists all knockouts.</small>
+              </div>
+              <div class="tier-item">
+                <span class="t-emoji">⚡</span>
+                <strong>Lightning</strong>
+                <small>Max RPM speed & critical shock deals 1.4x.</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- A Tier -->
+          <div class="tier-card tier-a">
+            <div class="tier-header">
+              <span class="tier-rank">A TIER</span>
+              <span class="tier-desc">Aggressive Strikers</span>
+            </div>
+            <div class="tier-emojis">
+              <div class="tier-item">
+                <span class="t-emoji">🔥</span>
+                <strong>Fire</strong>
+                <small>High recoil attack, explosive ring momentum.</small>
+              </div>
+              <div class="tier-item">
+                <span class="t-emoji">💣</span>
+                <strong>Bomb</strong>
+                <small>High impact kinetic shock on direct clash.</small>
+              </div>
+              <div class="tier-item">
+                <span class="t-emoji">🚀</span>
+                <strong>Rocket</strong>
+                <small>Extreme velocity, devastating corner pins.</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- B Tier -->
+          <div class="tier-card tier-b">
+            <div class="tier-header">
+              <span class="tier-rank">B TIER</span>
+              <span class="tier-desc">Tricky Tactics</span>
+            </div>
+            <div class="tier-emojis">
+              <div class="tier-item">
+                <span class="t-emoji">🤡</span>
+                <strong>Clown</strong>
+                <small>Irregular wobble pattern confounds AI aim.</small>
+              </div>
+              <div class="tier-item">
+                <span class="t-emoji">🌪️</span>
+                <strong>Tornado</strong>
+                <small>Long spin stamina, excels at outspinning.</small>
+              </div>
+              <div class="tier-item">
+                <span class="t-emoji">🍕</span>
+                <strong>Pizza</strong>
+                <small>Balanced circular slice, steady rotational curve.</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW TO PLAY GUIDE (SEO Rich Article) -->
+    <section id="guide-section" class="content-section dark-alt">
+      <div class="section-container">
+        <div class="section-head">
+          <span class="sub-badge" data-i18n="guideBadge">GAMEPLAY MANUAL</span>
+          <h2 data-i18n="guideTitle">Mastering the Emoji Blade Arena</h2>
+        </div>
+
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-num">01</div>
+            <h3 data-i18n="step1Title">Choose & Customize Your Emoji</h3>
+            <p data-i18n="step1Desc">Type any Unicode emoji, letter or symbol into the input dock. The game algorithm computes its collision geometry, perimeter friction, and center of mass in real time.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">02</div>
+            <h3 data-i18n="step2Title">Slingshot & Angle Mechanics</h3>
+            <p data-i18n="step2Desc">Use mouse drag or finger swipe directly in the arena to pull back the slingshot. Pulling further increases RPM launch speed and initial rotational torque.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">03</div>
+            <h3 data-i18n="step3Title">Collisions, Recoil & Ring Outs</h3>
+            <p data-i18n="step3Desc">Blades lose spin energy during surface collisions and wall scrapes. Landing a sharp corner contact triggers a Critical Clash with 1.35x knockback, capable of ejecting rivals out of the stadium.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EMBED CODE & SHARE (Backlink Magnet) -->
+    <section class="content-section embed-section">
+      <div class="section-container">
+        <div class="embed-box">
+          <div class="embed-info">
+            <span class="sub-badge" data-i18n="embedBadge">FREE FOR WEBMASTERS</span>
+            <h2 data-i18n="embedTitle">Embed Emoji Blade on Your Website</h2>
+            <p data-i18n="embedDesc">Boost your gaming blog, school portal, or unblocked games hub with this instant, lightweight interactive widget.</p>
+          </div>
+          <div class="embed-code-block">
+            <textarea id="embed-code-text" readonly><iframe src="https://emojiblade.online/embed/" width="100%" height="700" style="border:none; border-radius:16px; overflow:hidden;" title="Emoji Blade Online" allow="autoplay; fullscreen"></iframe></textarea>
+            <button id="copy-embed-btn" class="secondary-btn" data-i18n="copyEmbedBtn">📋 Copy Embed Code</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ SECTION (Rich Snippets SEO) -->
+    <section id="faq-section" class="content-section">
+      <div class="section-container">
+        <div class="section-head">
+          <span class="sub-badge">FAQ</span>
+          <h2 data-i18n="faqTitle">Frequently Asked Questions</h2>
+        </div>
+
+        <div class="faq-list">
+          <details class="faq-item" open>
+            <summary data-i18n="faq1Q">Can I use any emoji from my mobile keyboard?</summary>
+            <p data-i18n="faq1A">Yes! Simply open your mobile keyboard or copy-paste any emoji (such as 👾, 🦄, ⚽, 🐉, 🥑). The engine scans the glyph's pixel structure to generate custom physics.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary data-i18n="faq2Q">What determines a Critical Clash?</summary>
+            <p data-i18n="faq2A">A Critical Clash happens when your spinning tip collides with an opponent's flat flank at high relative velocity, dealing heavy spin stamina drain and screen-shaking recoil.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary data-i18n="faq3Q">Is there an offline or mobile app version?</summary>
+            <p data-i18n="faq3A">Emoji Blade is built as a lightweight Progressive Web App (PWA). You can tap "Add to Home Screen" in Safari or Chrome for a seamless, full-screen offline experience without app store downloads.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="section-container footer-inner">
+      <div class="footer-brand">
+        <span class="logo-emoji">🌀</span>
+        <strong>Emoji Blade Online</strong>
+        <p>A fast, free, browser-based emoji spinning top clash physics simulator.</p>
+        <small class="disclaimer">Inspired by Japanese Beyblade and spinning top battle culture. Independent browser toy.</small>
+      </div>
+      <div class="footer-links">
+        <a href="#arena-section" data-i18n="navPlay">Play Online</a>
+        <a href="#tier-section" data-i18n="navTier">Tier List</a>
+        <a href="#guide-section" data-i18n="navGuide">How to Play</a>
+        <a href="#faq-section" data-i18n="navFaq">FAQ</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Emoji Blade Online. All rights reserved. Free web game for everyone.</p>
+    </div>
+  </footer>
+
+  <script src="game.js"></script>
+</body>
+</html>

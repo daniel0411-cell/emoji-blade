@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://emojiblade.online/</loc>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://emojiblade.online/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://emojiblade.online/"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://emojiblade.online/?lang=zh-Hans"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://emojiblade.online/?lang=ja"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://emojiblade.online/?lang=ko"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://emojiblade.online/?lang=es"/>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://emojiblade.online/unblocked/</loc>
+    <lastmod>2026-10-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>
