@@ -1093,35 +1093,35 @@
       const cy = this.arenaCenterY;
       const r = this.arenaRadius;
 
-      // Outer Bevel
+      // Outer Bevel (Clean stadium rim)
       ctx.save();
       const outerGrad = ctx.createRadialGradient(cx, cy, r * 0.8, cx, cy, r + 24);
-      outerGrad.addColorStop(0, '#101726');
-      outerGrad.addColorStop(0.7, '#1b2742');
-      outerGrad.addColorStop(1, '#080d18');
+      outerGrad.addColorStop(0, '#eaf0fa');
+      outerGrad.addColorStop(0.7, '#d2e0f4');
+      outerGrad.addColorStop(1, '#b9cde8');
       ctx.fillStyle = outerGrad;
       ctx.beginPath();
       ctx.arc(cx, cy, r + 20, 0, Math.PI * 2);
       ctx.fill();
 
-      // Outer Neon Ring
-      ctx.strokeStyle = 'rgba(0, 240, 255, 0.45)';
+      // Outer Vibrant Ring
+      ctx.strokeStyle = '#0284c7';
       ctx.lineWidth = 4;
       ctx.stroke();
 
-      // Concave Bowl Floor
+      // Concave Bowl Floor (Bright, glossy toy-stadium floor)
       const bowlGrad = ctx.createRadialGradient(cx, cy, 10, cx, cy, r);
-      bowlGrad.addColorStop(0, '#131e36');
-      bowlGrad.addColorStop(0.65, '#0b1220');
-      bowlGrad.addColorStop(1, '#050912');
+      bowlGrad.addColorStop(0, '#ffffff');
+      bowlGrad.addColorStop(0.65, '#f0f5fc');
+      bowlGrad.addColorStop(1, '#d8e5f7');
       ctx.fillStyle = bowlGrad;
       ctx.beginPath();
       ctx.arc(cx, cy, r, 0, Math.PI * 2);
       ctx.fill();
 
-      // Radial Guidelines
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
-      ctx.lineWidth = 1;
+      // Radial Guidelines (Clean soft blue)
+      ctx.strokeStyle = 'rgba(2, 132, 199, 0.12)';
+      ctx.lineWidth = 1.5;
       ctx.beginPath();
       ctx.arc(cx, cy, r * 0.35, 0, Math.PI * 2);
       ctx.arc(cx, cy, r * 0.7, 0, Math.PI * 2);
@@ -1133,7 +1133,7 @@
       ctx.font = '36px sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
+      ctx.fillStyle = 'rgba(2, 132, 199, 0.12)';
       ctx.fillText('🌀', cx, cy);
 
       ctx.restore();
@@ -1148,10 +1148,10 @@
 
       ctx.save();
       ctx.setLineDash([6, 6]);
-      ctx.strokeStyle = '#00f0ff';
-      ctx.lineWidth = 3;
-      ctx.shadowColor = '#00f0ff';
-      ctx.shadowBlur = 12;
+      ctx.strokeStyle = '#0284c7';
+      ctx.lineWidth = 3.5;
+      ctx.shadowColor = 'rgba(2, 132, 199, 0.35)';
+      ctx.shadowBlur = 8;
 
       ctx.beginPath();
       ctx.moveTo(this.dragStartX, this.dragStartY);
@@ -1159,14 +1159,14 @@
       ctx.stroke();
 
       ctx.setLineDash([]);
-      ctx.strokeStyle = 'rgba(255, 71, 87, 0.85)';
+      ctx.strokeStyle = 'rgba(239, 68, 68, 0.85)';
       ctx.lineWidth = 2.5;
       ctx.beginPath();
       ctx.moveTo(this.dragStartX, this.dragStartY);
       ctx.lineTo(this.dragCurrentX, this.dragCurrentY);
       ctx.stroke();
 
-      ctx.fillStyle = '#ff4757';
+      ctx.fillStyle = '#ef4444';
       ctx.beginPath();
       ctx.arc(this.dragCurrentX, this.dragCurrentY, 9, 0, Math.PI * 2);
       ctx.fill();

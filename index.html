@@ -63,18 +63,47 @@
 <body>
   <h1 class="visually-hidden">Emoji Blade - Browser Spinning Top Battles</h1>
 
-  <!-- Background Ambience -->
+  <!-- Background Ambience (Pop Macaron Pastel Theme) -->
   <div class="bg-glow-orb orb-1"></div>
   <div class="bg-glow-orb orb-2"></div>
+  <div class="bg-glow-orb orb-3"></div>
   <div class="bg-grid-pattern"></div>
 
   <!-- Header -->
   <header class="site-header">
     <div class="header-container">
-      <a href="/" class="brand-logo">
-        <span class="logo-emoji">🌀</span>
+      <a href="/" class="brand-logo" aria-label="Emoji Blade Online Home">
+        <svg class="brand-spinner-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="blade-g1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ff4757" />
+              <stop offset="100%" stop-color="#ff7f50" />
+            </linearGradient>
+            <linearGradient id="blade-g2" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38bdf8" />
+              <stop offset="100%" stop-color="#2563eb" />
+            </linearGradient>
+            <linearGradient id="blade-g3" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fbbf24" />
+              <stop offset="100%" stop-color="#f59e0b" />
+            </linearGradient>
+            <linearGradient id="blade-g4" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#34d399" />
+              <stop offset="100%" stop-color="#059669" />
+            </linearGradient>
+          </defs>
+          <!-- 4 Rotating Curved Blades -->
+          <path d="M50 50 L50 6 A44 44 0 0 1 88 32 Z" fill="url(#blade-g1)" />
+          <path d="M50 50 L94 50 A44 44 0 0 1 68 88 Z" fill="url(#blade-g2)" />
+          <path d="M50 50 L50 94 A44 44 0 0 1 12 68 Z" fill="url(#blade-g3)" />
+          <path d="M50 50 L6 50 A44 44 0 0 1 32 12 Z" fill="url(#blade-g4)" />
+          <!-- Center Bit-Chip Rim -->
+          <circle cx="50" cy="50" r="22" fill="#ffffff" stroke="#e2e8f0" stroke-width="3" />
+          <!-- Center Happy Bit-Chip Emoji -->
+          <text x="50" y="58" font-size="26" text-anchor="middle" dominant-baseline="middle">🔥</text>
+        </svg>
         <div class="logo-text">
-          <span class="logo-title">EMOJI<span class="accent-text">BLADE</span></span>
+          <span class="logo-title"><span class="logo-part-emoji">EMOJI</span><span class="logo-part-blade">BLADE</span></span>
           <span class="logo-sub">SPINNING CLASH</span>
         </div>
       </a>
@@ -84,7 +113,7 @@
         <a href="/tier-list/" class="nav-link">Tier List</a>
         <a href="/characters/" class="nav-link">Characters</a>
         <a href="/guide/" class="nav-link">How to Play</a>
-        <a href="/unblocked/" class="nav-link" style="color: #10b981;">Unblocked ⚡</a>
+        <a href="/unblocked/" class="nav-link" style="color: #059669; font-weight: 700;">Unblocked ⚡</a>
       </nav>
 
       <div class="header-actions">
@@ -133,40 +162,43 @@
             <!-- 3, 2, 1, GO SHOOT! COUNTDOWN OVERLAY -->
             <div id="countdown-overlay" class="countdown-overlay" style="display: none;">3</div>
 
-            <!-- HUD Overlays -->
-            <div class="hud-player-stats hud-left">
-              <div class="hud-header">
-                <span class="hud-tag blue">YOU</span>
-                <span class="hud-tier" id="player-tier">A-TIER</span>
-              </div>
-              <div class="hud-emoji-preview" id="hud-player-emoji">🔥</div>
-              <div class="hud-bars">
-                <div class="bar-label">
-                  <span>Spin Energy</span>
-                  <span id="player-energy-val">100%</span>
+            <!-- Top Duel Fight Bar (Pop Arcade Option B) -->
+            <div class="hud-fight-bar">
+              <div class="hud-fighter hud-fighter-player">
+                <div class="hud-avatar-circle" id="hud-player-emoji">🔥</div>
+                <div class="hud-meta">
+                  <div class="hud-name-row">
+                    <span class="hud-player-name">YOU</span>
+                    <span class="hud-tier-badge" id="player-tier">A-TIER</span>
+                  </div>
+                  <div class="hud-bar-wrap">
+                    <div class="hud-bar-track">
+                      <div class="hud-bar-fill player-fill" id="player-energy-bar" style="width: 100%;"></div>
+                    </div>
+                    <span class="hud-energy-text" id="player-energy-val">100%</span>
+                  </div>
                 </div>
-                <div class="progress-track">
-                  <div class="progress-fill blue-fill" id="player-energy-bar" style="width: 100%;"></div>
-                </div>
               </div>
-            </div>
 
-            <div class="hud-vs-center">VS</div>
-
-            <div class="hud-player-stats hud-right">
-              <div class="hud-header">
-                <span class="hud-tier" id="enemy-tier">S-TIER</span>
-                <span class="hud-tag red">RIVAL</span>
+              <div class="hud-vs-badge">
+                <div class="vs-crown">👑</div>
+                <span class="vs-text">VS</span>
               </div>
-              <div class="hud-emoji-preview" id="hud-enemy-emoji">💎</div>
-              <div class="hud-bars">
-                <div class="bar-label">
-                  <span>Spin Energy</span>
-                  <span id="enemy-energy-val">100%</span>
+
+              <div class="hud-fighter hud-fighter-enemy">
+                <div class="hud-meta enemy-meta">
+                  <div class="hud-name-row enemy-name-row">
+                    <span class="hud-tier-badge" id="enemy-tier">S-TIER</span>
+                    <span class="hud-player-name">RIVAL</span>
+                  </div>
+                  <div class="hud-bar-wrap enemy-bar-wrap">
+                    <span class="hud-energy-text" id="enemy-energy-val">100%</span>
+                    <div class="hud-bar-track">
+                      <div class="hud-bar-fill enemy-fill" id="enemy-energy-bar" style="width: 100%;"></div>
+                    </div>
+                  </div>
                 </div>
-                <div class="progress-track">
-                  <div class="progress-fill red-fill" id="enemy-energy-bar" style="width: 100%;"></div>
-                </div>
+                <div class="hud-avatar-circle enemy-avatar" id="hud-enemy-emoji">💎</div>
               </div>
             </div>
 
