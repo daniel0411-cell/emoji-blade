@@ -96,6 +96,39 @@ const { chromium } = require('playwright');
         assert.equal(await page.locator('#battle-clock').textContent(), '00.0');
         await page.evaluate(() => { window.emojiBladeApp.playerTop.energy = 20; });
         await page.waitForFunction(() => document.getElementById('player-energy-bar').dataset.low === 'true');
+        await page.evaluate(() => {
+          const game = window.emojiBladeApp;
+          game.playerTop.launch(0, 85);
+          game.enemyTop.launch(180, 85);
+          game.battleState = 'battling';
+          game.battleStartTime = performance.now();
+        });
+        await page.keyboard.press('Space');
+        assert.ok(await page.evaluate(() => window.emojiBladeApp.playerTop.dashCooldown > 0));
+        assert.equal(await page.evaluate(() => {
+          const game = window.emojiBladeApp;
+          const before = game.playerTop.energy;
+          return !game.requestDash() && before === game.playerTop.energy;
+        }), true, 'Blocked repeat must not spend energy');
+        if (mode) {
+          await page.keyboard.press('Enter');
+          assert.ok(await page.evaluate(() => window.emojiBladeApp.enemyTop.dashCooldown > 0));
+        } else {
+          assert.equal(await page.locator('#enemy-dash-btn').isVisible(), false);
+        }
+        await page.evaluate(() => {
+          const game = window.emojiBladeApp;
+          game.playerTop.x = game.arenaCenterX - 25;
+          game.enemyTop.x = game.arenaCenterX + 25;
+          game.playerTop.y = game.enemyTop.y = game.arenaCenterY;
+          game.playerTop.vx = 5; game.enemyTop.vx = -5;
+          game.playerTop.vy = game.enemyTop.vy = 0;
+          game.handleTopCollisions();
+        });
+        await page.locator('#smash-feedback').waitFor({ state: 'visible' });
+        assert.equal(await page.evaluate(() => window.emojiBladeApp.playerTop.dashTicks), 0);
+        await page.evaluate(() => window.emojiBladeApp.setupStage());
+        await page.locator('#smash-feedback').waitFor({ state: 'hidden' });
       }
     }
     if (process.env.SCREENSHOT_PATH) {

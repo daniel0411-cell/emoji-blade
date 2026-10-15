@@ -118,6 +118,28 @@
       } catch (e) { }
     }
 
+    playDash() {
+      if (!this.enabled || !this.ctx) return;
+      try {
+        const now = this.ctx.currentTime;
+        const buffer = this.ctx.createBuffer(1, this.ctx.sampleRate * 0.18, this.ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+        const noise = this.ctx.createBufferSource();
+        noise.buffer = buffer;
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(2200, now);
+        filter.frequency.exponentialRampToValueAtTime(350, now + 0.18);
+        const gain = this.ctx.createGain();
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(0.3, now + 0.025);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+        noise.connect(filter); filter.connect(gain); gain.connect(this.ctx.destination);
+        noise.start(now); noise.stop(now + 0.18);
+      } catch (e) { }
+    }
+
     playCountdown(pitch = 440) {
       if (!this.enabled || !this.ctx) return;
       try {
@@ -315,6 +337,9 @@
       this.isLaunched = false;
       this.isSpinning = false;
       this.isBoss = false;
+      this.dashCooldown = 0;
+      this.dashTicks = 0;
+      this.trail = [];
     }
 
     configure(emoji, style = 'blaze', isBoss = false) {
@@ -342,6 +367,22 @@
       this.isLaunched = false;
       this.isSpinning = false;
       this.wobbleAmount = 0;
+      this.dashCooldown = 0;
+      this.dashTicks = 0;
+      this.trail = [];
+    }
+
+    dash() {
+      const speed = Math.hypot(this.vx, this.vy);
+      if (!this.isLaunched || !this.isSpinning || this.energy <= 6 || this.dashCooldown > 0 || speed < 0.01) return false;
+      const boostedSpeed = Math.max(speed, Math.min(18, speed + 6));
+      this.vx *= boostedSpeed / speed;
+      this.vy *= boostedSpeed / speed;
+      this.energy -= 6;
+      this.dashCooldown = 60;
+      this.dashTicks = 12;
+      this.trail = [];
+      return true;
     }
 
     launch(angleDeg, powerPercent) {
@@ -358,6 +399,14 @@
 
     update(arenaCenterX, arenaCenterY, arenaRadius) {
       if (!this.isLaunched) return;
+      this.dashCooldown = Math.max(0, this.dashCooldown - 1);
+      this.dashTicks = Math.max(0, this.dashTicks - 1);
+      if (this.dashTicks > 0) {
+        this.trail.push({ x: this.x, y: this.y });
+        if (this.trail.length > 8) this.trail.shift();
+      } else {
+        this.trail.shift();
+      }
 
       // Spin energy dissipation
       const drainBase = 0.048 + (100 - this.stats.endurance) * 0.00055;
@@ -419,6 +468,15 @@
     }
 
     draw(ctx) {
+      if (this.trail.length && !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+        ctx.save();
+        this.trail.forEach((point, index) => {
+          ctx.globalAlpha = (index + 1) / this.trail.length * 0.2;
+          ctx.fillStyle = this.isPlayer ? '#1676e8' : '#ed583d';
+          ctx.beginPath(); ctx.arc(point.x, point.y, this.radius * 0.9, 0, Math.PI * 2); ctx.fill();
+        });
+        ctx.restore();
+      }
       ctx.save();
       ctx.translate(this.x, this.y);
 
@@ -569,6 +627,8 @@
       this.statusMsg = document.getElementById('arena-status');
       this.countdownOverlay = document.getElementById('countdown-overlay');
       this.demoStation = document.querySelector('.battle-station');
+      this.dashButtons = [document.getElementById('player-dash-btn'), document.getElementById('enemy-dash-btn')];
+      this.smashFeedback = document.getElementById('smash-feedback');
 
       this.bestStreakEl.textContent = this.bestStreak;
     }
@@ -615,6 +675,7 @@
     }
 
     setupStage() {
+      this.smashUntil = 0;
       this.hitStopUntil = 0;
       this.physicsAccumulator = 0;
       clearInterval(this.countdownTimer);
@@ -697,6 +758,13 @@
     }
 
     initEvents() {
+      this.dashButtons.forEach((button, index) => button?.addEventListener('click', () => this.requestDash(index === 1)));
+      window.addEventListener('keydown', event => {
+        if (this.battleState !== 'battling' || event.target.closest?.('input, select, textarea, [contenteditable="true"]')) return;
+        if (event.code !== 'Space' && !(event.code === 'Enter' && this.is2PMode)) return;
+        event.preventDefault();
+        if (!event.repeat) this.requestDash(event.code === 'Enter');
+      });
       window.addEventListener('resize', () => this.resizeCanvas());
       const cancelLaunch = () => {
         if (this.battleState === 'countdown' || (this.is2PMode && this.turn2P === 2 && this.battleState === 'ready')) this.setupStage();
@@ -955,6 +1023,16 @@
       this.statusMsg.textContent = translate('⚡ CLASH IN PROGRESS!');
     }
 
+    requestDash(enemy = false) {
+      if (this.battleState !== 'battling' || (enemy && !this.is2PMode)) return false;
+      const top = enemy ? this.enemyTop : this.playerTop;
+      if (!top.dash()) return false;
+      sfx.init();
+      sfx.playDash();
+      this.updateHudBars();
+      return true;
+    }
+
     handleTopCollisions() {
       if (!this.playerTop.isSpinning || !this.enemyTop.isSpinning) return;
 
@@ -988,7 +1066,8 @@
 
         // Critical Hit evaluation
         const clashImpact = Math.hypot(kx, ky);
-        const isCrit = Math.random() < 0.28 || clashImpact > 7.5;
+        const isSmash = this.playerTop.dashTicks > 0 || this.enemyTop.dashTicks > 0;
+        const isCrit = isSmash || Math.random() < 0.28 || clashImpact > 7.5;
         const critMultiplier = isCrit ? 1.5 : 1.0;
 
         const playerDamage = (clashImpact * 1.8 + (this.enemyTop.stats.attack / 10)) * (100 / this.playerTop.stats.mass) * critMultiplier * 0.35;
@@ -1008,6 +1087,14 @@
           }
         }
         sfx.playClash(Math.min(clashImpact * 0.22, 1), isCrit);
+        if (isSmash) {
+          this.playerTop.dashTicks = 0;
+          this.enemyTop.dashTicks = 0;
+          this.smashUntil = performance.now() + 850;
+          if (this.smashFeedback && !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+            this.smashFeedback.animate([{ backgroundColor: '#fff1b845' }, { backgroundColor: 'transparent' }], { duration: 180 });
+          }
+        }
 
         if (isCrit) {
           this.applyScreenShake(8);
@@ -1304,6 +1391,18 @@
 
       this.particles.updateAndDraw(this.ctx);
       this.drawSlingshotGuide();
+
+      if (this.dashButtons) {
+        this.dashButtons.forEach((button, index) => {
+          if (!button) return;
+          const top = index ? this.enemyTop : this.playerTop;
+          button.hidden = index === 1 && !this.is2PMode;
+          button.disabled = this.battleState !== 'battling' || top.dashCooldown > 0 || top.energy <= 6 || !top.isSpinning;
+          button.style.setProperty('--dash-ready', `${(1 - top.dashCooldown / 60) * 100}%`);
+          button.querySelector('.dash-cd').textContent = top.dashCooldown > 0 ? `${(top.dashCooldown / 60).toFixed(1)}s` : '6%';
+        });
+        if (this.smashFeedback) this.smashFeedback.hidden = !(timestamp < this.smashUntil);
+      }
 
       if (this.demoStation) {
         const phase = this.isPullAiming ? 'aiming' : this.battleState;

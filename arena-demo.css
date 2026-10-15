@@ -4,7 +4,7 @@
 .battle-station {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 284px;
-  grid-template-areas: "heading heading" "score score" "arena loadout" "launch loadout";
+  grid-template-areas: "heading heading" "score score" "arena loadout" "dash loadout" "launch loadout";
   gap: 0 20px;
 }
 .battle-heading { grid-area: heading; display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
@@ -38,6 +38,21 @@
 #battle-phase { margin-right: auto; color: #1676e8; font-weight: 800; }
 .battle-telemetry b { color: #263843; font-weight: 600; }
 .battle-station .game-control-panel { display: contents; }
+.dash-controls { grid-area: dash; display: none; gap: 10px; justify-content: space-between; background: #fff; border-inline: 1px solid #b8c5cb; padding: 10px 18px; }
+.battle-station[data-phase="battling"] .dash-controls { display: flex; }
+.dash-btn { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex: 1; min-width: 0; max-width: 180px; height: 40px; padding: 0 12px 4px; border: 0; border-radius: 3px; background: #1676e8; color: #fff; font: 700 10px var(--font-mono); cursor: pointer; touch-action: manipulation; overflow: hidden; }
+.dash-btn[hidden] { display: none; }
+.dash-btn::after { content: ''; position: absolute; bottom: 0; left: 0; height: 4px; width: var(--dash-ready, 100%); background: #b5e8ff; }
+.dash-btn:disabled { opacity: 0.6; cursor: default; }
+.dash-btn:active:not(:disabled) { transform: translateY(2px); }
+.dash-btn:focus-visible { outline: 2px solid #263843; outline-offset: 3px; }
+.enemy-dash { background: #d94329; }
+.enemy-dash::after { background: #ffd3a3; }
+.dash-btn span:first-child { white-space: nowrap; }
+.dash-cd { min-width: 28px; text-align: right; font-size: 9px; font-variant-numeric: tabular-nums; }
+.smash-feedback { position: absolute; inset: 0; pointer-events: none; z-index: 25; text-align: center; }
+.smash-feedback[hidden] { display: none; }
+.smash-feedback strong { display: inline-block; margin-top: 82px; font-size: 22px; font-weight: 900; color: #be3c19; text-shadow: 1px 1px #fff, -1px -1px #fff; transform: skew(-6deg); }
 .battle-station .panel-card { border-radius: 0; box-shadow: none; padding: 18px; min-width: 0; }
 .battle-station .player-config { grid-area: loadout; align-self: stretch; border: 0; border-top: 3px solid #1676e8; background: #fff; }
 .battle-station .launch-config { grid-area: launch; display: grid; grid-template-columns: minmax(0, 1fr) 172px; gap: 10px 16px; background: #fff; border: 1px solid #b8c5cb; border-top: 0; border-radius: 0 0 6px 6px; }
@@ -101,7 +116,7 @@
   .arena-demo .nav-links { grid-column: 1 / -1; flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; gap: 2px; }
   .arena-demo .nav-link { white-space: nowrap; font-size: 11px; padding: 5px 8px; }
   .arena-demo .arena-section { padding-top: 18px; }
-  .battle-station { grid-template-columns: minmax(0, 1fr); grid-template-areas: "heading" "score" "arena" "launch" "loadout"; padding: 0 12px; }
+  .battle-station { grid-template-columns: minmax(0, 1fr); grid-template-areas: "heading" "score" "arena" "dash" "launch" "loadout"; padding: 0 12px; }
   .battle-heading { margin-bottom: 16px; }
   .battle-heading h2 { font-size: 24px; }
   .arena-live-label { font-size: 8px; }

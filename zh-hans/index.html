@@ -171,6 +171,7 @@
             
             <!-- 3, 2, 1, GO SHOOT! COUNTDOWN OVERLAY -->
             <div id="countdown-overlay" class="countdown-overlay" style="display: none;">3</div>
+            <div id="smash-feedback" class="smash-feedback" hidden><strong>CRITICAL SMASH!</strong></div>
 
             <!-- Top Duel Fight Bar (Bright Competitive Arcade) -->
             <div class="hud-fight-bar">
@@ -246,6 +247,10 @@
         </div>
 
         <!-- CONTROLS & EMOJI DOCK -->
+        <div class="dash-controls">
+          <button id="player-dash-btn" class="dash-btn" type="button" disabled title="玩家 1 冲刺（空格）；消耗 6 点能量"><span>P1 冲刺</span><span class="dash-cd">6%</span></button>
+          <button id="enemy-dash-btn" class="dash-btn enemy-dash" type="button" disabled hidden title="玩家 2 冲刺（Enter）；消耗 6 点能量"><span>P2 冲刺</span><span class="dash-cd">6%</span></button>
+        </div>
         <div class="game-control-panel">
           <div class="panel-card player-config">
             <div class="card-title-row">

@@ -169,6 +169,7 @@
             
             <!-- 3, 2, 1, GO SHOOT! COUNTDOWN OVERLAY -->
             <div id="countdown-overlay" class="countdown-overlay" style="display: none;">3</div>
+            <div id="smash-feedback" class="smash-feedback" hidden><strong>CRITICAL SMASH!</strong></div>
 
             <!-- Top Duel Fight Bar (Pop Arcade Option B) -->
             <div class="hud-fight-bar">
@@ -244,6 +245,10 @@
         </div>
 
         <!-- CONTROLS & EMOJI DOCK -->
+        <div class="dash-controls">
+          <button id="player-dash-btn" class="dash-btn" type="button" disabled title="Player 1 dash (Space); costs 6 energy"><span>P1 DASH</span><span class="dash-cd">6%</span></button>
+          <button id="enemy-dash-btn" class="dash-btn enemy-dash" type="button" disabled hidden title="Player 2 dash (Enter); costs 6 energy"><span>P2 DASH</span><span class="dash-cd">6%</span></button>
+        </div>
         <div class="game-control-panel">
           <div class="panel-card player-config">
             <div class="card-title-row">

@@ -172,6 +172,7 @@
             
             <!-- 3, 2, 1, GO SHOOT! COUNTDOWN OVERLAY -->
             <div id="countdown-overlay" class="countdown-overlay" style="display: none;">3</div>
+            <div id="smash-feedback" class="smash-feedback" hidden><strong>CRITICAL SMASH!</strong></div>
 
             <!-- Top Duel Fight Bar (Bright Competitive Arcade) -->
             <div class="hud-fight-bar">
@@ -247,6 +248,10 @@
         </div>
 
         <!-- CONTROLS & EMOJI DOCK -->
+        <div class="dash-controls">
+          <button id="player-dash-btn" class="dash-btn" type="button" disabled title="プレイヤー1 ダッシュ（Space）、エネルギー6消費"><span>P1 ダッシュ</span><span class="dash-cd">6%</span></button>
+          <button id="enemy-dash-btn" class="dash-btn enemy-dash" type="button" disabled hidden title="プレイヤー2 ダッシュ（Enter）、エネルギー6消費"><span>P2 ダッシュ</span><span class="dash-cd">6%</span></button>
+        </div>
         <div class="game-control-panel">
           <div class="panel-card player-config">
             <div class="card-title-row">
