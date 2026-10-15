@@ -565,6 +565,7 @@
       this.stageNumEl = document.getElementById('stage-num');
       this.statusMsg = document.getElementById('arena-status');
       this.countdownOverlay = document.getElementById('countdown-overlay');
+      this.demoStation = document.querySelector('.battle-station');
 
       this.bestStreakEl.textContent = this.bestStreak;
     }
@@ -594,8 +595,10 @@
       this.ctx.scale(dpr, dpr);
 
       this.arenaCenterX = rect.width / 2;
-      this.arenaCenterY = rect.height / 2;
-      this.arenaRadius = Math.min(rect.width, rect.height) * 0.44;
+      const hudSpace = this.demoStation ? 70 : 0;
+      const footerSpace = this.demoStation ? 40 : 0;
+      this.arenaCenterY = (rect.height + hudSpace - footerSpace) / 2;
+      this.arenaRadius = Math.min(rect.width, rect.height - hudSpace - footerSpace) * (this.demoStation ? 0.43 : 0.44);
 
       if (this.battleState === 'ready') {
         this.resetPositions();
@@ -992,8 +995,13 @@
         // FX Sparks & Sound
         const midX = (this.playerTop.x + this.enemyTop.x) / 2;
         const midY = (this.playerTop.y + this.enemyTop.y) / 2;
-        this.particles.emitSparks(midX, midY, isCrit ? '#ffd32a' : '#00f0ff', isCrit ? 26 : 14, clashImpact * 0.85);
-        if (isCrit) this.particles.emitShockwave(midX, midY, '#ffd32a');
+        this.particles.emitSparks(midX, midY, isCrit ? '#f59e0b' : '#00f0ff', isCrit ? 32 : 14, isCrit ? Math.max(4, clashImpact * 0.85) : clashImpact * 0.85);
+        if (isCrit) {
+          this.particles.emitShockwave(midX, midY, '#f97316');
+          if (!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+            this.particles.emitSparks(midX, midY, '#f97316', 8, Math.max(3, clashImpact * 0.45));
+          }
+        }
         sfx.playClash(Math.min(clashImpact * 0.22, 1), isCrit);
 
         if (isCrit) this.applyScreenShake(8);
@@ -1001,6 +1009,7 @@
     }
 
     applyScreenShake(intensity) {
+      if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
       const container = document.getElementById('arena-container');
       container.style.transform = `translate(${(Math.random() - 0.5) * intensity}px, ${(Math.random() - 0.5) * intensity}px)`;
       setTimeout(() => { container.style.transform = 'translate(0, 0)'; }, 90);
@@ -1092,6 +1101,44 @@
       const cx = this.arenaCenterX;
       const cy = this.arenaCenterY;
       const r = this.arenaRadius;
+
+      if (this.demoStation) {
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.fillStyle = '#d9e2e5';
+        ctx.beginPath(); ctx.arc(0, 0, r + 16, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = '#7b929d'; ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.fillStyle = '#f8faf9';
+        ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = '#344f5c'; ctx.lineWidth = 3; ctx.stroke();
+        for (let i = 0; i < 60; i++) {
+          const angle = i * Math.PI / 30;
+          const inner = r + (i % 5 === 0 ? 5 : 9);
+          ctx.strokeStyle = i % 5 === 0 ? '#344f5c' : '#8da2aa';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(Math.cos(angle) * inner, Math.sin(angle) * inner);
+          ctx.lineTo(Math.cos(angle) * (r + 13), Math.sin(angle) * (r + 13));
+          ctx.stroke();
+        }
+        ctx.strokeStyle = '#d7e0e1'; ctx.lineWidth = 1;
+        for (const size of [0.35, 0.7]) {
+          ctx.beginPath(); ctx.arc(0, 0, r * size, 0, Math.PI * 2); ctx.stroke();
+        }
+        ctx.setLineDash([4, 6]);
+        ctx.beginPath(); ctx.moveTo(-r, 0); ctx.lineTo(r, 0);
+        ctx.moveTo(0, -r); ctx.lineTo(0, r); ctx.stroke();
+        ctx.setLineDash([]);
+        for (const [start, color] of [[Math.PI * .85, '#1676e8'], [-Math.PI * .15, '#ed583d']]) {
+          ctx.strokeStyle = color; ctx.lineWidth = 5;
+          ctx.beginPath(); ctx.arc(0, 0, r + 3, start, start + Math.PI * .3); ctx.stroke();
+        }
+        ctx.fillStyle = '#9aadb3'; ctx.textAlign = 'center';
+        ctx.font = '700 12px monospace'; ctx.fillText('EB / 01', 0, 4);
+        ctx.restore();
+        return;
+      }
 
       // Outer Bevel (Clean stadium rim)
       ctx.save();
@@ -1241,6 +1288,19 @@
 
       this.particles.updateAndDraw(this.ctx);
       this.drawSlingshotGuide();
+
+      if (this.demoStation) {
+        const phase = this.isPullAiming ? 'aiming' : this.battleState;
+        this.demoStation.dataset.phase = phase;
+        document.getElementById('battle-phase').textContent = phase === 'ready'
+          ? (this.is2PMode ? `PLAYER ${this.turn2P} READY` : 'READY TO LAUNCH')
+          : phase.toUpperCase();
+        if (this.battleState === 'ready') document.getElementById('battle-clock').textContent = '00.0';
+        if (this.battleState === 'battling') document.getElementById('battle-clock').textContent = ((timestamp - this.battleStartTime) / 1000).toFixed(1).padStart(4, '0');
+        document.getElementById('battle-hit-count').textContent = String(this.battleHits).padStart(2, '0');
+        document.getElementById('player-energy-bar').dataset.low = this.playerTop.energy < 25;
+        document.getElementById('enemy-energy-bar').dataset.low = this.enemyTop.energy < 25;
+      }
 
       requestAnimationFrame(this.loop.bind(this));
     }

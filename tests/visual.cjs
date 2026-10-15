@@ -45,6 +45,35 @@ const { chromium } = require('playwright');
         ), false, 'Heading must contrast with its background');
       }
     }
+    await page.goto('https://local.test/');
+    if (await page.locator('.battle-station').count()) {
+      const button = page.locator('#main-launch-btn');
+      await button.hover();
+      await page.mouse.down();
+      await page.waitForFunction(() => getComputedStyle(document.getElementById('main-launch-btn')).transform === 'matrix(1, 0, 0, 1, 0, 3)');
+      await page.mouse.move(0, 0);
+      await page.mouse.up();
+      await page.waitForFunction(() => getComputedStyle(document.getElementById('main-launch-btn')).transform === 'none');
+      const sparks = await page.evaluate(() => {
+        const game = window.emojiBladeApp;
+        game.playerTop.x = 100; game.playerTop.y = 200;
+        game.enemyTop.x = 150; game.enemyTop.y = 200;
+        game.playerTop.vx = 5; game.enemyTop.vx = -5;
+        game.playerTop.vy = game.enemyTop.vy = 0;
+        game.playerTop.isSpinning = game.enemyTop.isSpinning = true;
+        game.handleTopCollisions();
+        const particles = game.particles.particles;
+        const result = { sparks: particles.filter(p => !p.isRing).length,
+          ring: particles.some(p => p.isRing && p.color === '#f97316'),
+          damage: game.playerTop.energy < 100 && game.enemyTop.energy < 100 };
+        game.setupStage();
+        return result;
+      });
+      assert.deepEqual(sparks, { sparks: 40, ring: true, damage: true });
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      assert.equal(await button.evaluate(element => getComputedStyle(element).transitionDuration), '0s');
+      await page.emulateMedia({ reducedMotion: 'no-preference' });
+    }
     for (const mode of ['', '?mode=2p']) {
       await page.goto(`https://local.test/${mode}`);
       await page.locator('#main-launch-btn').click();
@@ -53,6 +82,12 @@ const { chromium } = require('playwright');
       await page.locator('#cancel-launch-btn').click();
       await page.locator('#countdown-overlay').waitFor({ state: 'hidden' });
       assert.equal(await page.locator('#main-launch-btn').isEnabled(), true);
+      if (await page.locator('.battle-station').count()) {
+        await page.waitForFunction(() => document.getElementById('battle-phase').textContent.includes('READY'));
+        assert.equal(await page.locator('#battle-clock').textContent(), '00.0');
+        await page.evaluate(() => { window.emojiBladeApp.playerTop.energy = 20; });
+        await page.waitForFunction(() => document.getElementById('player-energy-bar').dataset.low === 'true');
+      }
     }
     if (process.env.SCREENSHOT_PATH) {
       await page.setViewportSize({ width: 390, height: 900 });

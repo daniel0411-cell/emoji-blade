@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="arena-demo">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,6 +27,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="/style.css?v=20261014-7">
+  <link rel="stylesheet" href="/arena-demo.css">
 
   <!-- Schema.org Structured Data -->
   <script type="application/ld+json">
@@ -135,11 +136,12 @@
   <main>
     <!-- HERO & ARENA SECTION -->
     <section id="arena-section" class="arena-section">
-      <div class="section-container">
+      <div class="section-container battle-station">
+        <div class="battle-heading"><div><span class="arena-eyebrow">EMOJI BLADE / ARENA 01</span><h2>Spin. Strike. Survive.</h2></div><span class="arena-live-label"><span></span> LOCAL ARENA</span></div>
         <div class="arena-top-bar">
           <div class="streak-badge">
             <span class="streak-fire">🔥</span>
-            <span>Win Streak:</span>
+            <span>STREAK</span>
             <strong id="streak-counter">0</strong>
             <small class="best-streak">(Best: <span id="best-streak">0</span>)</small>
           </div>
@@ -181,7 +183,6 @@
               </div>
 
               <div class="hud-vs-badge">
-                <div class="vs-crown">👑</div>
                 <span class="vs-text">VS</span>
               </div>
 
@@ -202,9 +203,8 @@
               </div>
             </div>
 
-            <div class="launch-aim-guide" id="launch-aim-guide">
-              <span class="guide-text">👈 Drag & Pull back on Arena to launch</span>
-            </div>
+            <div class="battle-telemetry"><span id="battle-phase">READY</span><span><b id="battle-clock">00.0</b> SEC</span><span><b id="battle-hit-count">00</b> HITS</span></div>
+            <div class="launch-aim-guide" id="launch-aim-guide" aria-hidden="true"></div>
 
             <!-- Battle Victory / Defeat Modal -->
             <div class="battle-overlay-modal" id="result-modal" style="display: none;">
@@ -241,9 +241,8 @@
         <div class="game-control-panel">
           <div class="panel-card player-config">
             <div class="card-title-row">
-              <span class="card-icon">⚡</span>
-              <h3>Your Emoji Blade</h3>
-              <button id="random-player-btn" class="tiny-ghost-btn" title="Random Emoji">🎲 Random</button>
+              <h3>YOUR LOADOUT</h3>
+              <button id="random-player-btn" class="tiny-ghost-btn" title="Random Emoji" aria-label="Random emoji">&#9860;</button>
             </div>
 
             <div class="emoji-input-wrapper">
@@ -260,7 +259,7 @@
 
             <!-- Quick Picker Emojis -->
             <div class="quick-picker-group">
-              <span class="picker-label">Quick Picks (Click to equip):</span>
+              <span class="picker-label">SELECT FIGHTER</span>
               <div class="quick-emojis" id="quick-emojis-container">
                 <button class="emoji-chip active" data-emoji="🔥">🔥</button>
                 <button class="emoji-chip" data-emoji="💣">💣</button>
@@ -324,11 +323,10 @@
           <!-- Right: Launch & Opponent Controls -->
           <div class="panel-card launch-config">
             <div class="card-title-row">
-              <span class="card-icon">🎯</span>
-              <h3>Launch Cannon & Rivals</h3>
+              <h3>LAUNCH CONTROL</h3>
               <div class="mode-toggles">
-                <button id="mode-single-btn" class="pill-tab active">Streak AI</button>
-                <button id="mode-2p-btn" class="pill-tab">2P Local Duel</button>
+                <button id="mode-single-btn" class="pill-tab active">SOLO</button>
+                <button id="mode-2p-btn" class="pill-tab">LOCAL 2P</button>
               </div>
             </div>
 
@@ -364,7 +362,7 @@
             <div class="action-btn-wrapper">
               <button id="main-launch-btn" class="massive-clash-btn">
                 <span class="btn-shine"></span>
-                <span class="btn-text">3, 2, 1, GO SHOOT! 🚀</span>
+                <span class="btn-text">LAUNCH &#8599;</span>
               </button>
             </div>
             
