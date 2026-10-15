@@ -49,6 +49,29 @@ function simulate(fps) {
 const slow = simulate(60), fast = simulate(120);
 assert.ok(Math.abs(slow.energy - fast.energy) < 0.07);
 assert.ok(Math.abs(slow.x - fast.x) < 1);
+// A critical hit must stop catch-up immediately and discard only paused time.
+let stoppedUpdates = 0;
+const hitStop = game();
+Object.assign(hitStop, {
+  battleState: 'battling', lastFrameTime: 900, physicsAccumulator: 50, hitStopUntil: 1045,
+  canvas: { parentElement: { getBoundingClientRect: () => ({ width: 800, height: 600 }) } },
+  ctx: { clearRect() {} }, playerTop: { update() { stoppedUpdates++; }, draw() {} },
+  enemyTop: { update() {}, draw() {} }, particles: { updateAndDraw() {} },
+  drawArena() {}, handleTopCollisions() {}, updateHudBars() {}, checkBattleOutcome() {}, drawSlingshotGuide() {},
+});
+hitStop.loop(1000);
+assert.equal(stoppedUpdates, 0, 'No physics updates during hit-stop');
+hitStop.loop(1046);
+assert.equal(stoppedUpdates, 0, 'Do not catch up the paused portion of the resume frame');
+hitStop.loop(1063);
+assert.equal(stoppedUpdates, 1, 'Resume physics after enough unpaused time');
+hitStop.lastFrameTime = 1900;
+hitStop.hitStopUntil = 0;
+hitStop.handleTopCollisions = () => { hitStop.hitStopUntil = 2045; };
+hitStop.loop(2000);
+assert.equal(stoppedUpdates, 2, 'Critical hit must interrupt the current catch-up batch');
+assert.equal(hitStop.physicsAccumulator, 0, 'Discard the interrupted catch-up backlog');
+console.log('PASS: hit-stop freezes physics, interrupts catch-up and excludes paused time on resume');
 const collision = game();
 collision.playerTop = new EmojiTop(true); collision.enemyTop = new EmojiTop(false);
 Object.assign(collision.playerTop, { x: 0, y: 0, vx: -1, vy: 0, isSpinning: true });

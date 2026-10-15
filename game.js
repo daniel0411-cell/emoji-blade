@@ -422,7 +422,7 @@
       ctx.save();
       ctx.translate(this.x, this.y);
 
-      // Precession tilt
+      // Precession tilt & defeat wobble
       const tiltX = Math.cos(this.wobblePhase) * this.wobbleAmount;
 
       // Shadow
@@ -434,7 +434,10 @@
       ctx.fill();
       ctx.restore();
 
-      // Top Body
+      // Top Body with gyroscopic tilt
+      if (tiltX !== 0 || !this.isSpinning) {
+        ctx.transform(1, 0, tiltX * 0.18, 1 - Math.abs(tiltX * 0.12) - (!this.isSpinning ? 0.15 : 0), 0, 0);
+      }
       ctx.rotate(this.angle);
 
       let ringColor1 = '#00f0ff';
@@ -612,6 +615,8 @@
     }
 
     setupStage() {
+      this.hitStopUntil = 0;
+      this.physicsAccumulator = 0;
       clearInterval(this.countdownTimer);
       clearTimeout(this.resultTimer);
       this.countdownTimer = null;
@@ -1004,7 +1009,12 @@
         }
         sfx.playClash(Math.min(clashImpact * 0.22, 1), isCrit);
 
-        if (isCrit) this.applyScreenShake(8);
+        if (isCrit) {
+          this.applyScreenShake(8);
+          if (!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+            this.hitStopUntil = performance.now() + 45;
+          }
+        }
       }
     }
 
@@ -1265,9 +1275,11 @@
 
     loop(timestamp = performance.now()) {
       // Keep physics at 60 Hz; cap catch-up after a suspended browser tab.
-      const elapsed = this.lastFrameTime === undefined ? 0 : Math.min(100, Math.max(0, timestamp - this.lastFrameTime));
+      // Exclude paused time, including the partial frame when hit-stop ends.
+      const elapsed = this.lastFrameTime === undefined ? 0
+        : Math.min(100, Math.max(0, timestamp - Math.max(this.lastFrameTime, this.hitStopUntil || 0)));
       this.lastFrameTime = timestamp;
-      this.physicsAccumulator = (this.physicsAccumulator || 0) + elapsed;
+      this.physicsAccumulator = timestamp < this.hitStopUntil ? 0 : (this.physicsAccumulator || 0) + elapsed;
       const rect = this.canvas.parentElement.getBoundingClientRect();
       this.ctx.clearRect(0, 0, rect.width, rect.height);
 
@@ -1281,6 +1293,10 @@
         this.handleTopCollisions();
         this.updateHudBars();
         this.checkBattleOutcome();
+        if (timestamp < this.hitStopUntil) {
+          this.physicsAccumulator = 0;
+          break;
+        }
       }
 
       this.playerTop.draw(this.ctx);
@@ -1292,9 +1308,26 @@
       if (this.demoStation) {
         const phase = this.isPullAiming ? 'aiming' : this.battleState;
         this.demoStation.dataset.phase = phase;
-        document.getElementById('battle-phase').textContent = phase === 'ready'
-          ? (this.is2PMode ? `PLAYER ${this.turn2P} READY` : 'READY TO LAUNCH')
+        const lang = document.documentElement.lang;
+        const isZh = lang === 'zh-Hans';
+        const isJa = lang === 'ja';
+        const readyText = isZh
+          ? (this.is2PMode ? `玩家 ${this.turn2P} 就绪` : '准备发射')
+          : isJa
+          ? (this.is2PMode ? `プレイヤー ${this.turn2P} 準備完了` : '発射準備完了')
+          : (this.is2PMode ? `PLAYER ${this.turn2P} READY` : 'READY TO LAUNCH');
+        const phaseText = phase === 'ready'
+          ? readyText
+          : phase === 'battling'
+          ? (isZh ? '战斗中' : isJa ? 'バトル中' : 'BATTLING')
+          : phase === 'aiming'
+          ? (isZh ? '瞄准中' : isJa ? '照準中' : 'AIMING')
+          : phase === 'countdown'
+          ? (isZh ? '发射倒计时' : isJa ? 'カウントダウン' : 'COUNTDOWN')
+          : phase === 'finished'
+          ? (isZh ? '对战结束' : isJa ? 'バトル終了' : 'FINISHED')
           : phase.toUpperCase();
+        document.getElementById('battle-phase').textContent = phaseText;
         if (this.battleState === 'ready') document.getElementById('battle-clock').textContent = '00.0';
         if (this.battleState === 'battling') document.getElementById('battle-clock').textContent = ((timestamp - this.battleStartTime) / 1000).toFixed(1).padStart(4, '0');
         document.getElementById('battle-hit-count').textContent = String(this.battleHits).padStart(2, '0');

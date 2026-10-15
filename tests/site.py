@@ -13,6 +13,7 @@ class Page(HTMLParser):
         super().__init__()
         self.ids = set()
         self.links = []
+        self.resources = {}
         self.canonicals = []
         self.alternates = {}
         self.h1 = 0
@@ -34,6 +35,8 @@ class Page(HTMLParser):
         if tag == 'meta' and a.get('property') in ('og:title', 'og:description'):
             self.social[a['property']] = a.get('content', '')
         if tag == 'a' and 'href' in a: self.links.append(a['href'])
+        if tag == 'link' and a.get('rel') in ('icon', 'apple-touch-icon', 'manifest'):
+            self.resources[a['rel']] = a['href']
         if tag == 'link' and a.get('rel') == 'canonical': self.canonicals.append(a['href'])
         if tag == 'link' and a.get('rel') == 'alternate':
             assert a['hreflang'] not in self.alternates
@@ -122,6 +125,22 @@ for prefix in ('', 'zh-hans/', 'ja/'):
     for slug in ('diamond-vs-bomb', 'lightning-vs-moai', 'fire-vs-diamond'):
         assert f'href="/{prefix}vs/{slug}/"' in matchups, (prefix, slug, 'matchup missing from hub')
 assert (root/'404.html').exists()
+for prefix, lang in (('', 'en'), ('zh-hans/', 'zh-Hans'), ('ja/', 'ja')):
+    home = Page(); home.feed((root/prefix/'index.html').read_text())
+    manifest = json.loads((root/home.resources['manifest'].lstrip('/')).read_text())
+    assert manifest['start_url'] == '/' + prefix, (lang, 'installed app must keep its language')
+    assert manifest['lang'] == lang
+    assert manifest['scope'] == '/' and manifest['id'] == '/'
+    assert (root/home.resources['icon'].lstrip('/')).exists()
+    apple_icon = (root/home.resources['apple-touch-icon'].lstrip('/')).read_bytes()
+    assert apple_icon[:8] == b'\x89PNG\r\n\x1a\n'
+    assert int.from_bytes(apple_icon[16:20], 'big') == int.from_bytes(apple_icon[20:24], 'big') == 180
+    assert {icon['sizes'] for icon in manifest['icons']} >= {'192x192', '512x512'}
+    for icon in manifest['icons']:
+        data = (root/icon['src'].lstrip('/')).read_bytes()
+        assert icon['type'] == 'image/png' and data[:8] == b'\x89PNG\r\n\x1a\n'
+        assert icon['sizes'] == f"{int.from_bytes(data[16:20], 'big')}x{int.from_bytes(data[20:24], 'big')}"
+print('PASS: localized PWA launch URLs and PNG installation icons')
 for route in ('index.html', 'zh-hans/index.html', 'ja/index.html'):
     source = (root/route).read_text()
     assert 'class="player-info-grid"' in source, (route, 'missing shared information cards')

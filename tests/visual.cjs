@@ -17,8 +17,8 @@ const { chromium } = require('playwright');
       const url = new URL(route.request().url());
       if (url.origin !== 'https://local.test') return route.abort();
       const file = url.pathname.endsWith('/') ? `${url.pathname}index.html` : url.pathname;
-      const contentType = file.endsWith('.css') ? 'text/css'
-        : file.endsWith('.js') ? 'text/javascript' : 'text/html';
+      const contentType = { '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml',
+        '.png': 'image/png', '.webmanifest': 'application/manifest+json' }[path.extname(file)] || 'text/html';
       await route.fulfill({
         body: await fs.readFile(path.join(__dirname, '..', file)), contentType,
       });
@@ -44,6 +44,15 @@ const { chromium } = require('playwright');
           getComputedStyle(element).color === getComputedStyle(element.parentElement).backgroundColor
         ), false, 'Heading must contrast with its background');
       }
+    }
+    for (const [prefix, countdown, finished] of [['', 'COUNTDOWN', 'FINISHED'],
+      ['zh-hans/', '发射倒计时', '对战结束'], ['ja/', 'カウントダウン', 'バトル終了']]) {
+      await page.goto(`https://local.test/${prefix}`);
+      await page.locator('#main-launch-btn').click();
+      await page.waitForFunction(expected => document.getElementById('battle-phase').textContent === expected, countdown);
+      await page.locator('#cancel-launch-btn').click();
+      await page.evaluate(() => { window.emojiBladeApp.battleState = 'finished'; });
+      await page.waitForFunction(expected => document.getElementById('battle-phase').textContent === expected, finished);
     }
     await page.goto('https://local.test/');
     if (await page.locator('.battle-station').count()) {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hans">
+<html lang="zh-Hans" class="arena-demo">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +12,11 @@
   <link rel="alternate" hreflang="en" href="https://emojiblade.online/">
   <link rel="alternate" hreflang="zh-Hans" href="https://emojiblade.online/zh-hans/">
   <link rel="alternate" hreflang="ja" href="https://emojiblade.online/ja/">
+  <!-- Favicon & PWA -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+  <link rel="manifest" href="/zh-hans/manifest.webmanifest">
+  <meta name="theme-color" content="#1676e8">
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Emoji Blade 表情陀螺对战 - 免费在线玩与本地双人模式">
@@ -26,6 +31,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="/style.css?v=20261014-7">
+  <link rel="stylesheet" href="/arena-demo.css?v=20261014-8">
 
   <!-- Schema.org Structured Data -->
   <script type="application/ld+json">[
@@ -75,16 +81,44 @@
   <!-- Header -->
   <header class="site-header">
     <div class="header-container">
-      <a href="/" class="brand-logo">
-        <span class="logo-emoji">🌀</span>
+      <a href="/zh-hans/" class="brand-logo" aria-label="Emoji Blade 首页">
+        <svg class="brand-spinner-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="blade-g1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ff4757" />
+              <stop offset="100%" stop-color="#ff7f50" />
+            </linearGradient>
+            <linearGradient id="blade-g2" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38bdf8" />
+              <stop offset="100%" stop-color="#2563eb" />
+            </linearGradient>
+            <linearGradient id="blade-g3" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fbbf24" />
+              <stop offset="100%" stop-color="#f59e0b" />
+            </linearGradient>
+            <linearGradient id="blade-g4" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#34d399" />
+              <stop offset="100%" stop-color="#059669" />
+            </linearGradient>
+          </defs>
+          <!-- 4 Rotating Curved Blades -->
+          <path d="M50 50 L50 6 A44 44 0 0 1 88 32 Z" fill="url(#blade-g1)" />
+          <path d="M50 50 L94 50 A44 44 0 0 1 68 88 Z" fill="url(#blade-g2)" />
+          <path d="M50 50 L50 94 A44 44 0 0 1 12 68 Z" fill="url(#blade-g3)" />
+          <path d="M50 50 L6 50 A44 44 0 0 1 32 12 Z" fill="url(#blade-g4)" />
+          <!-- Center Bit-Chip Rim -->
+          <circle cx="50" cy="50" r="22" fill="#ffffff" stroke="#e2e8f0" stroke-width="3" />
+          <!-- Center Happy Bit-Chip Emoji -->
+          <text x="50" y="58" font-size="26" text-anchor="middle" dominant-baseline="middle">🔥</text>
+        </svg>
         <div class="logo-text">
-          <span class="logo-title">EMOJI<span class="accent-text">BLADE</span></span>
+          <span class="logo-title"><span class="logo-part-emoji">EMOJI</span><span class="logo-part-blade">BLADE</span></span>
           <span class="logo-sub">SPINNING CLASH</span>
         </div>
       </a>
       
       <nav class="nav-links">
-        <a href="/" class="nav-link active">竞技场</a>
+        <a href="/zh-hans/" class="nav-link active">竞技场</a>
         <a href="/zh-hans/tier-list/" class="nav-link">强度天梯榜</a>
         <a href="/zh-hans/characters/" class="nav-link">角色图鉴</a>
         <a href="/zh-hans/guide/" class="nav-link">玩法攻略</a>
@@ -110,13 +144,14 @@
   <main>
     <!-- HERO & ARENA SECTION -->
     <section id="arena-section" class="arena-section">
-      <div class="section-container">
+      <div class="section-container battle-station">
+        <div class="battle-heading"><div><span class="arena-eyebrow">EMOJI BLADE / 竞技场 01</span><h2>旋转・碰撞・决胜</h2></div><span class="arena-live-label"><span></span> 本地对战</span></div>
         <div class="arena-top-bar">
           <div class="streak-badge">
             <span class="streak-fire">🔥</span>
-            <span>连胜纪录:</span>
+            <span>连胜</span>
             <strong id="streak-counter">0</strong>
-            <small class="best-streak">(最佳纪录： <span id="best-streak">0</span>)</small>
+            <small class="best-streak">(最佳: <span id="best-streak">0</span>)</small>
           </div>
 
           <div class="stage-badge">
@@ -137,46 +172,47 @@
             <!-- 3, 2, 1, GO SHOOT! COUNTDOWN OVERLAY -->
             <div id="countdown-overlay" class="countdown-overlay" style="display: none;">3</div>
 
-            <!-- HUD Overlays -->
-            <div class="hud-player-stats hud-left">
-              <div class="hud-header">
-                <span class="hud-tag blue">玩家</span>
-                <span class="hud-tier" id="player-tier">A-TIER</span>
+            <!-- Top Duel Fight Bar (Bright Competitive Arcade) -->
+            <div class="hud-fight-bar">
+              <div class="hud-fighter hud-fighter-player">
+                <div class="hud-avatar-circle" id="hud-player-emoji">🔥</div>
+                <div class="hud-meta">
+                  <div class="hud-name-row">
+                    <span class="hud-player-name">你</span>
+                    <span class="hud-tier-badge" id="player-tier">A-TIER</span>
+                  </div>
+                  <div class="hud-bar-wrap">
+                    <div class="hud-bar-track">
+                      <div class="hud-bar-fill player-fill" id="player-energy-bar" style="width: 100%;"></div>
+                    </div>
+                    <span class="hud-energy-text" id="player-energy-val">100%</span>
+                  </div>
+                </div>
               </div>
-              <div class="hud-emoji-preview" id="hud-player-emoji">🔥</div>
-              <div class="hud-bars">
-                <div class="bar-label">
-                  <span>旋转能量</span>
-                  <span id="player-energy-val">100%</span>
+
+              <div class="hud-vs-badge">
+                <span class="vs-text">VS</span>
+              </div>
+
+              <div class="hud-fighter hud-fighter-enemy">
+                <div class="hud-meta enemy-meta">
+                  <div class="hud-name-row enemy-name-row">
+                    <span class="hud-tier-badge" id="enemy-tier">S-TIER</span>
+                    <span class="hud-player-name">对手</span>
+                  </div>
+                  <div class="hud-bar-wrap enemy-bar-wrap">
+                    <span class="hud-energy-text" id="enemy-energy-val">100%</span>
+                    <div class="hud-bar-track">
+                      <div class="hud-bar-fill enemy-fill" id="enemy-energy-bar" style="width: 100%;"></div>
+                    </div>
+                  </div>
                 </div>
-                <div class="progress-track">
-                  <div class="progress-fill blue-fill" id="player-energy-bar" style="width: 100%;"></div>
-                </div>
+                <div class="hud-avatar-circle enemy-avatar" id="hud-enemy-emoji">💎</div>
               </div>
             </div>
 
-            <div class="hud-vs-center">VS</div>
-
-            <div class="hud-player-stats hud-right">
-              <div class="hud-header">
-                <span class="hud-tier" id="enemy-tier">S-TIER</span>
-                <span class="hud-tag red">对手</span>
-              </div>
-              <div class="hud-emoji-preview" id="hud-enemy-emoji">💎</div>
-              <div class="hud-bars">
-                <div class="bar-label">
-                  <span>旋转能量</span>
-                  <span id="enemy-energy-val">100%</span>
-                </div>
-                <div class="progress-track">
-                  <div class="progress-fill red-fill" id="enemy-energy-bar" style="width: 100%;"></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="launch-aim-guide" id="launch-aim-guide">
-              <span class="guide-text">👈 在场内拖动并向后拉动以发射</span>
-            </div>
+            <div class="battle-telemetry"><span id="battle-phase">准备发射</span><span><b id="battle-clock">00.0</b> 秒</span><span><b id="battle-hit-count">00</b> 次碰撞</span></div>
+            <div class="launch-aim-guide" id="launch-aim-guide" aria-hidden="true"></div>
 
             <!-- Battle Victory / Defeat Modal -->
             <div class="battle-overlay-modal" id="result-modal" style="display: none;">
@@ -213,26 +249,25 @@
         <div class="game-control-panel">
           <div class="panel-card player-config">
             <div class="card-title-row">
-              <span class="card-icon">⚡</span>
-              <h3>配置你的 Emoji 陀螺</h3>
-              <button id="random-player-btn" class="tiny-ghost-btn" title="随机选择表情">🎲 随机</button>
+              <h3>陀螺配置</h3>
+              <button id="random-player-btn" class="tiny-ghost-btn" title="随机选择表情" aria-label="随机选择表情">&#9860;</button>
             </div>
 
             <div class="emoji-input-wrapper">
               <input type="text" id="player-emoji-input" value="🔥" maxlength="128" autocomplete="off" spellcheck="false" aria-label="输入你的表情">
               <div class="blade-style-select">
                 <select id="blade-style-select" aria-label="陀螺外环外观">
-                  <option value="blaze">烈焰外观</option>
-                  <option value="cyber">霓虹外观</option>
-                  <option value="gold">黄金外观</option>
-                  <option value="obsidian">暗黑外观</option>
+                  <option value="blaze">烈焰战环</option>
+                  <option value="cyber">霓虹战环</option>
+                  <option value="gold">黄金战环</option>
+                  <option value="obsidian">暗黑战环</option>
                 </select>
               </div>
             </div>
 
             <!-- Quick Picker Emojis -->
             <div class="quick-picker-group">
-              <span class="picker-label">快捷选择（点击装备）：</span>
+              <span class="picker-label">选择陀螺</span>
               <div class="quick-emojis" id="quick-emojis-container">
                 <button class="emoji-chip active" data-emoji="🔥">🔥</button>
                 <button class="emoji-chip" data-emoji="💣">💣</button>
@@ -253,7 +288,7 @@
             <div class="stats-preview-grid">
               <div class="stat-cell">
                 <div class="stat-info">
-                  <span class="s-name">重量</span>
+                  <span class="s-name">重量 (Mass)</span>
                   <strong id="stat-weight-val">74</strong>
                 </div>
                 <div class="stat-meter"><div class="stat-fill" id="meter-weight" style="width: 74%"></div></div>
@@ -261,7 +296,7 @@
 
               <div class="stat-cell">
                 <div class="stat-info">
-                  <span class="s-name">攻击</span>
+                  <span class="s-name">攻击 (Clash)</span>
                   <strong id="stat-attack-val">95</strong>
                 </div>
                 <div class="stat-meter"><div class="stat-fill" id="meter-attack" style="width: 95%"></div></div>
@@ -269,7 +304,7 @@
 
               <div class="stat-cell">
                 <div class="stat-info">
-                  <span class="s-name">速度</span>
+                  <span class="s-name">速度 (Rating)</span>
                   <strong id="stat-speed-val">88</strong>
                 </div>
                 <div class="stat-meter"><div class="stat-fill" id="meter-speed" style="width: 88%"></div></div>
@@ -277,7 +312,7 @@
 
               <div class="stat-cell">
                 <div class="stat-info">
-                  <span class="s-name">耐力</span>
+                  <span class="s-name">耐力 (Spin)</span>
                   <strong id="stat-endurance-val">68</strong>
                 </div>
                 <div class="stat-meter"><div class="stat-fill" id="meter-endurance" style="width: 68%"></div></div>
@@ -286,7 +321,7 @@
 
             <!-- Trophies Shelf -->
             <div class="trophies-container">
-              <span class="trophy-title">🏆 已解锁徽章：</span>
+              <span class="trophy-title">🏆 已解锁冠军表情:</span>
               <div class="trophies-shelf" id="trophies-shelf">
                 <span class="trophy-item">🔥</span>
               </div>
@@ -296,29 +331,28 @@
           <!-- Right: Launch & Opponent Controls -->
           <div class="panel-card launch-config">
             <div class="card-title-row">
-              <span class="card-icon">🎯</span>
-              <h3>发射设置与对手</h3>
+              <h3>发射控制台</h3>
               <div class="mode-toggles">
-                <button id="mode-single-btn" class="pill-tab active">单人连胜</button>
+                <button id="mode-single-btn" class="pill-tab active">单人关卡</button>
                 <button id="mode-2p-btn" class="pill-tab">本地双人</button>
               </div>
             </div>
 
             <div class="rival-selector-row">
-              <label for="rival-mode-select">对手：</label>
+              <label for="rival-mode-select">对手:</label>
               <select id="rival-mode-select">
-                <option value="progression">关卡挑战</option>
-                <option value="random">随机对手</option>
+                <option value="progression">关卡挑战 (阶梯模式)</option>
+                <option value="random">随机挑战者</option>
                 <option value="custom">自定义对手</option>
               </select>
-              <input type="text" id="custom-enemy-input" value="💎" maxlength="128" style="display:none;" title="对手表情" aria-label="对手表情">
+              <input type="text" id="custom-enemy-input" value="💎" maxlength="128" style="display:none;" title="自定义对手表情" aria-label="自定义对手表情">
             </div>
 
             <!-- Sliders for Launch -->
             <div class="launch-sliders">
               <div class="slider-group">
                 <div class="slider-label">
-                  <span>发射力度：</span>
+                  <span>发射力度:</span>
                   <strong id="power-display">85%</strong>
                 </div>
                 <input type="range" aria-label="发射力度" id="power-slider" min="30" max="100" value="85">
@@ -326,7 +360,7 @@
 
               <div class="slider-group">
                 <div class="slider-label">
-                  <span>发射角度：</span>
+                  <span>发射角度:</span>
                   <strong id="angle-display">-35°</strong>
                 </div>
                 <input type="range" aria-label="发射角度" id="angle-slider" min="-180" max="180" value="-35">
@@ -336,13 +370,13 @@
             <div class="action-btn-wrapper">
               <button id="main-launch-btn" class="massive-clash-btn">
                 <span class="btn-shine"></span>
-                <span class="btn-text">3, 2, 1, 陀螺发射！🚀</span>
+                <span class="btn-text">发射 &#8599;</span>
               </button>
             </div>
             
             <button id="cancel-launch-btn" class="secondary-btn">取消发射</button>
             <p class="launch-tip">
-              💡 提示：拖动场内陀螺即可瞄准并发射！
+              💡 提示：在场内按住陀螺拖拽即可拉索弹射瞄准！
             </p>
           </div>
         </div>
