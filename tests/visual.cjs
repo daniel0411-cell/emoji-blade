@@ -45,6 +45,20 @@ const { chromium } = require('playwright');
         ), false, 'Heading must contrast with its background');
       }
     }
+    for (const width of [320, 390, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const route of ['2-player-duel', 'spinning-top-simulator', 'guide']) {
+        await page.goto(`https://local.test/${route}/`);
+        const image = page.locator('.game-screenshot img');
+        await image.waitFor();
+        const loaded = await image.evaluate(element => ({
+          loaded: element.complete && element.naturalWidth === 1200,
+          ratio: element.naturalHeight === Number(element.getAttribute('height')),
+          fits: element.getBoundingClientRect().right <= window.innerWidth,
+        }));
+        assert.deepEqual(loaded, { loaded: true, ratio: true, fits: true }, `${route} screenshot at ${width}px`);
+      }
+    }
     for (const [prefix, countdown, finished] of [['', 'COUNTDOWN', 'FINISHED'],
       ['zh-hans/', '发射倒计时', '对战结束'], ['ja/', 'カウントダウン', 'バトル終了']]) {
       await page.goto(`https://local.test/${prefix}`);

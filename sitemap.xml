@@ -3,7 +3,7 @@
   <!-- Core Home & Multilingual -->
   <url>
     <loc>https://emojiblade.online/</loc>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -29,7 +29,7 @@
   </url>
   <url>
     <loc>https://emojiblade.online/guide/</loc>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-10-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -112,8 +112,8 @@
   <url><loc>https://emojiblade.online/characters/pizza/</loc><lastmod>2026-10-14</lastmod></url>
   <url><loc>https://emojiblade.online/characters/tornado/</loc><lastmod>2026-10-14</lastmod></url>
   <url><loc>https://emojiblade.online/faq/</loc><lastmod>2026-10-14</lastmod></url>
-  <url><loc>https://emojiblade.online/spinning-top-simulator/</loc><lastmod>2026-10-14</lastmod></url>
-  <url><loc>https://emojiblade.online/2-player-duel/</loc><lastmod>2026-10-14</lastmod></url>
+  <url><loc>https://emojiblade.online/spinning-top-simulator/</loc><lastmod>2026-10-16</lastmod></url>
+  <url><loc>https://emojiblade.online/2-player-duel/</loc><lastmod>2026-10-16</lastmod></url>
   <url><loc>https://emojiblade.online/embed/</loc><lastmod>2026-10-14</lastmod></url>
   <url><loc>https://emojiblade.online/zh-hans/characters/</loc><lastmod>2026-10-14</lastmod></url>
   <url><loc>https://emojiblade.online/zh-hans/guide/</loc><lastmod>2026-10-14</lastmod></url>

@@ -1485,6 +1485,10 @@ input[type="range"] {
   text-decoration: none;
 }
 
+.game-screenshot { margin: 24px 0; }
+.game-screenshot img { display: block; width: 100%; height: auto; border: 1px solid var(--bg-card-border); border-radius: 6px; }
+.game-screenshot figcaption { margin-top: 8px; color: var(--text-muted); font-size: 13px; line-height: 1.6; }
+
 .stats-table-scroll { overflow-x: auto; margin: 24px 0; }
 .stats-table-scroll:focus-visible { outline: 2px solid var(--accent-cyan); }
 .character-stats-table { width: 100%; border-collapse: collapse; min-width: 610px; font-size: 14px; }
