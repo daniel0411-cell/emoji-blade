@@ -663,6 +663,7 @@
 .battle-station[data-phase="battling"] .arena-viewport-wrapper { border-color: #38bdf8; }
 .battle-station[data-phase="battling"] #battle-phase { color: #f59e0b; }
 .battle-station [data-low="true"] { background: #dc2626; animation: energy-alert 1s ease-in-out infinite alternate; }
+@keyframes energy-alert { to { opacity: .55; } }
 
 /* Responsive adjustments */
 @media (max-width: 1060px) {

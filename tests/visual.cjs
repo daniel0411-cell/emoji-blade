@@ -28,6 +28,8 @@ const { chromium } = require('playwright');
       for (const language of ['', 'zh-hans/', 'ja/']) {
         await page.goto(`https://local.test/${language}`);
         await page.locator('#player-tier').filter({ hasText: /TIER/ }).waitFor();
+        assert.equal(await page.locator('.holo-rpm-badge').textContent(),
+          language === 'zh-hans/' ? '陀螺预览' : language === 'ja/' ? 'コマプレビュー' : 'TOP PREVIEW');
         const issues = await page.evaluate(() => {
           const arena = document.querySelector('#arena-container').getBoundingClientRect();
           return [...document.querySelectorAll(
@@ -110,6 +112,13 @@ const { chromium } = require('playwright');
         assert.equal(await page.locator('#battle-clock').textContent(), '00.0');
         await page.evaluate(() => { window.emojiBladeApp.playerTop.energy = 20; });
         await page.waitForFunction(() => document.getElementById('player-energy-bar').dataset.low === 'true');
+        await page.waitForFunction(() => document.getElementById('player-energy-bar')
+          .getAnimations().some(animation => animation.animationName === 'energy-alert'));
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        assert.equal(await page.locator('#player-energy-bar').evaluate(element =>
+          element.getAnimations().some(animation => animation.animationName === 'energy-alert')
+        ), false, 'Reduced motion must disable the low-energy animation');
+        await page.emulateMedia({ reducedMotion: 'no-preference' });
         await page.evaluate(() => {
           const game = window.emojiBladeApp;
           game.playerTop.launch(0, 85);
