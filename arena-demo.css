@@ -24,8 +24,8 @@
   grid-area: heading;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 18px;
+  align-items: flex-end;
+  margin-bottom: 14px;
 }
 .arena-eyebrow {
   font: 11px var(--font-mono);
@@ -33,11 +33,11 @@
   letter-spacing: 1px;
 }
 .battle-heading h2 {
-  font-size: 32px;
-  line-height: 1.25;
+  font-size: 28px;
+  line-height: 1.2;
   font-weight: 900;
   color: #ffffff;
-  margin-top: 4px;
+  margin-top: 2px;
   letter-spacing: -0.5px;
 }
 .arena-live-label {
@@ -50,6 +50,8 @@
   padding: 4px 10px;
   border-radius: 999px;
   border: 1px solid #334155;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .arena-live-label span {
   width: 7px;
@@ -87,9 +89,14 @@
   font: 700 11px var(--font-mono);
 }
 .battle-station .arena-status-msg {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid #334155;
   color: #38bdf8;
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 999px;
+  box-shadow: none;
 }
 
 /* Center Column: Arena */
@@ -109,7 +116,7 @@
 }
 
 .battle-station .arena-canvas-container {
-  height: 440px;
+  height: 510px;
   border: 0;
   border-radius: 0;
   background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
@@ -301,10 +308,14 @@
 }
 .battle-station .player-config {
   grid-area: loadout;
-  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 510px;
+  padding: 18px;
 }
 .battle-station .card-title-row {
-  margin-bottom: 14px;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -343,11 +354,11 @@
 /* Holo Spinner Preview Dock */
 .holo-preview-dock {
   position: relative;
-  height: 96px;
+  height: 80px;
   background: radial-gradient(circle at 50% 50%, rgba(30, 58, 138, 0.35) 0%, rgba(15, 23, 42, 0.8) 100%);
   border: 1px solid rgba(56, 189, 248, 0.25);
   border-radius: 12px;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -355,16 +366,16 @@
 }
 .holo-spin-ring {
   position: absolute;
-  width: 68px;
-  height: 68px;
+  width: 58px;
+  height: 58px;
   border: 2px dashed rgba(56, 189, 248, 0.5);
   border-radius: 50%;
   animation: spinSlow 4s linear infinite;
 }
 .holo-glow-disc {
   position: absolute;
-  width: 52px;
-  height: 52px;
+  width: 44px;
+  height: 44px;
   background: radial-gradient(circle, rgba(56, 189, 248, 0.4) 0%, transparent 70%);
   border-radius: 50%;
   filter: blur(4px);
@@ -372,7 +383,7 @@
 .holo-current-emoji {
   position: relative;
   z-index: 2;
-  font-size: 38px;
+  font-size: 32px;
   filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.8));
   transition: transform 0.2s ease;
 }
@@ -397,12 +408,12 @@
 .battle-station .emoji-input-wrapper {
   display: flex;
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .battle-station #player-emoji-input {
-  width: 48px;
-  height: 40px;
-  font-size: 22px;
+  width: 44px;
+  height: 36px;
+  font-size: 20px;
   background: #1e293b;
   border: 1px solid #334155;
   border-radius: 8px;
@@ -414,7 +425,7 @@
 }
 .battle-station .blade-style-select select {
   width: 100%;
-  height: 40px;
+  height: 36px;
   background: #1e293b;
   border: 1px solid #334155;
   border-radius: 8px;
@@ -427,21 +438,24 @@
   color: #94a3b8;
   letter-spacing: 0.5px;
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
+}
+.battle-station .quick-picker-group {
+  margin-bottom: 8px;
 }
 .battle-station .quick-emojis {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
   margin-top: 4px;
 }
 .battle-station .emoji-chip {
   width: 100%;
-  height: 38px;
+  height: 32px;
   background: #1e293b;
   border: 1px solid #334155;
-  border-radius: 8px;
-  font-size: 20px;
+  border-radius: 6px;
+  font-size: 17px;
   transition: all 140ms ease;
   cursor: pointer;
 }
@@ -457,27 +471,29 @@
   box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
 }
 .battle-station .stats-preview-grid {
-  grid-template-columns: 1fr;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 10px;
   background: transparent;
   border: 0;
-  padding: 14px 0 0;
+  padding: 8px 0;
   border-top: 1px solid #1e293b;
-  margin-top: 14px;
+  border-bottom: 1px solid #1e293b;
+  margin-top: 8px;
 }
 .battle-station .stat-info {
   display: flex;
   justify-content: space-between;
-  font-size: 11px;
+  font-size: 10px;
   color: #94a3b8;
-  margin-bottom: 3px;
+  margin-bottom: 2px;
 }
 .battle-station .stat-info strong {
   color: #38bdf8;
   font-family: var(--font-mono);
 }
 .battle-station .stat-meter {
-  height: 6px;
+  height: 5px;
   border-radius: 999px;
   background: #1e293b;
   overflow: hidden;
@@ -488,29 +504,40 @@
 }
 
 .battle-station .trophies-container {
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px solid #1e293b;
+  margin-top: 8px;
+  padding-top: 0;
+  border-top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 .battle-station .trophy-title {
   color: #94a3b8;
-  font-size: 10px;
+  font-size: 9px;
   font-family: var(--font-mono);
+  margin: 0;
+}
+.battle-station .trophies-shelf {
+  display: flex;
+  gap: 4px;
 }
 .battle-station .trophy-item {
   background: #1e293b;
   border: 1px solid #334155;
   border-radius: 6px;
   padding: 2px 6px;
+  font-size: 12px;
 }
 
 /* Right Column: Launch Dock */
 .battle-station .launch-config {
   grid-area: launch;
-  align-self: stretch;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  justify-content: space-between;
+  min-height: 510px;
+  padding: 18px;
 }
 .battle-station .launch-config .card-title-row {
   margin: 0;
@@ -548,7 +575,7 @@
 .battle-station .rival-selector-row {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 .battle-station .rival-selector-row label {
   font-size: 11px;
@@ -557,7 +584,7 @@
   font-family: var(--font-mono);
 }
 .battle-station .rival-selector-row select {
-  height: 38px;
+  height: 36px;
   background: #1e293b;
   border: 1px solid #334155;
   border-radius: 8px;
@@ -568,13 +595,17 @@
 .battle-station .launch-sliders {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 12px;
 }
 .battle-station .slider-group {
   background: #1e293b;
   border: 1px solid #334155;
-  border-radius: 10px;
-  padding: 10px 12px;
+  border-radius: 8px;
+  padding: 8px 10px;
 }
 .battle-station .slider-label {
   display: flex;
