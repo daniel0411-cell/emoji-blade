@@ -48,6 +48,20 @@
     return messages[text]?.[lang === 'zh-Hans' ? 0 : lang === 'ja' ? 1 : 2] || text;
   }
 
+  function dashButtonLabel(player, top, battleState) {
+    const lang = document.documentElement?.lang;
+    const state = battleState !== 'battling' || !top.isSpinning
+      ? ['unavailable', '当前不可用', '現在使用できません']
+      : top.dashCooldown > 0
+      ? [`cooldown ${(top.dashCooldown / 60).toFixed(1)} seconds`, `冷却 ${(top.dashCooldown / 60).toFixed(1)} 秒`, `クールダウン ${(top.dashCooldown / 60).toFixed(1)} 秒`]
+      : top.energy <= 6
+      ? ['needs more than 6 energy', '需要超过 6 点能量', '7以上のエネルギーが必要です']
+      : ['ready; costs 6 energy', '可用；消耗 6 点能量', '使用可能、エネルギーを6消費します'];
+    const prefix = [`Player ${player} dash: `, `玩家 ${player} 冲刺：`, `プレイヤー${player} ダッシュ：`];
+    const index = lang === 'zh-Hans' ? 1 : lang === 'ja' ? 2 : 0;
+    return prefix[index] + state[index];
+  }
+
   // --- AUDIO SYNTHESIZER ---
   class SoundFX {
     constructor() {
@@ -1398,6 +1412,7 @@
           const top = index ? this.enemyTop : this.playerTop;
           button.hidden = index === 1 && !this.is2PMode;
           button.disabled = this.battleState !== 'battling' || top.dashCooldown > 0 || top.energy <= 6 || !top.isSpinning;
+          button.setAttribute('aria-label', dashButtonLabel(index + 1, top, this.battleState));
           button.style.setProperty('--dash-ready', `${(1 - top.dashCooldown / 60) * 100}%`);
           button.querySelector('.dash-cd').textContent = top.dashCooldown > 0 ? `${(top.dashCooldown / 60).toFixed(1)}s` : '6%';
         });
