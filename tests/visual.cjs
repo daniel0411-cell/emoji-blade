@@ -47,6 +47,49 @@ const { chromium } = require('playwright');
         ), false, 'Heading must contrast with its background');
       }
     }
+    for (const width of [390, 1061, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const language of ['', 'zh-hans/', 'ja/']) {
+        await page.goto(`https://local.test/${language}?mode=2p`);
+        await page.locator('#player-tier').filter({ hasText: /TIER/ }).waitFor();
+        await page.locator('#rival-mode-select').selectOption('custom');
+        for (const phase of ['ready', 'battling']) {
+          if (phase === 'battling') {
+            await page.evaluate(() => {
+              const game = window.emojiBladeApp;
+              game.playerTop.launch(0, 85); game.enemyTop.launch(180, 85);
+              game.battleState = 'battling';
+            });
+          }
+          await page.waitForFunction(expected =>
+            document.querySelector('.battle-station').dataset.phase === expected, phase);
+          await page.waitForFunction(() => {
+            const canvas = document.getElementById('battleCanvas');
+            const rect = canvas.parentElement.getBoundingClientRect();
+            return Math.abs(canvas.height / devicePixelRatio - rect.height) < 1;
+          });
+          const layout = await page.evaluate(() => {
+            const rect = selector => document.querySelector(selector).getBoundingClientRect();
+            const sides = [rect('.player-config'), rect('.launch-config')];
+            const arena = rect('.arena-viewport-wrapper');
+            const dash = rect('.dash-controls');
+            return { sides: sides.map(r => ({ top: r.top, bottom: r.bottom })),
+              top: arena.top, bottom: dash.height ? dash.bottom : arena.bottom,
+              overflow: document.documentElement.scrollWidth > innerWidth,
+              mobileMinHeight: getComputedStyle(document.querySelector('.launch-config')).minHeight };
+          });
+          assert.equal(layout.overflow, false);
+          if (width > 1060) {
+            for (const side of layout.sides) {
+              assert.ok(Math.abs(side.top - layout.top) < 1 && Math.abs(side.bottom - layout.bottom) < 1,
+                `${language || 'en'} ${width}px ${phase}: deck edges must align`);
+            }
+          } else {
+            assert.equal(layout.mobileMinHeight, '0px');
+          }
+        }
+      }
+    }
     for (const width of [320, 390, 1440]) {
       await page.setViewportSize({ width, height: 900 });
       for (const route of ['2-player-duel', 'spinning-top-simulator', 'guide']) {

@@ -829,6 +829,10 @@
         if (!event.repeat) this.requestDash(event.code === 'Enter');
       });
       window.addEventListener('resize', () => this.resizeCanvas());
+      if (window.ResizeObserver) {
+        this.canvasResizeObserver = new window.ResizeObserver(() => this.resizeCanvas());
+        this.canvasResizeObserver.observe(this.canvas.parentElement);
+      }
       const cancelLaunch = () => {
         if (this.battleState === 'countdown' || (this.is2PMode && this.turn2P === 2 && this.battleState === 'ready')) this.setupStage();
       };

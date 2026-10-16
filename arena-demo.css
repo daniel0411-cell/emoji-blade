@@ -697,6 +697,12 @@
 @keyframes energy-alert { to { opacity: .55; } }
 
 /* Responsive adjustments */
+@media (min-width: 1061px) {
+  .battle-station { grid-template-rows: auto auto minmax(512px, 1fr) auto; }
+  .battle-station .player-config, .battle-station .launch-config { align-self: stretch; }
+  .battle-station .arena-viewport-wrapper { align-self: stretch; display: flex; flex-direction: column; }
+  .battle-station .arena-canvas-container { flex: 1; height: auto; min-height: 510px; }
+}
 @media (max-width: 1060px) {
   .battle-station {
     grid-template-columns: minmax(0, 1fr) 280px;
@@ -710,6 +716,7 @@
   }
 }
 @media (max-width: 760px) {
+  .battle-station .player-config, .battle-station .launch-config { min-height: 0; }
   .arena-demo .site-header { padding: 8px 0; }
   .arena-demo .header-container { display: grid; grid-template-columns: minmax(0, 1fr) auto; padding: 0 12px; gap: 8px; }
   .arena-demo .brand-logo { gap: 6px; }
