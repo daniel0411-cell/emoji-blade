@@ -31,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="/style.css?v=20261014-7">
-  <link rel="stylesheet" href="/arena-demo.css?v=20261014-8">
+  <link rel="stylesheet" href="/arena-demo.css?v=20261016-9">
 
   <!-- Schema.org Structured Data -->
   <script type="application/ld+json">[
@@ -254,8 +254,16 @@
         <div class="game-control-panel">
           <div class="panel-card player-config">
             <div class="card-title-row">
-              <h3>陀螺配置</h3>
-              <button id="random-player-btn" class="tiny-ghost-btn" title="随机选择表情" aria-label="随机选择表情">&#9860;</button>
+              <h3>P1 装配坞</h3>
+              <button id="random-player-btn" class="tiny-ghost-btn" title="随机选择表情" aria-label="随机选择表情">🎲 随机</button>
+            </div>
+
+            <!-- Holo Spinner Preview Dock -->
+            <div class="holo-preview-dock">
+              <div class="holo-spin-ring"></div>
+              <div class="holo-glow-disc"></div>
+              <span id="holo-preview-emoji" class="holo-current-emoji" title="当前陀螺全息展示">🔥</span>
+              <span class="holo-rpm-badge">RPM: 4,800 MAX</span>
             </div>
 
             <div class="emoji-input-wrapper">
@@ -336,7 +344,7 @@
           <!-- Right: Launch & Opponent Controls -->
           <div class="panel-card launch-config">
             <div class="card-title-row">
-              <h3>发射控制台</h3>
+              <h3>发射动力推杆</h3>
               <div class="mode-toggles">
                 <button id="mode-single-btn" class="pill-tab active">单人关卡</button>
                 <button id="mode-2p-btn" class="pill-tab">本地双人</button>
@@ -375,7 +383,7 @@
             <div class="action-btn-wrapper">
               <button id="main-launch-btn" class="massive-clash-btn">
                 <span class="btn-shine"></span>
-                <span class="btn-text">发射 &#8599;</span>
+                <span class="btn-text">发射 (GO SHOOT!) 🚀</span>
               </button>
             </div>
             

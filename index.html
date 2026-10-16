@@ -33,7 +33,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="/style.css?v=20261014-7">
-  <link rel="stylesheet" href="/arena-demo.css">
+  <link rel="stylesheet" href="/arena-demo.css?v=20261016-9">
 
   <!-- Schema.org Structured Data -->
   <script type="application/ld+json">
@@ -252,8 +252,16 @@
         <div class="game-control-panel">
           <div class="panel-card player-config">
             <div class="card-title-row">
-              <h3>YOUR LOADOUT</h3>
-              <button id="random-player-btn" class="tiny-ghost-btn" title="Random Emoji" aria-label="Random emoji">&#9860;</button>
+              <h3>P1 LOADOUT</h3>
+              <button id="random-player-btn" class="tiny-ghost-btn" title="Random Emoji" aria-label="Random emoji">🎲 Random</button>
+            </div>
+
+            <!-- Holo Spinner Preview Dock -->
+            <div class="holo-preview-dock">
+              <div class="holo-spin-ring"></div>
+              <div class="holo-glow-disc"></div>
+              <span id="holo-preview-emoji" class="holo-current-emoji" title="Active Top Preview">🔥</span>
+              <span class="holo-rpm-badge">RPM: 4,800 MAX</span>
             </div>
 
             <div class="emoji-input-wrapper">
@@ -334,7 +342,7 @@
           <!-- Right: Launch & Opponent Controls -->
           <div class="panel-card launch-config">
             <div class="card-title-row">
-              <h3>LAUNCH CONTROL</h3>
+              <h3>LAUNCH DOCK</h3>
               <div class="mode-toggles">
                 <button id="mode-single-btn" class="pill-tab active">SOLO</button>
                 <button id="mode-2p-btn" class="pill-tab">LOCAL 2P</button>
@@ -373,7 +381,7 @@
             <div class="action-btn-wrapper">
               <button id="main-launch-btn" class="massive-clash-btn">
                 <span class="btn-shine"></span>
-                <span class="btn-text">LAUNCH &#8599;</span>
+                <span class="btn-text">GO SHOOT! 🚀</span>
               </button>
             </div>
             

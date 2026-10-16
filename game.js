@@ -803,6 +803,8 @@
 
       document.getElementById('hud-player-emoji').textContent = this.playerTop.emoji;
       document.getElementById('player-tier').textContent = `${stats.tier}-TIER`;
+      const holoEmoji = document.getElementById('holo-preview-emoji');
+      if (holoEmoji) holoEmoji.textContent = this.playerTop.emoji;
     }
 
     renderBadges() {
