@@ -30,6 +30,22 @@ const { chromium } = require('playwright');
         await page.locator('#player-tier').filter({ hasText: /TIER/ }).waitFor();
         assert.equal(await page.locator('.holo-rpm-badge').textContent(),
           language === 'zh-hans/' ? '陀螺预览' : language === 'ja/' ? 'コマプレビュー' : 'TOP PREVIEW');
+        const lowContrast = await page.evaluate(() => {
+          const luminance = rgb => {
+            const values = rgb.map(value => value / 255)
+              .map(value => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
+            return values[0] * 0.2126 + values[1] * 0.7152 + values[2] * 0.0722;
+          };
+          return [...document.querySelectorAll('.arena-eyebrow, .arena-status-msg, .streak-badge, '
+            + '.vs-text, #battle-phase, .card-title-row h3, .holo-rpm-badge, .stat-info strong, .slider-label strong')]
+            .filter(element => {
+              const foreground = luminance(getComputedStyle(element).color.match(/\d+/g).slice(0, 3).map(Number));
+              // Use the darkest background stop behind these light-theme labels.
+              const background = luminance(element.matches('.holo-rpm-badge') ? [224, 242, 254] : [248, 250, 252]);
+              return (Math.max(foreground, background) + 0.05) / (Math.min(foreground, background) + 0.05) < 4.5;
+            }).map(element => element.className || element.id);
+        });
+        assert.deepEqual(lowContrast, [], `${language || 'en'}: small accent text must reach 4.5:1`);
         const issues = await page.evaluate(() => {
           const arena = document.querySelector('#arena-container').getBoundingClientRect();
           return [...document.querySelectorAll(

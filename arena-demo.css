@@ -29,7 +29,7 @@
 }
 .arena-eyebrow {
   font: 11px var(--font-mono);
-  color: #0284c7;
+  color: #0369a1;
   letter-spacing: 1px;
 }
 .battle-heading h2 {
@@ -76,7 +76,7 @@
 }
 .battle-station .streak-badge {
   font: 11px var(--font-mono);
-  color: #ea580c;
+  color: #c2410c;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -93,7 +93,7 @@
 .battle-station .arena-status-msg {
   background: #f8fafc;
   border: 1px solid #cbd5e1;
-  color: #0284c7;
+  color: #0369a1;
   font-size: 11px;
   font-weight: 700;
   padding: 5px 14px;
@@ -217,7 +217,7 @@
 .battle-station .vs-text {
   font-size: 15px;
   font-weight: 900;
-  color: #ea580c;
+  color: #c2410c;
   letter-spacing: 0.5px;
 }
 .battle-station .launch-aim-guide { display: none; }
@@ -234,7 +234,7 @@
   color: #64748b;
   pointer-events: none;
 }
-#battle-phase { margin-right: auto; color: #0284c7; font-weight: 800; }
+#battle-phase { margin-right: auto; color: #0369a1; font-weight: 800; }
 .battle-telemetry b { color: #0f172a; font-weight: 700; }
 
 .battle-station .game-control-panel { display: contents; }
@@ -330,7 +330,7 @@
 .battle-station .card-title-row h3 {
   font: 800 12px var(--font-mono);
   letter-spacing: 0.5px;
-  color: #0284c7;
+  color: #0369a1;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -404,7 +404,7 @@
   font-family: var(--font-mono);
   font-size: 9px;
   font-weight: 700;
-  color: #0284c7;
+  color: #0369a1;
   letter-spacing: 0.5px;
 }
 @keyframes spinSlow {
@@ -496,7 +496,7 @@
   margin-bottom: 2px;
 }
 .battle-station .stat-info strong {
-  color: #0284c7;
+  color: #0369a1;
   font-family: var(--font-mono);
 }
 .battle-station .stat-meter {
@@ -551,7 +551,7 @@
   justify-content: space-between;
 }
 .battle-station .launch-config .card-title-row h3 {
-  color: #ea580c;
+  color: #c2410c;
 }
 .battle-station .launch-config .card-title-row h3::before {
   background: #ea580c;
@@ -624,11 +624,11 @@
   font-weight: 700;
 }
 .battle-station .slider-label strong {
-  color: #ea580c;
+  color: #c2410c;
   font-family: var(--font-mono);
 }
 .battle-station .slider-group:nth-child(2) .slider-label strong {
-  color: #0284c7;
+  color: #0369a1;
 }
 
 .battle-station .massive-clash-btn {
@@ -700,7 +700,7 @@
 .battle-station .countdown-overlay { font-size: 100px; color: #0f172a; text-shadow: 0 0 30px rgba(56, 189, 248, 0.6); }
 .battle-station .countdown-overlay.go-shoot { font-size: 46px; color: #ea580c; text-shadow: 0 0 30px rgba(234, 88, 12, 0.7); }
 .battle-station[data-phase="battling"] .arena-viewport-wrapper { border-color: #0284c7; box-shadow: 0 12px 30px -8px rgba(2, 132, 199, 0.25); }
-.battle-station[data-phase="battling"] #battle-phase { color: #ea580c; }
+.battle-station[data-phase="battling"] #battle-phase { color: #c2410c; }
 .battle-station [data-low="true"] { background: #dc2626; animation: energy-alert 1s ease-in-out infinite alternate; }
 @keyframes energy-alert { to { opacity: .55; } }
 
