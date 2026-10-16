@@ -82,12 +82,12 @@ def submit_indexnow():
         raise SystemExit('Local IndexNow verification file does not match')
     body = {'host': 'emojiblade.online', 'key': KEY, 'keyLocation': f'{BASE}/{KEY}.txt',
             'urlList': [BASE + route for route in CORE]}
-    request = urllib.request.Request('https://api.indexnow.org/indexnow',
+    request = urllib.request.Request('https://www.bing.com/indexnow',
                                      data=json.dumps(body).encode(),
                                      headers={'Content-Type': 'application/json'}, method='POST')
     with urllib.request.urlopen(request, timeout=25) as response:
         print(json.dumps({'status': response.status, 'submitted_urls': body['urlList'],
-                          'note': 'Notification accepted; this does not confirm crawling or indexing.'}, indent=2))
+                          'note': 'Notification received; key validation, crawling and indexing may still be pending.'}, indent=2))
 
 
 if __name__ == '__main__':

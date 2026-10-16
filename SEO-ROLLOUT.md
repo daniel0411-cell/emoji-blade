@@ -99,3 +99,28 @@ Asia/Shanghai, with a total of two runs. Keep unchanged/non-actionable
 results quiet; notify on meaningful changes, failure, required user action
 or the completed two-week review. Actual release and submission receipts
 are recorded in the accompanying chat after production verification.
+
+October 16 release: 07da97ca11933d9473379378aff9e12e9656067e,
+https://0cc76a02.emoji-blade.pages.dev. The immutable and default Pages
+hostnames matched all nine changed public files exactly. Production home
+matched its local SHA-256, and the six-page production audit passed after
+release (63 sitemap URLs, correct canonicals and robots, missing URL 404).
+Home description is now 152 characters; simulator description is 155.
+
+The public api.indexnow.org endpoint timed out without a receipt. Bing's
+official https://www.bing.com/indexnow endpoint received the same six core
+URLs and returned HTTP 202 on October 16. Key validation can still be
+pending; neither crawling nor indexing is confirmed by this response.
+The submission tool now uses the endpoint with the verified response.
+
+Bing sitemap was resubmitted October 16 and shows processing (its last
+crawl remains October 14). Google sitemap resubmission displayed a success
+receipt October 16; its existing report shows 63 discovered URLs, not 63
+indexed pages. The Google per-URL indexing request failed with a reCAPTCHA
+service connection error; no accepted per-URL request is claimed.
+
+Production browser testing found a cached older CSS response under the
+unchanged stylesheet version. Bump the stylesheet query on all three new
+screenshot guides so returning browsers load the responsive image rules.
+Analytics remains pending the owner's measurement platform/ID; directory
+materials are prepared but no external listings have been submitted.
