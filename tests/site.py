@@ -55,7 +55,7 @@ class Page(HTMLParser):
             json.loads(self.schema)
             self.json_script = False
 
-pages = list(root.rglob('*.html'))
+pages = [file for file in root.rglob('*.html') if 'node_modules' not in file.parts]
 titles = set()
 for file in pages:
     p = Page(); p.feed(file.read_text())

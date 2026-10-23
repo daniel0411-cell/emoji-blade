@@ -25,9 +25,27 @@ const { chromium } = require('playwright');
     });
     for (const width of [320, 390, 480, 768, 1440]) {
       await page.setViewportSize({ width, height: 900 });
-      for (const language of ['', 'zh-hans/', 'ja/']) {
+      for (const language of ['', 'zh-hans/', 'zh-hant/', 'ja/']) {
         await page.goto(`https://local.test/${language}`);
         await page.locator('#player-tier').filter({ hasText: /TIER/ }).waitFor();
+        assert.equal(await page.locator('.holo-rpm-badge').textContent(),
+          language === 'zh-hans/' ? '陀螺预览' : language === 'zh-hant/' ? '陀螺預覽' : language === 'ja/' ? 'コマプレビュー' : 'TOP PREVIEW');
+        const lowContrast = await page.evaluate(() => {
+          const luminance = rgb => {
+            const values = rgb.map(value => value / 255)
+              .map(value => value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4);
+            return values[0] * 0.2126 + values[1] * 0.7152 + values[2] * 0.0722;
+          };
+          return [...document.querySelectorAll('.arena-eyebrow, .arena-status-msg, .streak-badge, '
+            + '.vs-text, #battle-phase, .card-title-row h3, .holo-rpm-badge, .stat-info strong, .slider-label strong')]
+            .filter(element => {
+              const foreground = luminance(getComputedStyle(element).color.match(/\d+/g).slice(0, 3).map(Number));
+              // Use the darkest background stop behind these light-theme labels.
+              const background = luminance(element.matches('.holo-rpm-badge') ? [224, 242, 254] : [248, 250, 252]);
+              return (Math.max(foreground, background) + 0.05) / (Math.min(foreground, background) + 0.05) < 4.5;
+            }).map(element => element.className || element.id);
+        });
+        assert.deepEqual(lowContrast, [], `${language || 'en'}: small accent text must reach 4.5:1`);
         const issues = await page.evaluate(() => {
           const arena = document.querySelector('#arena-container').getBoundingClientRect();
           return [...document.querySelectorAll(
@@ -39,14 +57,80 @@ const { chromium } = require('playwright');
           }).map(element => element.id || element.className);
         });
         assert.deepEqual(issues, [], `${language || 'en'} at ${width}px: clipped or hidden HUD`);
+        const colors = await page.locator('#battleCanvas').evaluate(canvas => {
+          const pixels = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+          const colors = new Set();
+          for (let i = 0; i < pixels.length; i += 64) {
+            colors.add(`${pixels[i]},${pixels[i + 1]},${pixels[i + 2]},${pixels[i + 3]}`);
+          }
+          return colors.size;
+        });
+        assert.ok(colors > 32, 'Arena canvas must contain rendered tops and details');
         await page.goto(`https://local.test/${language}guide/`);
         assert.equal(await page.locator('.prose-card h1').evaluate(element =>
           getComputedStyle(element).color === getComputedStyle(element.parentElement).backgroundColor
         ), false, 'Heading must contrast with its background');
       }
     }
+    for (const width of [390, 1061, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const language of ['', 'zh-hans/', 'zh-hant/', 'ja/']) {
+        await page.goto(`https://local.test/${language}?mode=2p`);
+        await page.locator('#player-tier').filter({ hasText: /TIER/ }).waitFor();
+        await page.locator('#rival-mode-select').selectOption('custom');
+        for (const phase of ['ready', 'battling']) {
+          if (phase === 'battling') {
+            await page.evaluate(() => {
+              const game = window.emojiBladeApp;
+              game.playerTop.launch(0, 85); game.enemyTop.launch(180, 85);
+              game.battleState = 'battling';
+            });
+          }
+          await page.waitForFunction(expected =>
+            document.querySelector('.battle-station').dataset.phase === expected, phase);
+          await page.waitForFunction(() => {
+            const canvas = document.getElementById('battleCanvas');
+            const rect = canvas.parentElement.getBoundingClientRect();
+            return Math.abs(canvas.height / devicePixelRatio - rect.height) < 1;
+          });
+          const layout = await page.evaluate(() => {
+            const rect = selector => document.querySelector(selector).getBoundingClientRect();
+            const sides = [rect('.player-config'), rect('.launch-config')];
+            const arena = rect('.arena-viewport-wrapper');
+            const dash = rect('.dash-controls');
+            return { sides: sides.map(r => ({ top: r.top, bottom: r.bottom })),
+              top: arena.top, bottom: dash.height ? dash.bottom : arena.bottom,
+              overflow: document.documentElement.scrollWidth > innerWidth,
+              mobileMinHeight: getComputedStyle(document.querySelector('.launch-config')).minHeight };
+          });
+          assert.equal(layout.overflow, false);
+          if (width > 1060) {
+            for (const side of layout.sides) {
+              assert.ok(Math.abs(side.top - layout.top) < 1 && Math.abs(side.bottom - layout.bottom) < 1,
+                `${language || 'en'} ${width}px ${phase}: deck edges must align`);
+            }
+          } else {
+            assert.equal(layout.mobileMinHeight, '0px');
+          }
+        }
+      }
+    }
+    for (const width of [320, 390, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const route of ['2-player-duel', 'spinning-top-simulator', 'guide']) {
+        await page.goto(`https://local.test/${route}/`);
+        const image = page.locator('.game-screenshot img');
+        await image.waitFor();
+        const loaded = await image.evaluate(element => ({
+          loaded: element.complete && element.naturalWidth === 1200,
+          ratio: element.naturalHeight === Number(element.getAttribute('height')),
+          fits: element.getBoundingClientRect().right <= window.innerWidth,
+        }));
+        assert.deepEqual(loaded, { loaded: true, ratio: true, fits: true }, `${route} screenshot at ${width}px`);
+      }
+    }
     for (const [prefix, countdown, finished] of [['', 'COUNTDOWN', 'FINISHED'],
-      ['zh-hans/', '发射倒计时', '对战结束'], ['ja/', 'カウントダウン', 'バトル終了']]) {
+      ['zh-hans/', '发射倒计时', '对战结束'], ['zh-hant/', '發射倒數', '對戰結束'], ['ja/', 'カウントダウン', 'バトル終了']]) {
       await page.goto(`https://local.test/${prefix}`);
       await page.locator('#main-launch-btn').click();
       await page.waitForFunction(expected => document.getElementById('battle-phase').textContent === expected, countdown);
@@ -54,6 +138,19 @@ const { chromium } = require('playwright');
       await page.evaluate(() => { window.emojiBladeApp.battleState = 'finished'; });
       await page.waitForFunction(expected => document.getElementById('battle-phase').textContent === expected, finished);
     }
+    await page.goto('https://local.test/zh-hant/?mode=2p');
+    await page.waitForFunction(() => document.getElementById('battle-phase').textContent === '玩家 1 就緒');
+    assert.match(await page.locator('#player-dash-btn').getAttribute('aria-label'), /玩家 1 衝刺：目前無法使用/);
+    await page.evaluate(() => {
+      const game = window.emojiBladeApp;
+      game.playerTop.isSpinning = true;
+      game.playerTop.energy = 50;
+      game.enemyTop.energy = 0;
+      game.battleState = 'battling';
+      game.checkBattleOutcome();
+    });
+    await page.locator('#result-modal').waitFor({ state: 'visible' });
+    assert.match(await page.locator('#result-summary').textContent(), /獲勝！/);
     await page.goto('https://local.test/');
     if (await page.locator('.battle-station').count()) {
       const button = page.locator('#main-launch-btn');
@@ -96,6 +193,13 @@ const { chromium } = require('playwright');
         assert.equal(await page.locator('#battle-clock').textContent(), '00.0');
         await page.evaluate(() => { window.emojiBladeApp.playerTop.energy = 20; });
         await page.waitForFunction(() => document.getElementById('player-energy-bar').dataset.low === 'true');
+        await page.waitForFunction(() => document.getElementById('player-energy-bar')
+          .getAnimations().some(animation => animation.animationName === 'energy-alert'));
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        assert.equal(await page.locator('#player-energy-bar').evaluate(element =>
+          element.getAnimations().some(animation => animation.animationName === 'energy-alert')
+        ), false, 'Reduced motion must disable the low-energy animation');
+        await page.emulateMedia({ reducedMotion: 'no-preference' });
         await page.evaluate(() => {
           const game = window.emojiBladeApp;
           game.playerTop.launch(0, 85);
@@ -135,9 +239,15 @@ const { chromium } = require('playwright');
       await page.setViewportSize({ width: 390, height: 900 });
       await page.goto('https://local.test/');
       await page.screenshot({ path: process.env.SCREENSHOT_PATH });
+      for (const width of [390, 1440]) {
+        await page.setViewportSize({ width, height: 1000 });
+        await page.goto('https://local.test/zh-hant/');
+        await page.locator('#player-tier').filter({ hasText: /TIER/ }).waitFor();
+        await page.screenshot({ path: process.env.SCREENSHOT_PATH.replace('.png', `-zh-hant-${width}.png`), fullPage: true });
+      }
     }
     assert.deepEqual(errors, [], 'Browser runtime errors');
-    console.log('PASS: HUD and guide headings in three languages at five viewport widths; solo/2P launch cancellation');
+    console.log('PASS: HUD and guide headings in four languages at five viewport widths; localized phases/results; solo/2P launch cancellation');
   } finally {
     await browser.close();
   }

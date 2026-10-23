@@ -32,8 +32,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="/style.css?v=20261014-7">
-  <link rel="stylesheet" href="/arena-demo.css?v=20261014-8">
+  <link rel="stylesheet" href="/style.css?v=20261023-1">
+  <link rel="stylesheet" href="/arena-demo.css?v=20261023-1">
 
   <!-- Schema.org Structured Data -->
   <script type="application/ld+json">[
@@ -174,7 +174,7 @@
             
             <!-- 3, 2, 1, GO SHOOT! COUNTDOWN OVERLAY -->
             <div id="countdown-overlay" class="countdown-overlay" style="display: none;">3</div>
-            <div id="smash-feedback" class="smash-feedback" hidden><strong>CRITICAL SMASH!</strong></div>
+            <div id="smash-feedback" class="smash-feedback" hidden><strong>暴击冲撞！</strong></div>
 
             <!-- Top Duel Fight Bar (Bright Competitive Arcade) -->
             <div class="hud-fight-bar">
@@ -251,14 +251,22 @@
 
         <!-- CONTROLS & EMOJI DOCK -->
         <div class="dash-controls">
-          <button id="player-dash-btn" class="dash-btn" type="button" disabled title="玩家 1 冲刺（空格）；消耗 6 点能量"><span>P1 冲刺</span><span class="dash-cd">6%</span></button>
-          <button id="enemy-dash-btn" class="dash-btn enemy-dash" type="button" disabled hidden title="玩家 2 冲刺（Enter）；消耗 6 点能量"><span>P2 冲刺</span><span class="dash-cd">6%</span></button>
+          <button id="player-dash-btn" class="dash-btn" type="button" disabled aria-keyshortcuts="Space" title="玩家 1 冲刺（空格）；消耗 6 点能量"><span>P1 冲刺</span><span class="dash-cd">6%</span></button>
+          <button id="enemy-dash-btn" class="dash-btn enemy-dash" type="button" disabled hidden aria-keyshortcuts="Enter" title="玩家 2 冲刺（Enter）；消耗 6 点能量"><span>P2 冲刺</span><span class="dash-cd">6%</span></button>
         </div>
         <div class="game-control-panel">
           <div class="panel-card player-config">
             <div class="card-title-row">
-              <h3>陀螺配置</h3>
-              <button id="random-player-btn" class="tiny-ghost-btn" title="随机选择表情" aria-label="随机选择表情">&#9860;</button>
+              <h3>P1 装配坞</h3>
+              <button id="random-player-btn" class="tiny-ghost-btn" title="随机选择表情" aria-label="随机选择表情">🎲 随机</button>
+            </div>
+
+            <!-- Holo Spinner Preview Dock -->
+            <div class="holo-preview-dock">
+              <div class="holo-spin-ring"></div>
+              <div class="holo-glow-disc"></div>
+              <span id="holo-preview-emoji" class="holo-current-emoji" title="当前陀螺全息展示">🔥</span>
+              <span class="holo-rpm-badge">陀螺预览</span>
             </div>
 
             <div class="emoji-input-wrapper">
@@ -339,7 +347,7 @@
           <!-- Right: Launch & Opponent Controls -->
           <div class="panel-card launch-config">
             <div class="card-title-row">
-              <h3>发射控制台</h3>
+              <h3>发射动力推杆</h3>
               <div class="mode-toggles">
                 <button id="mode-single-btn" class="pill-tab active">单人关卡</button>
                 <button id="mode-2p-btn" class="pill-tab">本地双人</button>
@@ -378,7 +386,7 @@
             <div class="action-btn-wrapper">
               <button id="main-launch-btn" class="massive-clash-btn">
                 <span class="btn-shine"></span>
-                <span class="btn-text">发射 &#8599;</span>
+                <span class="btn-text">发射 (GO SHOOT!) 🚀</span>
               </button>
             </div>
             
@@ -391,9 +399,98 @@
       </div>
     </section>
 
+    <!-- TIER LIST PREVIEW SECTION (Links to /zh-hans/tier-list/) -->
+    <section class="content-section">
+      <div class="section-container">
+        <div class="section-head">
+          <span class="sub-badge">表情符号元分析</span>
+          <h2>表情符号刀锋实力排名（等级列表）</h2>
+          <p>比较预设等级、基础属性评分和通用碰撞规则。等级来自游戏设定，并非实测胜率或保证克制。</p>
+        </div>
+
+        <div class="tier-grid">
+          <div class="tier-card tier-s">
+            <div class="tier-header">
+              <span class="tier-rank">S级</span>
+              <span class="tier-desc">至尊冲突者</span>
+            </div>
+            <div class="tier-emojis">
+              <a href="/zh-hans/?emoji=%F0%9F%92%8E" class="tier-item">
+                <span class="t-emoji">💎</span>
+                <strong>钻石核</strong>
+                <small>强大的防御能力和高密度质量。高密度质量可降低碰撞损伤。</small>
+              </a>
+              <a href="/zh-hans/?emoji=%F0%9F%97%BF" class="tier-item">
+                <span class="t-emoji">🗿</span>
+                <strong>摩艾石像堡垒</strong>
+                <small>重量评分 100、耐力 100；较高重量可减少碰撞伤害。</small>
+              </a>
+              <a href="/zh-hans/?emoji=%E2%9A%A1" class="tier-item">
+                <span class="t-emoji">⚡</span>
+                <strong>闪电伏特</strong>
+                <small>99 速度，快速启动；共享 1.5 倍暴击规则。</small>
+              </a>
+            </div>
+          </div>
+
+          <div class="tier-card tier-a">
+            <div class="tier-header">
+              <span class="tier-rank">A级</span>
+              <span class="tier-desc">进攻型前锋</span>
+            </div>
+            <div class="tier-emojis">
+              <a href="/zh-hans/?emoji=%F0%9F%94%A5" class="tier-item">
+                <span class="t-emoji">🔥</span>
+                <strong>炼狱之火</strong>
+                <small>攻击 95、速度 88；攻击影响碰撞伤害，不直接增加反冲。</small>
+              </a>
+              <a href="/zh-hans/?emoji=%F0%9F%92%A3" class="tier-item">
+                <span class="t-emoji">💣</span>
+                <strong>重炸弹</strong>
+                <small>攻击 98、重量 90，代价是耐力较低（65）。</small>
+              </a>
+              <a href="/zh-hans/?emoji=%F0%9F%9A%80" class="tier-item">
+                <span class="t-emoji">🚀</span>
+                <strong>宇宙火箭</strong>
+                <small>速度 96，发射初速较高；耐力为 64。</small>
+              </a>
+            </div>
+          </div>
+
+          <div class="tier-card tier-b">
+            <div class="tier-header">
+              <span class="tier-rank">B级</span>
+              <span class="tier-desc">狡黠的战术</span>
+            </div>
+            <div class="tier-emojis">
+              <a href="/zh-hans/?emoji=%F0%9F%A4%A1" class="tier-item">
+                <span class="t-emoji">🤡</span>
+                <strong>混乱小丑</strong>
+                <small>平衡预设；抖动是一种视觉效果。</small>
+              </a>
+              <a href="/zh-hans/?emoji=%F0%9F%8C%AA%EF%B8%8F" class="tier-item">
+                <span class="t-emoji">🌪️</span>
+                <strong>漩涡龙卷风</strong>
+                <small>耐力 94，适合持久战；没有反向旋转机制。</small>
+              </a>
+              <a href="/zh-hans/?emoji=%F0%9F%8D%95" class="tier-item">
+                <span class="t-emoji">🍕</span>
+                <strong>披萨轮</strong>
+                <small>耐力 86、攻击 70；外环造型不改变碰撞形状。</small>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+          <a href="/zh-hans/tier-list/" class="primary-glow-btn" style="display: inline-block; text-decoration: none;">查看完整实力榜和策略指南 ↗</a>
+        </div>
+      </div>
+    </section>
+
     <section class="content-section player-info-section" aria-label="继续探索">
       <div class="section-container">
-        <div class="player-info-grid"><article class="player-info-card"><h2>怎么玩 Emoji Blade</h2><p>选择表情陀螺，设置发射角度和力度，或在场内向后拉动陀螺并松开发射。让对手先耗尽旋转能量即可获胜。场地边缘会反弹，不存在出界获胜。</p></article><article class="player-info-card"><h2>属性与暴击</h2><p>重量影响碰撞响应和伤害，攻击影响对手能量损失，速度影响初始移动和旋转动画，耐力减少持续能量消耗。暴击伤害为双方各承受 1.5 倍。外环造型不改变碰撞形状。</p></article><article class="player-info-card"><h2>单人和本地双人</h2><p>单人关卡模式每五关遇到 Boss。本地双人由玩家一先设置发射参数，再由玩家二设置，随后同时发射；双人对战不计入单人连胜和徽章。</p></article></div>
+        <div class="player-info-grid"><article class="player-info-card" data-index="01"><h2>怎么玩 Emoji Blade</h2><p>选择表情陀螺，设置发射角度和力度，或在场内向后拉动陀螺并松开发射。让对手先耗尽旋转能量即可获胜。场地边缘会反弹，不存在出界获胜。</p></article><article class="player-info-card" data-index="02"><h2>属性与暴击</h2><p>重量影响碰撞响应和伤害，攻击影响对手能量损失，速度影响初始移动和旋转动画，耐力减少持续能量消耗。暴击伤害为双方各承受 1.5 倍。外环造型不改变碰撞形状。</p></article><article class="player-info-card" data-index="03"><h2>单人和本地双人</h2><p>单人关卡模式每五关遇到 Boss。本地双人由玩家一先设置发射参数，再由玩家二设置，随后同时发射；双人对战不计入单人连胜和徽章。</p></article></div>
         <nav class="player-resource-links" aria-label="继续探索"><a href="/zh-hans/characters/">角色属性</a><a href="/zh-hans/guide/">发射指南</a><a href="/zh-hans/2-player-duel/">本地双人指南</a><a href="/zh-hans/faq/">常见问题</a><a href="/zh-hans/spinning-top-simulator/">模拟器介绍</a><a href="/zh-hans/vs/">对决比较</a></nav>
       </div>
     </section>
@@ -408,6 +505,6 @@
     <div class="footer-bottom"><p>© 2026 Emoji Blade</p></div>
   </footer>
 
-  <script src="/game.js?v=20261014-6"></script>
+  <script src="/game.js?v=20261023-1"></script>
 </body>
 </html>

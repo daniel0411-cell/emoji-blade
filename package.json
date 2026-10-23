@@ -1,0 +1,11 @@
+{
+  "name": "emoji-blade",
+  "private": true,
+  "scripts": {
+    "test": "node --check game.js && node --check embed.js && node tests/regression.cjs && python3 tests/site.py",
+    "test:visual": "node tests/visual.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.64.1"
+  }
+}

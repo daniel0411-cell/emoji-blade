@@ -13,8 +13,8 @@ const context = {
   clearInterval(id) { timers.delete(id); }, clearTimeout() {}, Intl, URLSearchParams,
 };
 vm.createContext(context);
-vm.runInContext(source.replace("  window.addEventListener('DOMContentLoaded'", "  window.audit = { EmojiTop, EmojiBladeGame, readStored, writeStored, normalizeEmoji, computeEmojiStats };\n  window.addEventListener('DOMContentLoaded'"), context);
-const { EmojiTop, EmojiBladeGame, readStored, writeStored, normalizeEmoji, computeEmojiStats } = context.window.audit;
+vm.runInContext(source.replace("  window.addEventListener('DOMContentLoaded'", "  window.audit = { EmojiTop, EmojiBladeGame, readStored, writeStored, normalizeEmoji, computeEmojiStats, dashButtonLabel };\n  window.addEventListener('DOMContentLoaded'"), context);
+const { EmojiTop, EmojiBladeGame, readStored, writeStored, normalizeEmoji, computeEmojiStats, dashButtonLabel } = context.window.audit;
 assert.equal(readStored('test', 'fallback'), 'fallback');
 assert.doesNotThrow(() => writeStored('test', 'value'));
 assert.equal(normalizeEmoji('👩‍🚀extra'), '👩‍🚀');
@@ -78,6 +78,12 @@ const dashGame = game();
 assert.equal(dashGame.requestDash(), false, 'Cannot dash during setup');
 dashGame.battleState = 'battling';
 assert.equal(dashGame.requestDash(true), false, 'Solo player cannot control the AI top');
+context.document.documentElement = { lang: 'en' };
+assert.equal(dashButtonLabel(1, { isSpinning: false }, 'ready'), 'Player 1 dash: unavailable');
+context.document.documentElement.lang = 'zh-Hans';
+assert.equal(dashButtonLabel(1, { isSpinning: true, dashCooldown: 30, energy: 100 }, 'battling'), '玩家 1 冲刺：冷却 0.5 秒');
+context.document.documentElement.lang = 'ja';
+assert.equal(dashButtonLabel(2, { isSpinning: true, dashCooldown: 0, energy: 100 }, 'battling'), 'プレイヤー2 ダッシュ：使用可能、エネルギーを6消費します');
 console.log('PASS: dash launch guard, energy cost, cooldown, speed limit, reset and mode guards');
 // A critical hit must stop catch-up immediately and discard only paused time.
 let stoppedUpdates = 0;
@@ -264,7 +270,7 @@ invaderBoss.configure('👾', 'blaze', true);
 assert.equal(invaderBoss.stats.mass, 97);
 assert.equal(invaderBoss.stats.attack, 108);
 console.log('PASS: four-language expansion ratings, all twelve matchup launch links, stage 10 Boss ratings');
-console.log('PASS: 36 result-button cases across languages, modes and outcomes; stage and streak preservation');
+console.log('PASS: 48 result-button cases across languages, modes and outcomes; stage and streak preservation');
 for (const locale of ['zh-hans', 'zh-hant', 'ja']) {
   for (const route of ['characters', 'tier-list']) {
     const html = fs.readFileSync(path.join(__dirname, '..', locale, route, 'index.html'), 'utf8');

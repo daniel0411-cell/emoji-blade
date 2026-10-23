@@ -52,6 +52,20 @@
     return (index >= 0 ? messages[text]?.[index] : undefined) || text;
   }
 
+  function dashButtonLabel(player, top, battleState) {
+    const lang = document.documentElement?.lang;
+    const state = battleState !== 'battling' || !top.isSpinning
+      ? ['unavailable', '当前不可用', '現在使用できません', '目前無法使用']
+      : top.dashCooldown > 0
+      ? [`cooldown ${(top.dashCooldown / 60).toFixed(1)} seconds`, `冷却 ${(top.dashCooldown / 60).toFixed(1)} 秒`, `クールダウン ${(top.dashCooldown / 60).toFixed(1)} 秒`, `冷卻 ${(top.dashCooldown / 60).toFixed(1)} 秒`]
+      : top.energy <= 6
+      ? ['needs more than 6 energy', '需要超过 6 点能量', '7以上のエネルギーが必要です', '需要超過 6 點能量']
+      : ['ready; costs 6 energy', '可用；消耗 6 点能量', '使用可能、エネルギーを6消費します', '可用；消耗 6 點能量'];
+    const prefix = [`Player ${player} dash: `, `玩家 ${player} 冲刺：`, `プレイヤー${player} ダッシュ：`, `玩家 ${player} 衝刺：`];
+    const index = lang === 'zh-Hans' ? 1 : lang === 'ja' ? 2 : lang === 'zh-Hant' ? 3 : 0;
+    return prefix[index] + state[index];
+  }
+
   // --- AUDIO SYNTHESIZER ---
   class SoundFX {
     constructor() {
@@ -475,9 +489,11 @@
       if (this.trail.length && !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
         ctx.save();
         this.trail.forEach((point, index) => {
-          ctx.globalAlpha = (index + 1) / this.trail.length * 0.2;
+          ctx.globalAlpha = ((index + 1) / this.trail.length) * 0.25;
           ctx.fillStyle = this.isPlayer ? '#1676e8' : '#ed583d';
-          ctx.beginPath(); ctx.arc(point.x, point.y, this.radius * 0.9, 0, Math.PI * 2); ctx.fill();
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, this.radius * (0.7 + 0.3 * (index / this.trail.length)), 0, Math.PI * 2);
+          ctx.fill();
         });
         ctx.restore();
       }
@@ -487,10 +503,10 @@
       // Precession tilt & defeat wobble
       const tiltX = Math.cos(this.wobblePhase) * this.wobbleAmount;
 
-      // Shadow
+      // Realistic Contact + Drop Shadow
       ctx.save();
       ctx.scale(1 + tiltX * 0.3, 0.45);
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.55)';
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.6)';
       ctx.beginPath();
       ctx.arc(0, 52, this.radius * 0.95, 0, Math.PI * 2);
       ctx.fill();
@@ -509,6 +525,28 @@
       if (this.style === 'obsidian') { ringColor1 = '#8b5cf6'; ringColor2 = '#4b0082'; }
       if (this.isBoss) { ringColor1 = '#ff0033'; ringColor2 = '#660000'; }
 
+      // Dynamic High-Speed Motion Blur Halo & Energy Streaks
+      const speedRatio = Math.min(1, Math.abs(this.rpm) / 36);
+      if (this.isSpinning && speedRatio > 0.18 && !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+        ctx.save();
+        ctx.strokeStyle = ringColor1;
+        ctx.globalAlpha = speedRatio * 0.35;
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.arc(0, 0, this.radius + 4, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.lineWidth = 2.5;
+        ctx.globalAlpha = speedRatio * 0.55;
+        for (let a = 0; a < 3; a++) {
+          const arcOffset = (this.angle * 1.4 + (a * Math.PI * 2) / 3) % (Math.PI * 2);
+          ctx.beginPath();
+          ctx.arc(0, 0, this.radius + 6, arcOffset, arcOffset + 0.6);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
       // Outer glow and spinning teeth
       ctx.strokeStyle = ringColor1;
       ctx.lineWidth = 3.5;
@@ -516,7 +554,14 @@
       ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
       ctx.stroke();
 
-      // Battle Ring Claws (4 or 6 teeth for Boss)
+      // Metallic Specular Accent Rim
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.arc(0, 0, this.radius - 2, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Battle Ring Claws (4 or 6 teeth for Boss) with 3D Bevel Facet
       const teeth = this.isBoss ? 6 : 4;
       for (let i = 0; i < teeth; i++) {
         const thAngle = (i * Math.PI * 2) / teeth;
@@ -529,10 +574,18 @@
         ctx.lineTo(this.radius - 2, 7);
         ctx.closePath();
         ctx.fill();
+
+        // Claw ridge highlight
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(this.radius - 2, 0);
+        ctx.lineTo(this.radius + 7, 0);
+        ctx.stroke();
         ctx.restore();
       }
 
-      // Metallic Core Disc
+      // Metallic Core Disc with Dual Concentric Bevels
       const grad = ctx.createRadialGradient(0, 0, 2, 0, 0, this.radius - 4);
       grad.addColorStop(0, '#334155');
       grad.addColorStop(0.7, '#1e293b');
@@ -542,13 +595,21 @@
       ctx.arc(0, 0, this.radius - 4, 0, Math.PI * 2);
       ctx.fill();
 
-      // Central Emoji
+      // Core Disc Metal Ring
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(0, 0, (this.radius - 4) * 0.65, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Central Emoji with Dynamic Core Glow & Alert
       ctx.save();
       ctx.font = `${this.isBoss ? 42 : 32}px sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.shadowColor = ringColor1;
-      ctx.shadowBlur = 12;
+      const isLowEnergy = this.energy < 25;
+      ctx.shadowColor = isLowEnergy ? '#ef4444' : ringColor1;
+      ctx.shadowBlur = isLowEnergy ? 16 : (12 + speedRatio * 8);
       ctx.fillText(this.emoji, 0, 2);
       ctx.restore();
 
@@ -746,6 +807,8 @@
 
       document.getElementById('hud-player-emoji').textContent = this.playerTop.emoji;
       document.getElementById('player-tier').textContent = `${stats.tier}-TIER`;
+      const holoEmoji = document.getElementById('holo-preview-emoji');
+      if (holoEmoji) holoEmoji.textContent = this.playerTop.emoji;
     }
 
     renderBadges() {
@@ -770,6 +833,10 @@
         if (!event.repeat) this.requestDash(event.code === 'Enter');
       });
       window.addEventListener('resize', () => this.resizeCanvas());
+      if (window.ResizeObserver) {
+        this.canvasResizeObserver = new window.ResizeObserver(() => this.resizeCanvas());
+        this.canvasResizeObserver.observe(this.canvas.parentElement);
+      }
       const cancelLaunch = () => {
         if (this.battleState === 'countdown' || (this.is2PMode && this.turn2P === 2 && this.battleState === 'ready')) this.setupStage();
       };
@@ -1185,7 +1252,8 @@
         banner.textContent = translate(banner.textContent);
         document.getElementById('res-type-val').textContent = translate(draw ? 'DRAW' : playerWon ? 'Outspun' : 'Spin Depleted');
         if (document.documentElement.lang !== 'en' && !draw) {
-          summary.textContent = `${playerWon ? this.playerTop.emoji : this.enemyTop.emoji} ${document.documentElement.lang === 'ja' ? 'の勝利！' : '获胜！'}`;
+          const lang = document.documentElement.lang;
+          summary.textContent = `${playerWon ? this.playerTop.emoji : this.enemyTop.emoji} ${lang === 'ja' ? 'の勝利！' : lang === 'zh-Hant' ? '獲勝！' : '获胜！'}`;
         } else if (draw) {
           summary.textContent = translate(summary.textContent);
         }
@@ -1206,36 +1274,73 @@
       if (this.demoStation) {
         ctx.save();
         ctx.translate(cx, cy);
-        ctx.fillStyle = '#d9e2e5';
-        ctx.beginPath(); ctx.arc(0, 0, r + 16, 0, Math.PI * 2); ctx.fill();
-        ctx.strokeStyle = '#7b929d'; ctx.lineWidth = 1;
+
+        // 1. Heavy Titanium Outer Basin Rim
+        const outerRimGrad = ctx.createRadialGradient(0, 0, r, 0, 0, r + 20);
+        outerRimGrad.addColorStop(0, '#1e293b');
+        outerRimGrad.addColorStop(0.5, '#334155');
+        outerRimGrad.addColorStop(1, '#0f172a');
+        ctx.fillStyle = outerRimGrad;
+        ctx.beginPath(); ctx.arc(0, 0, r + 18, 0, Math.PI * 2); ctx.fill();
+
+        ctx.strokeStyle = '#475569';
+        ctx.lineWidth = 1.5;
         ctx.stroke();
-        ctx.fillStyle = '#f8faf9';
+
+        // 2. High-Tech Concave Floor (Radial Depth Gradient)
+        const floorGrad = ctx.createRadialGradient(0, 0, 10, 0, 0, r);
+        floorGrad.addColorStop(0, '#ffffff');
+        floorGrad.addColorStop(0.5, '#f8fafc');
+        floorGrad.addColorStop(0.85, '#e2e8f0');
+        floorGrad.addColorStop(1, '#cbd5e1');
+        ctx.fillStyle = floorGrad;
         ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill();
-        ctx.strokeStyle = '#344f5c'; ctx.lineWidth = 3; ctx.stroke();
+
+        // Deep Inner Wall Shadow Rim
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 3.5;
+        ctx.stroke();
+
+        // 3. Precision Laser Calibrations (60 ticks with dual accent colors)
         for (let i = 0; i < 60; i++) {
           const angle = i * Math.PI / 30;
-          const inner = r + (i % 5 === 0 ? 5 : 9);
-          ctx.strokeStyle = i % 5 === 0 ? '#344f5c' : '#8da2aa';
-          ctx.lineWidth = 1;
+          const isMajor = i % 5 === 0;
+          const inner = r + (isMajor ? 4 : 8);
+          ctx.strokeStyle = isMajor ? '#94a3b8' : '#64748b';
+          ctx.lineWidth = isMajor ? 1.5 : 1;
           ctx.beginPath();
           ctx.moveTo(Math.cos(angle) * inner, Math.sin(angle) * inner);
-          ctx.lineTo(Math.cos(angle) * (r + 13), Math.sin(angle) * (r + 13));
+          ctx.lineTo(Math.cos(angle) * (r + 14), Math.sin(angle) * (r + 14));
           ctx.stroke();
         }
-        ctx.strokeStyle = '#d7e0e1'; ctx.lineWidth = 1;
+
+        // 4. Subtle Inner Tech Energy Grooves
+        ctx.strokeStyle = 'rgba(100, 116, 139, 0.25)';
+        ctx.lineWidth = 1.2;
         for (const size of [0.35, 0.7]) {
           ctx.beginPath(); ctx.arc(0, 0, r * size, 0, Math.PI * 2); ctx.stroke();
         }
+
         ctx.setLineDash([4, 6]);
+        ctx.strokeStyle = 'rgba(100, 116, 139, 0.2)';
         ctx.beginPath(); ctx.moveTo(-r, 0); ctx.lineTo(r, 0);
         ctx.moveTo(0, -r); ctx.lineTo(0, r); ctx.stroke();
         ctx.setLineDash([]);
+
+        // 5. High-Impact Perimeter Safety Energy Bars (Neon Blue P1 & Neon Crimson P2)
         for (const [start, color] of [[Math.PI * .85, '#1676e8'], [-Math.PI * .15, '#ed583d']]) {
-          ctx.strokeStyle = color; ctx.lineWidth = 5;
-          ctx.beginPath(); ctx.arc(0, 0, r + 3, start, start + Math.PI * .3); ctx.stroke();
+          ctx.save();
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 5;
+          ctx.shadowColor = color;
+          ctx.shadowBlur = 8;
+          ctx.beginPath(); ctx.arc(0, 0, r + 2, start, start + Math.PI * .3); ctx.stroke();
+          ctx.restore();
         }
-        ctx.fillStyle = '#9aadb3'; ctx.textAlign = 'center';
+
+        // 6. Center Stadium Typography
+        ctx.fillStyle = '#64748b';
+        ctx.textAlign = 'center';
         ctx.font = '700 12px monospace'; ctx.fillText('EB / 01', 0, 4);
         ctx.restore();
         return;
@@ -1402,6 +1507,7 @@
           const top = index ? this.enemyTop : this.playerTop;
           button.hidden = index === 1 && !this.is2PMode;
           button.disabled = this.battleState !== 'battling' || top.dashCooldown > 0 || top.energy <= 6 || !top.isSpinning;
+          button.setAttribute('aria-label', dashButtonLabel(index + 1, top, this.battleState));
           button.style.setProperty('--dash-ready', `${(1 - top.dashCooldown / 60) * 100}%`);
           button.querySelector('.dash-cd').textContent = top.dashCooldown > 0 ? `${(top.dashCooldown / 60).toFixed(1)}s` : '6%';
         });
@@ -1413,22 +1519,25 @@
         this.demoStation.dataset.phase = phase;
         const lang = document.documentElement.lang;
         const isZh = lang === 'zh-Hans';
+        const isTraditional = lang === 'zh-Hant';
         const isJa = lang === 'ja';
         const readyText = isZh
           ? (this.is2PMode ? `玩家 ${this.turn2P} 就绪` : '准备发射')
+          : isTraditional
+          ? (this.is2PMode ? `玩家 ${this.turn2P} 就緒` : '準備發射')
           : isJa
           ? (this.is2PMode ? `プレイヤー ${this.turn2P} 準備完了` : '発射準備完了')
           : (this.is2PMode ? `PLAYER ${this.turn2P} READY` : 'READY TO LAUNCH');
         const phaseText = phase === 'ready'
           ? readyText
           : phase === 'battling'
-          ? (isZh ? '战斗中' : isJa ? 'バトル中' : 'BATTLING')
+          ? (isZh ? '战斗中' : isTraditional ? '戰鬥中' : isJa ? 'バトル中' : 'BATTLING')
           : phase === 'aiming'
-          ? (isZh ? '瞄准中' : isJa ? '照準中' : 'AIMING')
+          ? (isZh ? '瞄准中' : isTraditional ? '瞄準中' : isJa ? '照準中' : 'AIMING')
           : phase === 'countdown'
-          ? (isZh ? '发射倒计时' : isJa ? 'カウントダウン' : 'COUNTDOWN')
+          ? (isZh ? '发射倒计时' : isTraditional ? '發射倒數' : isJa ? 'カウントダウン' : 'COUNTDOWN')
           : phase === 'finished'
-          ? (isZh ? '对战结束' : isJa ? 'バトル終了' : 'FINISHED')
+          ? (isZh ? '对战结束' : isTraditional ? '對戰結束' : isJa ? 'バトル終了' : 'FINISHED')
           : phase.toUpperCase();
         document.getElementById('battle-phase').textContent = phaseText;
         if (this.battleState === 'ready') document.getElementById('battle-clock').textContent = '00.0';
