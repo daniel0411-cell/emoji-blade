@@ -6,7 +6,7 @@ import xml.etree.ElementTree as ET
 
 root = Path(__file__).resolve().parents[1]
 base = 'https://emojiblade.online'
-alternates = {'x-default': base+'/', 'en': base+'/', 'zh-Hans': base+'/zh-hans/', 'ja': base+'/ja/'}
+alternates = {'x-default': base+'/', 'en': base+'/', 'zh-Hans': base+'/zh-hans/', 'zh-Hant': base+'/zh-hant/', 'ja': base+'/ja/'}
 
 class Page(HTMLParser):
     def __init__(self):
@@ -82,24 +82,26 @@ for file in pages:
         route = file.parent.relative_to(root).as_posix()
         expected = base + '/' + (route + '/' if route != '.' else '')
         assert p.canonicals == [expected], (file, p.canonicals)
-        content_route = route.removeprefix('zh-hans/').removeprefix('ja/')
+        content_route = route.removeprefix('zh-hans/').removeprefix('zh-hant/').removeprefix('ja/')
         expanded_routes = {'vs', 'vs/diamond-vs-bomb', 'vs/lightning-vs-moai', 'vs/fire-vs-diamond',
                            'characters/crown', 'characters/dragon', 'characters/oni', 'characters/invader'}
         if content_route in expanded_routes:
             assert p.alternates == {
                 'x-default': base+'/'+content_route+'/', 'en': base+'/'+content_route+'/',
-                'zh-Hans': base+'/zh-hans/'+content_route+'/', 'ja': base+'/ja/'+content_route+'/'
+                'zh-Hans': base+'/zh-hans/'+content_route+'/', 'zh-Hant': base+'/zh-hant/'+content_route+'/',
+                'ja': base+'/ja/'+content_route+'/'
             }, (file, 'missing reciprocal expansion languages')
             assert p.schema, (file, 'missing structured data')
-        if route in ('.', 'zh-hans', 'ja'): assert p.alternates == alternates
+        if route in ('.', 'zh-hans', 'zh-hant', 'ja'): assert p.alternates == alternates
         topic = route.split('/')[-1]
         if topic in ('characters', 'guide', 'faq', '2-player-duel', 'spinning-top-simulator', 'tier-list', 'unblocked'):
             expected_alternates = {
                 'x-default': base+'/'+topic+'/', 'en': base+'/'+topic+'/',
-                'zh-Hans': base+'/zh-hans/'+topic+'/', 'ja': base+'/ja/'+topic+'/'
+                'zh-Hans': base+'/zh-hans/'+topic+'/', 'zh-Hant': base+'/zh-hant/'+topic+'/',
+                'ja': base+'/ja/'+topic+'/'
             }
             assert p.alternates == expected_alternates, (file, 'missing reciprocal topic languages')
-            if route.startswith(('zh-hans/', 'ja/')):
+            if route.startswith(('zh-hans/', 'zh-hant/', 'ja/')) :
                 locale = route.split('/')[0]
                 for href in p.links:
                     url = urlsplit(href)
@@ -115,7 +117,7 @@ urls = [el.text for el in tree.findall('s:url/s:loc', ns)]
 assert len(urls) == len(set(urls))
 expected_urls = {base + '/' + (p.parent.relative_to(root).as_posix()+'/' if p.parent != root else '') for p in pages if p.name == 'index.html'}
 assert set(urls) == expected_urls
-for prefix in ('', 'zh-hans/', 'ja/'):
+for prefix in ('', 'zh-hans/', 'zh-hant/', 'ja/'):
     home = (root/prefix/'index.html').read_text()
     characters = (root/prefix/'characters/index.html').read_text()
     matchups = (root/prefix/'vs/index.html').read_text()
@@ -125,7 +127,7 @@ for prefix in ('', 'zh-hans/', 'ja/'):
     for slug in ('diamond-vs-bomb', 'lightning-vs-moai', 'fire-vs-diamond'):
         assert f'href="/{prefix}vs/{slug}/"' in matchups, (prefix, slug, 'matchup missing from hub')
 assert (root/'404.html').exists()
-for prefix, lang in (('', 'en'), ('zh-hans/', 'zh-Hans'), ('ja/', 'ja')):
+for prefix, lang in (('', 'en'), ('zh-hans/', 'zh-Hans'), ('zh-hant/', 'zh-Hant'), ('ja/', 'ja')):
     home = Page(); home.feed((root/prefix/'index.html').read_text())
     manifest = json.loads((root/home.resources['manifest'].lstrip('/')).read_text())
     assert manifest['start_url'] == '/' + prefix, (lang, 'installed app must keep its language')
@@ -141,7 +143,7 @@ for prefix, lang in (('', 'en'), ('zh-hans/', 'zh-Hans'), ('ja/', 'ja')):
         assert icon['type'] == 'image/png' and data[:8] == b'\x89PNG\r\n\x1a\n'
         assert icon['sizes'] == f"{int.from_bytes(data[16:20], 'big')}x{int.from_bytes(data[20:24], 'big')}"
 print('PASS: localized PWA launch URLs and PNG installation icons')
-for route in ('index.html', 'zh-hans/index.html', 'ja/index.html'):
+for route in ('index.html', 'zh-hans/index.html', 'zh-hant/index.html', 'ja/index.html'):
     source = (root/route).read_text()
     assert 'class="player-info-grid"' in source, (route, 'missing shared information cards')
     assert source.count('class="footer-col"') == 4, (route, 'missing shared footer columns')

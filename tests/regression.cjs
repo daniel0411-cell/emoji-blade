@@ -142,6 +142,7 @@ for (const [twoPlayers, mode, expected] of [[true, 'progression', 4], [false, 'c
 for (const [lang, next, retry, again] of [
   ['en', 'Next Stage ⚡', 'Retry Stage ⚡', 'Play Again ⚡'],
   ['zh-Hans', '下一关 ⚡', '重试本关 ⚡', '再来一局 ⚡'],
+  ['zh-Hant', '下一關 ⚡', '重試本關 ⚡', '再來一局 ⚡'],
   ['ja', '次のステージ ⚡', 'このステージを再挑戦 ⚡', 'もう一度対戦 ⚡']
 ]) {
   context.document.documentElement.lang = lang;
@@ -226,7 +227,7 @@ console.log('PASS: local 2P deep links, unknown-mode fallback, all 16 published 
 
 // Published matchup links must select the promised presets, not a random/progression opponent.
 const expandedPresets = { crown: '👑', dragon: '🐉', oni: '👹', invader: '👾', diamond: '💎', bomb: '💣', lightning: '⚡', moai: '🗿', fire: '🔥' };
-for (const locale of ['', 'zh-hans/', 'ja/']) {
+for (const locale of ['', 'zh-hans/', 'zh-hant/', 'ja/']) {
   for (const slug of ['crown', 'dragon', 'oni', 'invader']) {
     const html = fs.readFileSync(path.join(__dirname, '..', locale, 'characters', slug, 'index.html'), 'utf8');
     const row = html.match(new RegExp(`<tr data-preset="${slug}">([\\s\\S]*?)</tr>`));
@@ -262,9 +263,9 @@ const invaderBoss = new EmojiTop(false);
 invaderBoss.configure('👾', 'blaze', true);
 assert.equal(invaderBoss.stats.mass, 97);
 assert.equal(invaderBoss.stats.attack, 108);
-console.log('PASS: three-language expansion ratings, all nine matchup launch links, stage 10 Boss ratings');
+console.log('PASS: four-language expansion ratings, all twelve matchup launch links, stage 10 Boss ratings');
 console.log('PASS: 36 result-button cases across languages, modes and outcomes; stage and streak preservation');
-for (const locale of ['zh-hans', 'ja']) {
+for (const locale of ['zh-hans', 'zh-hant', 'ja']) {
   for (const route of ['characters', 'tier-list']) {
     const html = fs.readFileSync(path.join(__dirname, '..', locale, route, 'index.html'), 'utf8');
     const rows = [...html.matchAll(/<tr data-preset="([^"]+)">.*?<td>([^<]+)<\/td><td>(\d+)<\/td><td>(\d+)<\/td><td>(\d+)<\/td><td>(\d+)<\/td><\/tr>/g)];

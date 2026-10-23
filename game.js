@@ -32,20 +32,24 @@
   function translate(text) {
     const lang = document.documentElement?.lang;
     const messages = {
-      'Drag player top or set angle & launch!': ['拖动陀螺，或设置角度后发射！', 'コマをドラッグするか、角度を設定して発射！'],
-      '⚠️ WARNING: BOSS APPROACHING!': ['⚠️ Boss 来袭！', '⚠️ ボスが登場！'],
-      '👉 PLAYER 2 TURN: Aim Rival & Launch!': ['👉 玩家二：设置角度和力度后发射！', '👉 プレイヤー2：角度とパワーを設定して発射！'],
-      '⚡ CLASH IN PROGRESS!': ['⚡ 对战进行中！', '⚡ 対戦中！'],
-      'VICTORY! 🏆': ['胜利！🏆', '勝利！🏆'], 'DEFEAT 💥': ['落败 💥', '敗北 💥'],
-      'PLAYER 1 WINS!': ['玩家一获胜！', 'プレイヤー1の勝利！'],
-      'PLAYER 2 WINS!': ['玩家二获胜！', 'プレイヤー2の勝利！'],
-      'DRAW': ['平局', '引き分け'], 'Both tops stopped together. Play again!': ['双方同时停止，再来一场！', '両方のコマが止まりました。もう一度！'],
-      'Outspun': ['耐力获胜', '持久力勝利'], 'Spin Depleted': ['能量耗尽', 'エネルギー切れ'],
-      'Play Again ⚡': ['再来一局 ⚡', 'もう一度対戦 ⚡'],
-      'Next Stage ⚡': ['下一关 ⚡', '次のステージ ⚡'],
-      'Retry Stage ⚡': ['重试本关 ⚡', 'このステージを再挑戦 ⚡'],
+      'Drag player top or set angle & launch!': ['拖动陀螺，或设置角度后发射！', 'コマをドラッグするか、角度を設定して発射！', '拖曳陀螺，或設定角度後發射！'],
+      '⚠️ WARNING: BOSS APPROACHING!': ['⚠️ Boss 来袭！', '⚠️ ボスが登場！', '⚠️ Boss 來襲！'],
+      '👉 PLAYER 2 TURN: Aim Rival & Launch!': ['👉 玩家二：设置角度和力度后发射！', '👉 プレイヤー2：角度とパワーを設定して発射！', '👉 玩家二：設定角度與力道後發射！'],
+      '⚡ CLASH IN PROGRESS!': ['⚡ 对战进行中！', '⚡ 対戦中！', '⚡ 對戰進行中！'],
+      'VICTORY! 🏆': ['胜利！🏆', '勝利！🏆', '勝利！🏆'],
+      'DEFEAT 💥': ['落败 💥', '敗北 💥', '落敗 💥'],
+      'PLAYER 1 WINS!': ['玩家一获胜！', 'プレイヤー1の勝利！', '玩家一獲勝！'],
+      'PLAYER 2 WINS!': ['玩家二获胜！', 'プレイヤー2の勝利！', '玩家二獲勝！'],
+      'DRAW': ['平局', '引き分け', '平局'],
+      'Both tops stopped together. Play again!': ['双方同时停止，再来一场！', '両方のコマが止まりました。もう一度！', '雙方同時停止，再來一場！'],
+      'Outspun': ['耐力获胜', '持久力勝利', '持久力獲勝'],
+      'Spin Depleted': ['能量耗尽', 'エネルギー切れ', '能量耗盡'],
+      'Play Again ⚡': ['再来一局 ⚡', 'もう一度対戦 ⚡', '再來一局 ⚡'],
+      'Next Stage ⚡': ['下一关 ⚡', '次のステージ ⚡', '下一關 ⚡'],
+      'Retry Stage ⚡': ['重试本关 ⚡', 'このステージを再挑戦 ⚡', '重試本關 ⚡'],
     };
-    return messages[text]?.[lang === 'zh-Hans' ? 0 : lang === 'ja' ? 1 : 2] || text;
+    const index = lang === 'zh-Hans' ? 0 : lang === 'ja' ? 1 : lang === 'zh-Hant' ? 2 : -1;
+    return (index >= 0 ? messages[text]?.[index] : undefined) || text;
   }
 
   // --- AUDIO SYNTHESIZER ---
