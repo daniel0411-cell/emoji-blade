@@ -44,6 +44,9 @@
       'Both tops stopped together. Play again!': ['双方同时停止，再来一场！', '両方のコマが止まりました。もう一度！', '雙方同時停止，再來一場！'],
       'Outspun': ['耐力获胜', '持久力勝利', '持久力獲勝'],
       'Spin Depleted': ['能量耗尽', 'エネルギー切れ', '能量耗盡'],
+      'CRITICAL SMASH!': ['暴击冲撞！', 'クリティカルスマッシュ！', '暴擊衝撞！'],
+      '⚡ XTREME DASH!': ['⚡ 极限弹射！', '⚡ エクストリームダッシュ！', '⚡ 極限彈射！'],
+      '⚡ XTREME SMASH!': ['⚡ 极限暴击！', '⚡ エクストリームスマッシュ！', '⚡ 極限暴擊！'],
       'Play Again ⚡': ['再来一局 ⚡', 'もう一度対戦 ⚡', '再來一局 ⚡'],
       'Next Stage ⚡': ['下一关 ⚡', '次のステージ ⚡', '下一關 ⚡'],
       'Retry Stage ⚡': ['重试本关 ⚡', 'このステージを再挑戦 ⚡', '重試本關 ⚡'],
@@ -158,6 +161,25 @@
       } catch (e) { }
     }
 
+    playXtremeDash() {
+      if (!this.enabled || !this.ctx) return;
+      try {
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(420, now);
+        osc.frequency.exponentialRampToValueAtTime(1480, now + 0.22);
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(0.35, now + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.26);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.28);
+      } catch (e) { }
+    }
+
     playCountdown(pitch = 440) {
       if (!this.enabled || !this.ctx) return;
       try {
@@ -197,6 +219,12 @@
   }
 
   const sfx = new SoundFX();
+
+  function triggerHaptic(pattern) {
+    if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+      try { navigator.vibrate(pattern); } catch (_) {}
+    }
+  }
 
   // --- EMOJI ATTRIBUTE CALCULATION SYSTEM ---
   const EMOJI_PRESETS = {
@@ -357,6 +385,8 @@
       this.isBoss = false;
       this.dashCooldown = 0;
       this.dashTicks = 0;
+      this.xtremeCooldown = 0;
+      this.xtremeTicks = 0;
       this.trail = [];
     }
 
@@ -387,6 +417,8 @@
       this.wobbleAmount = 0;
       this.dashCooldown = 0;
       this.dashTicks = 0;
+      this.xtremeCooldown = 0;
+      this.xtremeTicks = 0;
       this.trail = [];
     }
 
@@ -415,13 +447,16 @@
       sfx.playLaunch();
     }
 
-    update(arenaCenterX, arenaCenterY, arenaRadius) {
+    update(arenaCenterX, arenaCenterY, arenaRadius, onXtremeDash) {
       if (!this.isLaunched) return;
       this.dashCooldown = Math.max(0, this.dashCooldown - 1);
       this.dashTicks = Math.max(0, this.dashTicks - 1);
-      if (this.dashTicks > 0) {
-        this.trail.push({ x: this.x, y: this.y });
-        if (this.trail.length > 8) this.trail.shift();
+      this.xtremeCooldown = Math.max(0, this.xtremeCooldown - 1);
+      this.xtremeTicks = Math.max(0, this.xtremeTicks - 1);
+
+      if (this.xtremeTicks > 0 || this.dashTicks > 0) {
+        this.trail.push({ x: this.x, y: this.y, xtreme: this.xtremeTicks > 0 });
+        if (this.trail.length > (this.xtremeTicks > 0 ? 12 : 8)) this.trail.shift();
       } else {
         this.trail.shift();
       }
@@ -447,7 +482,7 @@
       this.vx += (dx / (distFromCenter || 1)) * bowlForce;
       this.vy += (dy / (distFromCenter || 1)) * bowlForce;
 
-      // Arena outer ring boundary bounce
+      // Arena outer ring boundary bounce & Xtreme Rail Engagement
       const maxDist = arenaRadius - this.radius;
       if (distFromCenter > maxDist) {
         const nx = (this.x - arenaCenterX) / distFromCenter;
@@ -456,12 +491,36 @@
         this.x = arenaCenterX + nx * maxDist;
         this.y = arenaCenterY + ny * maxDist;
 
-        const dot = this.vx * nx + this.vy * ny;
-        if (dot > 0) {
-          this.vx = (this.vx - 1.7 * dot * nx) * 0.8;
-          this.vy = (this.vy - 1.7 * dot * ny) * 0.8;
-          this.energy -= 1.1; // wall friction
-          sfx.playClash(0.35, false);
+        // Xtreme Rail arcs (Upper: -140° to -40°, Lower: 40° to 140°)
+        const contactAngle = Math.atan2(ny, nx);
+        const inUpperRail = contactAngle >= -Math.PI * 0.78 && contactAngle <= -Math.PI * 0.22;
+        const inLowerRail = contactAngle >= Math.PI * 0.22 && contactAngle <= Math.PI * 0.78;
+        const onRail = inUpperRail || inLowerRail;
+
+        if (onRail && this.xtremeCooldown === 0 && this.isSpinning && this.energy > 8) {
+          this.xtremeTicks = 16;
+          this.xtremeCooldown = 85;
+          this.energy = Math.max(5, this.energy - 3);
+
+          const currentSpeed = Math.hypot(this.vx, this.vy);
+          const boostSpd = Math.max(16, Math.min(22, currentSpeed + 8.5));
+          const dotTan = this.vx * (-ny) + this.vy * nx;
+          const tanDir = dotTan >= 0 ? 1 : -1;
+          this.vx = (tanDir * (-ny) * 0.65 - nx * 0.76) * boostSpd;
+          this.vy = (tanDir * nx * 0.65 - ny * 0.76) * boostSpd;
+
+          sfx.playXtremeDash();
+          triggerHaptic([25, 35, 25]);
+          if (typeof onXtremeDash === 'function') onXtremeDash(this);
+        } else {
+          const dot = this.vx * nx + this.vy * ny;
+          if (dot > 0) {
+            this.vx = (this.vx - 1.7 * dot * nx) * 0.8;
+            this.vy = (this.vy - 1.7 * dot * ny) * 0.8;
+            this.energy -= 1.1; // wall friction
+            sfx.playClash(0.35, false);
+            triggerHaptic(12);
+          }
         }
       }
 
@@ -489,8 +548,8 @@
       if (this.trail.length && !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
         ctx.save();
         this.trail.forEach((point, index) => {
-          ctx.globalAlpha = ((index + 1) / this.trail.length) * 0.25;
-          ctx.fillStyle = this.isPlayer ? '#1676e8' : '#ed583d';
+          ctx.globalAlpha = ((index + 1) / this.trail.length) * (point.xtreme ? 0.45 : 0.25);
+          ctx.fillStyle = point.xtreme ? '#f59e0b' : (this.isPlayer ? '#1676e8' : '#ed583d');
           ctx.beginPath();
           ctx.arc(point.x, point.y, this.radius * (0.7 + 0.3 * (index / this.trail.length)), 0, Math.PI * 2);
           ctx.fill();
@@ -515,6 +574,17 @@
       // Top Body with gyroscopic tilt
       if (tiltX !== 0 || !this.isSpinning) {
         ctx.transform(1, 0, tiltX * 0.18, 1 - Math.abs(tiltX * 0.12) - (!this.isSpinning ? 0.15 : 0), 0, 0);
+      }
+      if (this.xtremeTicks > 0) {
+        ctx.save();
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 3.5;
+        ctx.shadowColor = '#f59e0b';
+        ctx.shadowBlur = 12;
+        ctx.beginPath();
+        ctx.arc(0, 0, this.radius + 4, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
       }
       ctx.rotate(this.angle);
 
@@ -827,10 +897,63 @@
     initEvents() {
       this.dashButtons.forEach((button, index) => button?.addEventListener('click', () => this.requestDash(index === 1)));
       window.addEventListener('keydown', event => {
-        if (this.battleState !== 'battling' || event.target.closest?.('input, select, textarea, [contenteditable="true"]')) return;
-        if (event.code !== 'Space' && !(event.code === 'Enter' && this.is2PMode)) return;
-        event.preventDefault();
-        if (!event.repeat) this.requestDash(event.code === 'Enter');
+        if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey
+          || event.target.closest?.('input, select, textarea, button, a, [contenteditable]:not([contenteditable="false"]), [role="button"]')) return;
+
+        if (this.battleState === 'ready') {
+          if (event.code === 'Space' || event.code === 'Enter') {
+            event.preventDefault();
+            if (event.repeat) return;
+            sfx.init();
+            this.startLaunchSequence();
+            return;
+          }
+          if (event.code === 'ArrowLeft' || event.key === 'a' || event.key === 'A') {
+            event.preventDefault();
+            const next = Math.max(-180, Number(this.angleSlider.value) - 5);
+            this.angleSlider.value = next;
+            this.angleDisplay.textContent = `${next}°`;
+            return;
+          }
+          if (event.code === 'ArrowRight' || event.key === 'd' || event.key === 'D') {
+            event.preventDefault();
+            const next = Math.min(180, Number(this.angleSlider.value) + 5);
+            this.angleSlider.value = next;
+            this.angleDisplay.textContent = `${next}°`;
+            return;
+          }
+          if (event.code === 'ArrowUp' || event.key === 'w' || event.key === 'W') {
+            event.preventDefault();
+            const next = Math.min(100, Number(this.powerSlider.value) + 5);
+            this.powerSlider.value = next;
+            this.powerDisplay.textContent = `${next}%`;
+            return;
+          }
+          if (event.code === 'ArrowDown' || event.key === 's' || event.key === 'S') {
+            event.preventDefault();
+            const next = Math.max(30, Number(this.powerSlider.value) - 5);
+            this.powerSlider.value = next;
+            this.powerDisplay.textContent = `${next}%`;
+            return;
+          }
+        }
+
+        if (this.battleState === 'battling') {
+          if (event.code === 'Space' || (event.code === 'Enter' && this.is2PMode)) {
+            event.preventDefault();
+            if (!event.repeat) this.requestDash(event.code === 'Enter');
+            return;
+          }
+        }
+
+        if (this.battleState === 'finished') {
+          if (event.code === 'Space' || event.code === 'Enter') {
+            event.preventDefault();
+            if (event.repeat) return;
+            this.nextBattleBtn?.click();
+            return;
+          }
+        }
       });
       window.addEventListener('resize', () => this.resizeCanvas());
       if (window.ResizeObserver) {
@@ -1135,11 +1258,12 @@
         this.enemyTop.vx += p * this.playerTop.stats.mass * nx * 1.3;
         this.enemyTop.vy += p * this.playerTop.stats.mass * ny * 1.3;
 
-        // Critical Hit evaluation
+        // Critical Hit & Xtreme Smash evaluation
         const clashImpact = Math.hypot(kx, ky);
-        const isSmash = this.playerTop.dashTicks > 0 || this.enemyTop.dashTicks > 0;
+        const isXtreme = this.playerTop.xtremeTicks > 0 || this.enemyTop.xtremeTicks > 0;
+        const isSmash = this.playerTop.dashTicks > 0 || this.enemyTop.dashTicks > 0 || isXtreme;
         const isCrit = isSmash || Math.random() < 0.28 || clashImpact > 7.5;
-        const critMultiplier = isCrit ? 1.5 : 1.0;
+        const critMultiplier = isXtreme ? 1.8 : (isCrit ? 1.5 : 1.0);
 
         const playerDamage = (clashImpact * 1.8 + (this.enemyTop.stats.attack / 10)) * (100 / this.playerTop.stats.mass) * critMultiplier * 0.35;
         const enemyDamage = (clashImpact * 1.8 + (this.playerTop.stats.attack / 10)) * (100 / this.enemyTop.stats.mass) * critMultiplier * 0.35;
@@ -1150,27 +1274,34 @@
         // FX Sparks & Sound
         const midX = (this.playerTop.x + this.enemyTop.x) / 2;
         const midY = (this.playerTop.y + this.enemyTop.y) / 2;
-        this.particles.emitSparks(midX, midY, isCrit ? '#f59e0b' : '#00f0ff', isCrit ? 32 : 14, isCrit ? Math.max(4, clashImpact * 0.85) : clashImpact * 0.85);
+        this.particles.emitSparks(midX, midY, isXtreme ? '#f59e0b' : (isCrit ? '#f59e0b' : '#00f0ff'), isXtreme ? 40 : (isCrit ? 32 : 14), isCrit ? Math.max(4, clashImpact * 0.85) : clashImpact * 0.85);
         if (isCrit) {
-          this.particles.emitShockwave(midX, midY, '#f97316');
+          this.particles.emitShockwave(midX, midY, isXtreme ? '#e11d48' : '#f97316');
           if (!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
             this.particles.emitSparks(midX, midY, '#f97316', 8, Math.max(3, clashImpact * 0.45));
           }
         }
         sfx.playClash(Math.min(clashImpact * 0.22, 1), isCrit);
+        triggerHaptic(isXtreme ? [40, 60, 80] : (isCrit ? 35 : 15));
         if (isSmash) {
           this.playerTop.dashTicks = 0;
           this.enemyTop.dashTicks = 0;
+          this.playerTop.xtremeTicks = 0;
+          this.enemyTop.xtremeTicks = 0;
           this.smashUntil = performance.now() + 850;
-          if (this.smashFeedback && !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
-            this.smashFeedback.animate([{ backgroundColor: '#fff1b845' }, { backgroundColor: 'transparent' }], { duration: 180 });
+          if (this.smashFeedback) {
+            const strong = this.smashFeedback.querySelector('strong');
+            if (strong) strong.textContent = translate(isXtreme ? '⚡ XTREME SMASH!' : 'CRITICAL SMASH!');
+            if (!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+              this.smashFeedback.animate([{ backgroundColor: isXtreme ? '#f59e0b40' : '#fff1b845' }, { backgroundColor: 'transparent' }], { duration: 220 });
+            }
           }
         }
 
         if (isCrit) {
-          this.applyScreenShake(8);
+          this.applyScreenShake(isXtreme ? 14 : 8);
           if (!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
-            this.hitStopUntil = performance.now() + 45;
+            this.hitStopUntil = performance.now() + (isXtreme ? 65 : 45);
           }
         }
       }
@@ -1327,7 +1458,49 @@
         ctx.moveTo(0, -r); ctx.lineTo(0, r); ctx.stroke();
         ctx.setLineDash([]);
 
-        // 5. High-Impact Perimeter Safety Energy Bars (Neon Blue P1 & Neon Crimson P2)
+        // 5. Xtreme Accelerator Rails (Upper Amber & Lower Cyan Geared Tracks)
+        const rails = [
+          { start: -Math.PI * 0.78, end: -Math.PI * 0.22, color: '#f59e0b', glow: 'rgba(245, 158, 11, 0.45)' },
+          { start: Math.PI * 0.22, end: Math.PI * 0.78, color: '#0284c7', glow: 'rgba(2, 132, 199, 0.45)' }
+        ];
+
+        for (const rail of rails) {
+          ctx.save();
+          // Glow track bed
+          ctx.strokeStyle = rail.glow;
+          ctx.lineWidth = 10;
+          ctx.beginPath();
+          ctx.arc(0, 0, r + 2, rail.start, rail.end);
+          ctx.stroke();
+
+          // Main Neon Rail line
+          ctx.strokeStyle = rail.color;
+          ctx.lineWidth = 4;
+          ctx.shadowColor = rail.color;
+          ctx.shadowBlur = 8;
+          ctx.beginPath();
+          ctx.arc(0, 0, r + 2, rail.start, rail.end);
+          ctx.stroke();
+          ctx.restore();
+
+          // Geared Teeth notches along the rail
+          ctx.save();
+          ctx.strokeStyle = rail.color;
+          ctx.lineWidth = 2;
+          const toothCount = 12;
+          for (let t = 0; t <= toothCount; t++) {
+            const toothAng = rail.start + (t / toothCount) * (rail.end - rail.start);
+            const cos = Math.cos(toothAng);
+            const sin = Math.sin(toothAng);
+            ctx.beginPath();
+            ctx.moveTo(cos * (r - 2), sin * (r - 2));
+            ctx.lineTo(cos * (r + 7), sin * (r + 7));
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+
+        // Perimeter Safety Energy Bars (Neon Blue P1 & Neon Crimson P2)
         for (const [start, color] of [[Math.PI * .85, '#1676e8'], [-Math.PI * .15, '#ed583d']]) {
           ctx.save();
           ctx.strokeStyle = color;
@@ -1484,8 +1657,13 @@
       while (this.physicsAccumulator >= 1000 / 60) {
         this.physicsAccumulator -= 1000 / 60;
         if (this.battleState !== 'battling') continue;
-        this.playerTop.update(this.arenaCenterX, this.arenaCenterY, this.arenaRadius);
-        this.enemyTop.update(this.arenaCenterX, this.arenaCenterY, this.arenaRadius);
+        const handleXtreme = top => {
+          this.particles.emitSparks(top.x, top.y, '#f59e0b', 24, 7);
+          this.applyScreenShake(5);
+          this.statusMsg.textContent = translate('⚡ XTREME DASH!');
+        };
+        this.playerTop.update(this.arenaCenterX, this.arenaCenterY, this.arenaRadius, handleXtreme);
+        this.enemyTop.update(this.arenaCenterX, this.arenaCenterY, this.arenaRadius, handleXtreme);
         this.handleTopCollisions();
         this.updateHudBars();
         this.checkBattleOutcome();

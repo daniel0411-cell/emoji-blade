@@ -50,6 +50,37 @@ const slow = simulate(60), fast = simulate(120);
 assert.ok(Math.abs(slow.energy - fast.energy) < 0.07);
 assert.ok(Math.abs(slow.x - fast.x) < 1);
 const dashTop = new EmojiTop(true);
+const railTop = new EmojiTop(true);
+let railTriggers = 0;
+const hitRail = () => {
+  Object.assign(railTop, { x: 0, y: -170, vx: 0, vy: -4 });
+  railTop.update(0, 0, 200, () => railTriggers++);
+};
+railTop.launch(-90, 85);
+hitRail();
+assert.equal(railTriggers, 1);
+assert.equal(railTop.xtremeCooldown, 85);
+assert.equal(railTop.xtremeTicks, 16);
+assert.ok(railTop.vy > 0, 'Rail redirects toward the arena');
+assert.ok(Math.hypot(railTop.vx, railTop.vy) >= 16);
+hitRail();
+assert.equal(railTriggers, 1, 'Rail cooldown blocks immediate retriggers');
+for (let i = 0; i < 84; i++) {
+  Object.assign(railTop, { x: 0, y: 0, vx: 0, vy: 0 });
+  railTop.update(0, 0, 200);
+}
+hitRail();
+assert.equal(railTriggers, 2, 'Rail re-arms after cooldown');
+railTop.reset(0, 0);
+assert.equal(railTop.xtremeTicks, 0);
+assert.equal(railTop.xtremeCooldown, 0);
+railTop.launch(-90, 85);
+railTop.energy = 8;
+hitRail();
+assert.equal(railTriggers, 2, 'Low energy cannot engage rail');
+Object.assign(railTop, { energy: 100, x: 170, y: 0, vx: 4, vy: 0 });
+railTop.update(0, 0, 200, () => railTriggers++);
+assert.equal(railTriggers, 2, 'Non-rail wall must not boost');
 dashTop.reset(0, 0);
 assert.equal(dashTop.dash(), false, 'Cannot dash before launch');
 dashTop.launch(0, 85);

@@ -57,15 +57,17 @@ const { chromium } = require('playwright');
           }).map(element => element.id || element.className);
         });
         assert.deepEqual(issues, [], `${language || 'en'} at ${width}px: clipped or hidden HUD`);
-        const colors = await page.locator('#battleCanvas').evaluate(canvas => {
+        await page.waitForFunction(() => {
+          const canvas = document.getElementById('battleCanvas');
+          if (!canvas || !canvas.width || !canvas.height) return false;
           const pixels = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
           const colors = new Set();
           for (let i = 0; i < pixels.length; i += 64) {
             colors.add(`${pixels[i]},${pixels[i + 1]},${pixels[i + 2]},${pixels[i + 3]}`);
+            if (colors.size > 32) return true;
           }
-          return colors.size;
+          return false;
         });
-        assert.ok(colors > 32, 'Arena canvas must contain rendered tops and details');
         await page.goto(`https://local.test/${language}guide/`);
         assert.equal(await page.locator('.prose-card h1').evaluate(element =>
           getComputedStyle(element).color === getComputedStyle(element.parentElement).backgroundColor
@@ -206,6 +208,7 @@ const { chromium } = require('playwright');
           game.enemyTop.launch(180, 85);
           game.battleState = 'battling';
           game.battleStartTime = performance.now();
+          document.activeElement.blur();
         });
         await page.keyboard.press('Space');
         assert.ok(await page.evaluate(() => window.emojiBladeApp.playerTop.dashCooldown > 0));
@@ -233,6 +236,42 @@ const { chromium } = require('playwright');
         assert.equal(await page.evaluate(() => window.emojiBladeApp.playerTop.dashTicks), 0);
         await page.evaluate(() => window.emojiBladeApp.setupStage());
         await page.locator('#smash-feedback').waitFor({ state: 'hidden' });
+      }
+    }
+    for (const key of ['Space', 'Enter']) {
+      await page.goto('https://local.test/?mode=2p');
+      await page.waitForFunction(() => !!window.emojiBladeApp);
+      await page.keyboard.down(key);
+      assert.equal(await page.evaluate(() => window.emojiBladeApp.turn2P), 2);
+      await page.keyboard.down(key);
+      assert.equal(await page.evaluate(() => window.emojiBladeApp.battleState), 'ready', 'Held launch must not submit P2');
+      await page.keyboard.up(key);
+      await page.keyboard.press(key);
+      assert.equal(await page.evaluate(() => window.emojiBladeApp.battleState), 'countdown');
+      await page.keyboard.press('Escape');
+      await page.locator('#sound-toggle-btn').focus();
+      const soundBefore = await page.locator('#sound-icon').textContent();
+      await page.keyboard.press(key);
+      assert.notEqual(await page.locator('#sound-icon').textContent(), soundBefore, 'Focused button keeps native activation');
+      assert.equal(await page.evaluate(() => window.emojiBladeApp.turn2P), 1);
+    }
+    for (const [prefix, normal, xtreme] of [
+      ['', 'CRITICAL SMASH!', '⚡ XTREME SMASH!'],
+      ['zh-hans/', '暴击冲撞！', '⚡ 极限暴击！'],
+      ['zh-hant/', '暴擊衝撞！', '⚡ 極限暴擊！'],
+      ['ja/', 'クリティカルスマッシュ！', '⚡ エクストリームスマッシュ！'],
+    ]) {
+      await page.goto(`https://local.test/${prefix}`);
+      await page.waitForFunction(() => !!window.emojiBladeApp);
+      for (const isXtreme of [true, false]) {
+        await page.evaluate(xtreme => {
+          const game = window.emojiBladeApp;
+          game.battleState = 'battling';
+          Object.assign(game.playerTop, { x: 200, y: 200, vx: 5, vy: 0, isSpinning: true, dashTicks: 8, xtremeTicks: xtreme ? 16 : 0 });
+          Object.assign(game.enemyTop, { x: 240, y: 200, vx: -5, vy: 0, isSpinning: true, xtremeTicks: 0 });
+          game.handleTopCollisions();
+        }, isXtreme);
+        assert.equal(await page.locator('#smash-feedback strong').textContent(), isXtreme ? xtreme : normal);
       }
     }
     if (process.env.SCREENSHOT_PATH) {
