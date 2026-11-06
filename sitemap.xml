@@ -142,8 +142,13 @@
   <url><loc>https://emojiblade.online/characters/invader/</loc><lastmod>2026-10-14</lastmod></url>
   <url><loc>https://emojiblade.online/characters/oni/</loc><lastmod>2026-10-14</lastmod></url>
   <url><loc>https://emojiblade.online/ja/characters/crown/</loc><lastmod>2026-10-14</lastmod></url>
+  <url><loc>https://emojiblade.online/ja/characters/diamond/</loc><lastmod>2026-11-06</lastmod></url>
   <url><loc>https://emojiblade.online/ja/characters/dragon/</loc><lastmod>2026-10-14</lastmod></url>
+  <url><loc>https://emojiblade.online/ja/characters/fire/</loc><lastmod>2026-11-06</lastmod></url>
   <url><loc>https://emojiblade.online/ja/characters/invader/</loc><lastmod>2026-10-14</lastmod></url>
+  <url><loc>https://emojiblade.online/ja/characters/lightning/</loc><lastmod>2026-11-06</lastmod></url>
+  <url><loc>https://emojiblade.online/ja/characters/bomb/</loc><lastmod>2026-11-06</lastmod></url>
+  <url><loc>https://emojiblade.online/ja/characters/moai/</loc><lastmod>2026-11-06</lastmod></url>
   <url><loc>https://emojiblade.online/ja/characters/oni/</loc><lastmod>2026-10-14</lastmod></url>
   <url><loc>https://emojiblade.online/ja/vs/diamond-vs-bomb/</loc><lastmod>2026-10-14</lastmod></url>
   <url><loc>https://emojiblade.online/ja/vs/fire-vs-diamond/</loc><lastmod>2026-10-14</lastmod></url>
@@ -158,8 +163,13 @@
   <url><loc>https://emojiblade.online/vs/lightning-vs-moai/</loc><lastmod>2026-10-14</lastmod></url>
   <url><loc>https://emojiblade.online/vs/moai-vs-diamond/</loc><lastmod>2026-11-06</lastmod></url>
   <url><loc>https://emojiblade.online/zh-hans/characters/crown/</loc><lastmod>2026-10-14</lastmod></url>
+  <url><loc>https://emojiblade.online/zh-hans/characters/diamond/</loc><lastmod>2026-11-06</lastmod></url>
   <url><loc>https://emojiblade.online/zh-hans/characters/dragon/</loc><lastmod>2026-10-14</lastmod></url>
+  <url><loc>https://emojiblade.online/zh-hans/characters/fire/</loc><lastmod>2026-11-06</lastmod></url>
   <url><loc>https://emojiblade.online/zh-hans/characters/invader/</loc><lastmod>2026-10-14</lastmod></url>
+  <url><loc>https://emojiblade.online/zh-hans/characters/lightning/</loc><lastmod>2026-11-06</lastmod></url>
+  <url><loc>https://emojiblade.online/zh-hans/characters/bomb/</loc><lastmod>2026-11-06</lastmod></url>
+  <url><loc>https://emojiblade.online/zh-hans/characters/moai/</loc><lastmod>2026-11-06</lastmod></url>
   <url><loc>https://emojiblade.online/zh-hans/characters/oni/</loc><lastmod>2026-10-14</lastmod></url>
   <url><loc>https://emojiblade.online/zh-hans/vs/diamond-vs-bomb/</loc><lastmod>2026-10-14</lastmod></url>
   <url><loc>https://emojiblade.online/zh-hans/vs/fire-vs-diamond/</loc><lastmod>2026-10-14</lastmod></url>
@@ -194,14 +204,44 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://emojiblade.online/zh-hant/characters/diamond/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://emojiblade.online/zh-hant/characters/dragon/</loc>
     <lastmod>2026-10-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://emojiblade.online/zh-hant/characters/fire/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://emojiblade.online/zh-hant/characters/invader/</loc>
     <lastmod>2026-10-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://emojiblade.online/zh-hant/characters/lightning/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://emojiblade.online/zh-hant/characters/bomb/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://emojiblade.online/zh-hant/characters/moai/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

@@ -82,7 +82,12 @@ for file in pages:
         for question in faq_questions(p.schemas):
             for text in (question['name'], question['acceptedAnswer']['text']):
                 assert ' '.join(text.split()) in visible, (file, 'FAQ schema missing from body', text)
-    if 'vs' in file.relative_to(root).parts:
+    relative = file.relative_to(root)
+    localized_character = (len(relative.parts) == 4
+                           and relative.parts[0] in ('zh-hans', 'zh-hant', 'ja')
+                           and relative.parts[1] == 'characters'
+                           and relative.parts[2] in ('bomb', 'diamond', 'fire', 'lightning', 'moai'))
+    if 'vs' in relative.parts or localized_character:
         assert '1.5' in ''.join(p.body_text) and '1.8' in ''.join(p.body_text), (file, 'missing critical damage distinction')
         assert any(word in ''.join(p.body_text) for word in ('Hazard', '危险擂台', '危險擂台', 'ハザード')), (file, 'missing arena mode distinction')
     if file == root / 'characters/rocket/index.html':
@@ -113,7 +118,8 @@ for file in pages:
         content_route = route.removeprefix('zh-hans/').removeprefix('zh-hant/').removeprefix('ja/')
         expanded_routes = {'vs', 'vs/diamond-vs-bomb', 'vs/lightning-vs-moai', 'vs/fire-vs-diamond',
                            'vs/lightning-vs-fire', 'vs/moai-vs-diamond',
-                           'characters/crown', 'characters/dragon', 'characters/oni', 'characters/invader'}
+                           'characters/crown', 'characters/dragon', 'characters/oni', 'characters/invader',
+                           'characters/lightning', 'characters/diamond', 'characters/fire', 'characters/bomb', 'characters/moai'}
         if content_route in expanded_routes:
             assert p.alternates == {
                 'x-default': base+'/'+content_route+'/', 'en': base+'/'+content_route+'/',
@@ -151,7 +157,7 @@ for prefix in ('', 'zh-hans/', 'zh-hant/', 'ja/'):
     characters = (root/prefix/'characters/index.html').read_text()
     matchups = (root/prefix/'vs/index.html').read_text()
     assert f'href="/{prefix}vs/"' in home, (prefix, 'matchup hub missing from home')
-    for slug in ('crown', 'dragon', 'oni', 'invader'):
+    for slug in ('crown', 'dragon', 'oni', 'invader', 'lightning', 'diamond', 'fire', 'bomb', 'moai'):
         assert f'href="/{prefix}characters/{slug}/"' in characters, (prefix, slug, 'detail missing from library')
     for slug in ('diamond-vs-bomb', 'lightning-vs-moai', 'fire-vs-diamond', 'lightning-vs-fire', 'moai-vs-diamond'):
         assert f'href="/{prefix}vs/{slug}/"' in matchups, (prefix, slug, 'matchup missing from hub')
