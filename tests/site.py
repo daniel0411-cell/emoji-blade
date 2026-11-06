@@ -23,9 +23,15 @@ class Page(HTMLParser):
         self.social = {}
         self.json_script = False
         self.schema = ''
+        self.schemas = []
+        self.in_body = False
+        self.hidden_text = False
+        self.body_text = []
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
+        if tag == 'body': self.in_body = True
+        if tag in ('script', 'style'): self.hidden_text = True
         if 'id' in a:
             assert a['id'] not in self.ids, ('duplicate id', a['id'])
             self.ids.add(a['id'])
@@ -48,17 +54,39 @@ class Page(HTMLParser):
     def handle_data(self, data):
         if self.in_title: self.title += data
         if self.json_script: self.schema += data
+        if self.in_body and not self.hidden_text: self.body_text.append(data)
 
     def handle_endtag(self, tag):
+        if tag == 'body': self.in_body = False
+        if tag in ('script', 'style'): self.hidden_text = False
         if tag == 'title': self.in_title = False
         if tag == 'script' and self.json_script:
-            json.loads(self.schema)
+            self.schemas.append(json.loads(self.schema))
             self.json_script = False
+
+def faq_questions(value):
+    if isinstance(value, dict):
+        if value.get('@type') == 'FAQPage':
+            yield from value.get('mainEntity', [])
+        else:
+            for child in value.values(): yield from faq_questions(child)
+    elif isinstance(value, list):
+        for child in value: yield from faq_questions(child)
 
 pages = [file for file in root.rglob('*.html') if 'node_modules' not in file.parts]
 titles = set()
 for file in pages:
     p = Page(); p.feed(file.read_text())
+    if file.parent.parent == root / 'characters':
+        visible = ' '.join(' '.join(p.body_text).split())
+        for question in faq_questions(p.schemas):
+            for text in (question['name'], question['acceptedAnswer']['text']):
+                assert ' '.join(text.split()) in visible, (file, 'FAQ schema missing from body', text)
+    if 'vs' in file.relative_to(root).parts:
+        assert '1.5' in ''.join(p.body_text) and '1.8' in ''.join(p.body_text), (file, 'missing critical damage distinction')
+        assert any(word in ''.join(p.body_text) for word in ('Hazard', '危险擂台', '危險擂台', 'ハザード')), (file, 'missing arena mode distinction')
+    if file == root / 'characters/rocket/index.html':
+        assert '96 Speed and 92 Attack' in ''.join(p.body_text), 'Rocket introduction must match preset ratings'
     assert p.h1 == 1, (file, 'expected one h1')
     assert p.title.strip(), (file, 'missing title')
     if file.name == 'index.html':
@@ -84,6 +112,7 @@ for file in pages:
         assert p.canonicals == [expected], (file, p.canonicals)
         content_route = route.removeprefix('zh-hans/').removeprefix('zh-hant/').removeprefix('ja/')
         expanded_routes = {'vs', 'vs/diamond-vs-bomb', 'vs/lightning-vs-moai', 'vs/fire-vs-diamond',
+                           'vs/lightning-vs-fire', 'vs/moai-vs-diamond',
                            'characters/crown', 'characters/dragon', 'characters/oni', 'characters/invader'}
         if content_route in expanded_routes:
             assert p.alternates == {
@@ -124,7 +153,7 @@ for prefix in ('', 'zh-hans/', 'zh-hant/', 'ja/'):
     assert f'href="/{prefix}vs/"' in home, (prefix, 'matchup hub missing from home')
     for slug in ('crown', 'dragon', 'oni', 'invader'):
         assert f'href="/{prefix}characters/{slug}/"' in characters, (prefix, slug, 'detail missing from library')
-    for slug in ('diamond-vs-bomb', 'lightning-vs-moai', 'fire-vs-diamond'):
+    for slug in ('diamond-vs-bomb', 'lightning-vs-moai', 'fire-vs-diamond', 'lightning-vs-fire', 'moai-vs-diamond'):
         assert f'href="/{prefix}vs/{slug}/"' in matchups, (prefix, slug, 'matchup missing from hub')
 assert (root/'404.html').exists()
 for prefix, lang in (('', 'en'), ('zh-hans/', 'zh-Hans'), ('zh-hant/', 'zh-Hant'), ('ja/', 'ja')):
