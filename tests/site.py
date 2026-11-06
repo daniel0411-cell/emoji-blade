@@ -94,7 +94,7 @@ for file in pages:
             assert p.schema, (file, 'missing structured data')
         if route in ('.', 'zh-hans', 'zh-hant', 'ja'): assert p.alternates == alternates
         topic = route.split('/')[-1]
-        if topic in ('characters', 'guide', 'faq', '2-player-duel', 'spinning-top-simulator', 'tier-list', 'unblocked'):
+        if topic in ('characters', 'guide', 'faq', '2-player-duel', 'spinning-top-simulator', 'tier-list', 'unblocked', 'generator'):
             expected_alternates = {
                 'x-default': base+'/'+topic+'/', 'en': base+'/'+topic+'/',
                 'zh-Hans': base+'/zh-hans/'+topic+'/', 'zh-Hant': base+'/zh-hant/'+topic+'/',
@@ -109,7 +109,7 @@ for file in pages:
                     target_topic = url.path.strip('/')
                     # The English language switch intentionally targets this topic's English page.
                     if target_topic == topic and p.links.count(href) == 1: continue
-                    assert target_topic not in ('characters', 'guide', 'faq', '2-player-duel', 'spinning-top-simulator', 'tier-list', 'unblocked'), (file, 'topic navigation must stay localized', href)
+                    assert target_topic not in ('characters', 'guide', 'faq', '2-player-duel', 'spinning-top-simulator', 'tier-list', 'unblocked', 'generator'), (file, 'topic navigation must stay localized', href)
 
 tree = ET.parse(root/'sitemap.xml')
 ns = {'s': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
@@ -151,7 +151,7 @@ for route in ('index.html', 'zh-hans/index.html', 'zh-hant/index.html', 'ja/inde
     assert 'id="embed-code-text"' not in source, (route, 'embed code must not be on homepage')
     if route != 'index.html':
         locale = route.split('/')[0]
-        for topic in ('characters', 'guide', 'faq', '2-player-duel', 'spinning-top-simulator', 'tier-list', 'unblocked'):
+        for topic in ('characters', 'guide', 'faq', '2-player-duel', 'spinning-top-simulator', 'tier-list', 'unblocked', 'generator'):
             assert f'href="/{topic}/"' not in source, (route, 'English topic link left on localized home')
         assert '（英文）' not in source and '（英語）' not in source
 print(f'PASS: {len(pages)} pages; links, h1, canonical, reciprocal languages, JSON-LD, sitemap')

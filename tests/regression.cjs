@@ -13,6 +13,7 @@ const context = {
   clearInterval(id) { timers.delete(id); }, clearTimeout() {}, Intl, URLSearchParams,
 };
 vm.createContext(context);
+vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'top-stats.js'), 'utf8'), context);
 vm.runInContext(source.replace("  window.addEventListener('DOMContentLoaded'", "  window.audit = { EmojiTop, EmojiBladeGame, readStored, writeStored, normalizeEmoji, computeEmojiStats, dashButtonLabel };\n  window.addEventListener('DOMContentLoaded'"), context);
 const { EmojiTop, EmojiBladeGame, readStored, writeStored, normalizeEmoji, computeEmojiStats, dashButtonLabel } = context.window.audit;
 assert.equal(readStored('test', 'fallback'), 'fallback');
@@ -338,4 +339,104 @@ console.log('PASS: localized character/tier tables and FAQ numeric mechanics');
     assert.ok(status.textContent.includes(result === 'success' ? 'copied' : 'unavailable'));
   }
   console.log('PASS: embed clipboard success, denial and unavailable fallback');
+
+  // Hazard mode physics: high speed ring out, low speed rebound, standard mode safety
+  const hazardTop = new EmojiTop(true);
+  hazardTop.reset(0, 0);
+  hazardTop.launch(0, 85);
+  let ringOutCalled = false;
+  Object.assign(hazardTop, { x: 205, y: 0, vx: 4, vy: 0 });
+  hazardTop.update(0, 0, 200, () => {}, true, () => { ringOutCalled = true; });
+  assert.equal(ringOutCalled, true, 'High speed at pocket triggers ring out');
+  assert.equal(hazardTop.isRingOut, true);
+  assert.equal(hazardTop.isSpinning, false);
+
+  const cushionTop = new EmojiTop(true);
+  cushionTop.reset(0, 0);
+  cushionTop.launch(0, 50);
+  let cushionRingOut = false;
+  Object.assign(cushionTop, { x: 195, y: 0, vx: 1.5, vy: 0 });
+  cushionTop.update(0, 0, 200, () => {}, true, () => { cushionRingOut = true; });
+  assert.equal(cushionRingOut, false, 'Low speed in pocket cushions and rebounds');
+  assert.equal(cushionTop.isRingOut, false);
+  assert.ok(cushionTop.vx < 0, 'Rebounds inward');
+
+  const classicTop = new EmojiTop(true);
+  classicTop.reset(0, 0);
+  classicTop.launch(0, 85);
+  let classicRingOut = false;
+  Object.assign(classicTop, { x: 205, y: 0, vx: 4, vy: 0 });
+  classicTop.update(0, 0, 200, () => {}, false, () => { classicRingOut = true; });
+  assert.equal(classicRingOut, false, 'Standard mode must not ring out');
+  assert.equal(classicTop.isRingOut, false);
+
+  // Single ring-out and simultaneous double ring-out arbitration
+  const outcomeElements = {};
+  context.document.getElementById = id => {
+    if (!outcomeElements[id]) outcomeElements[id] = { style: {}, textContent: '', className: '' };
+    return outcomeElements[id];
+  };
+  const hazardGame = game();
+  Object.assign(hazardGame, {
+    battleState: 'battling', is2PMode: false, isHazardMode: true,
+    rivalModeSelect: { value: 'progression' },
+    playerTop: new EmojiTop(true), enemyTop: new EmojiTop(false),
+    winStreak: 2, bestStreak: 2, stage: 2, battleHits: 5, battleStartTime: 0,
+    unlockedBadges: ['🔥'], bestStreakEl: {}, streakCounter: {}, nextBattleBtn: element(),
+    particles: { emitSparks() {} }
+  });
+  hazardGame.playerTop.isSpinning = true;
+  hazardGame.playerTop.energy = 80;
+  hazardGame.enemyTop.isRingOut = true;
+  hazardGame.enemyTop.ringOutTime = 0;
+  let testTime = 0;
+  context.performance.now = () => testTime;
+  hazardGame.checkBattleOutcome();
+  assert.equal(hazardGame.battleState, 'battling', 'Waits 60ms window for potential double ring out');
+  assert.equal(hazardGame.ringOutWaitStart, 0);
+  testTime = 70; // 70ms passed (> 60ms)
+  hazardGame.checkBattleOutcome();
+  assert.equal(hazardGame.battleState, 'finished');
+  assert.equal(outcomeElements['result-banner'].textContent, 'OVER FINISH! 🕳️');
+  assert.equal(outcomeElements['res-type-val'].textContent, 'Over Finish');
+  assert.equal(hazardGame.winStreak, 3);
+
+  const drawGame = game();
+  Object.assign(drawGame, {
+    battleState: 'battling', is2PMode: false, isHazardMode: true,
+    rivalModeSelect: { value: 'progression' },
+    playerTop: new EmojiTop(true), enemyTop: new EmojiTop(false),
+    winStreak: 2, bestStreak: 2, stage: 2, battleHits: 5, battleStartTime: 0,
+    unlockedBadges: ['🔥'], bestStreakEl: {}, streakCounter: {}, nextBattleBtn: element(),
+    particles: { emitSparks() {} }
+  });
+  drawGame.playerTop.isRingOut = true;
+  drawGame.playerTop.ringOutTime = 100;
+  drawGame.enemyTop.isRingOut = true;
+  drawGame.enemyTop.ringOutTime = 130;
+  drawGame.checkBattleOutcome();
+  assert.equal(drawGame.battleState, 'finished');
+  assert.equal(outcomeElements['result-banner'].textContent, 'DRAW');
+
+  // Deep links: hazard mode and challenge setup
+  const deepGame = game();
+  deepGame.arenaHazardSelect = { value: 'standard' };
+  deepGame.bladeStyleSelect = { value: 'blaze' };
+  deepGame.playerInput = { value: '🔥' };
+  deepGame.rivalModeSelect = { value: 'progression' };
+  deepGame.customEnemyInput = { style: {}, value: '' };
+  deepGame.playerTop = new EmojiTop(true);
+  deepGame.statusMsg = { textContent: '' };
+  deepGame.checkUrlDeepLink = EmojiBladeGame.prototype.checkUrlDeepLink.bind(deepGame);
+
+  context.window.location = { search: '?challenge=1&emoji=🥊&rival=👾&style=obsidian&hazard=1' };
+  deepGame.checkUrlDeepLink();
+  assert.equal(deepGame.isHazardMode, true);
+  assert.equal(deepGame.arenaHazardSelect.value, 'hazard');
+  assert.equal(deepGame.bladeStyleSelect.value, 'obsidian');
+  assert.equal(deepGame.rivalModeSelect.value, 'custom');
+  assert.equal(deepGame.customEnemyInput.value, '👾');
+  assert.equal(deepGame.playerInput.value, '🥊');
+
+  console.log('PASS: hazard mode physics, double ring-out arbitration, and challenge deep linking');
 })().catch(error => { console.error(error); process.exitCode = 1; });

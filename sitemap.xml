@@ -45,6 +45,12 @@
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
+  <url>
+    <loc>https://emojiblade.online/generator/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
 
   <!-- Programmatic SEO Character Cards -->
   <url>
@@ -122,6 +128,7 @@
   <url><loc>https://emojiblade.online/zh-hans/spinning-top-simulator/</loc><lastmod>2026-10-14</lastmod></url>
   <url><loc>https://emojiblade.online/zh-hans/tier-list/</loc><lastmod>2026-10-14</lastmod></url>
   <url><loc>https://emojiblade.online/zh-hans/unblocked/</loc><lastmod>2026-10-14</lastmod></url>
+  <url><loc>https://emojiblade.online/zh-hans/generator/</loc><lastmod>2026-11-06</lastmod></url>
   <url><loc>https://emojiblade.online/ja/characters/</loc><lastmod>2026-10-14</lastmod></url>
   <url><loc>https://emojiblade.online/ja/guide/</loc><lastmod>2026-10-14</lastmod></url>
   <url><loc>https://emojiblade.online/ja/faq/</loc><lastmod>2026-10-14</lastmod></url>
@@ -129,6 +136,7 @@
   <url><loc>https://emojiblade.online/ja/spinning-top-simulator/</loc><lastmod>2026-10-14</lastmod></url>
   <url><loc>https://emojiblade.online/ja/tier-list/</loc><lastmod>2026-10-14</lastmod></url>
   <url><loc>https://emojiblade.online/ja/unblocked/</loc><lastmod>2026-10-14</lastmod></url>
+  <url><loc>https://emojiblade.online/ja/generator/</loc><lastmod>2026-11-06</lastmod></url>
   <url><loc>https://emojiblade.online/characters/crown/</loc><lastmod>2026-10-14</lastmod></url>
   <url><loc>https://emojiblade.online/characters/dragon/</loc><lastmod>2026-10-14</lastmod></url>
   <url><loc>https://emojiblade.online/characters/invader/</loc><lastmod>2026-10-14</lastmod></url>
@@ -224,6 +232,12 @@
   <url>
     <loc>https://emojiblade.online/zh-hant/unblocked/</loc>
     <lastmod>2026-10-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://emojiblade.online/zh-hant/generator/</loc>
+    <lastmod>2026-11-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

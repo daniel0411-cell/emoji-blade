@@ -1,0 +1,14 @@
+.gen-card { border-radius: 8px; box-shadow: var(--shadow-pop-sm); }
+.preview-box { background: #f1f5f9; border-radius: 8px; }
+.gen-input { min-width: 0; width: 100%; background: #fff; color: #0f172a; border-color: #94a3b8; border-radius: 8px; }
+.gen-input:focus-visible { outline: 2px solid #0369a1; outline-offset: 2px; }
+.tier-pill.tier-s, .tier-pill.tier-boss { color: #be123c; background: #ffe4e6; border-color: #be123c; }
+.tier-pill.tier-a { color: #9a3412; background: #ffedd5; border-color: #9a3412; }
+.tier-pill.tier-b { color: #1d4ed8; background: #dbeafe; border-color: #1d4ed8; }
+.tier-pill.tier-c { color: #475569; background: #e2e8f0; border-color: #475569; }
+.stat-bar-track { background: #cbd5e1; }
+.gen-actions > * { flex: 1 1 220px; text-align: center; }
+@media (prefers-reduced-motion: reduce) {
+  .spinning-top-preview { animation: none; }
+  .stat-bar-fill, .quick-chip { transition: none; }
+}

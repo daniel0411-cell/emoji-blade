@@ -20,14 +20,7 @@
   function writeStored(key, value) {
     try { localStorage.setItem(key, value); } catch { /* Storage is optional. */ }
   }
-  function normalizeEmoji(value) {
-    const text = String(value || '').trim().slice(0, 128);
-    if (!text) return '🔥';
-    if (typeof Intl.Segmenter === 'function') {
-      return new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(text)[Symbol.iterator]().next().value.segment;
-    }
-    return Array.from(text)[0];
-  }
+  const { normalizeEmoji, computeEmojiStats, EMOJI_PRESETS } = window.EmojiBladeStats;
 
   function translate(text) {
     const lang = document.documentElement?.lang;
@@ -44,6 +37,14 @@
       'Both tops stopped together. Play again!': ['双方同时停止，再来一场！', '両方のコマが止まりました。もう一度！', '雙方同時停止，再來一場！'],
       'Outspun': ['耐力获胜', '持久力勝利', '持久力獲勝'],
       'Spin Depleted': ['能量耗尽', 'エネルギー切れ', '能量耗盡'],
+      'OVER FINISH! 🕳️': ['出界绝杀！🕳️', 'オーバーフィニッシュ！🕳️', '出界絕殺！🕳️'],
+      'RING OUT! 💥': ['被击出场外 💥', 'リングアウト！💥', '被擊出場外 💥'],
+      'Over Finish': ['出界绝杀', 'オーバーフィニッシュ', '出界絕殺'],
+      'Knocked Out': ['击出场外', 'リングアウト', '擊出場外'],
+      'Both tops knocked out simultaneously. Play again!': ['双方同时出界，再来一场！', '両方のコマが同時に場外に出ました。もう一度！', '雙方同時出界，再來一場！'],
+      '⚠️ HAZARD ARENA: Beware the open pockets!': ['⚠️ 危险擂台：小心两侧出界缺口！', '⚠️ ハザードアリーナ：左右の場外ポケットに注意！', '⚠️ 危險擂台：小心兩側出界缺口！'],
+      '⚔️ CHALLENGE ACCEPTED: Defeat rival blade!': ['⚔️ 接受挑战：击败对手陀螺！', '⚔️ 挑戦状受領：相手のコマを倒せ！', '⚔️ 接受挑戰：擊敗對手陀螺！'],
+      'Link Copied! ✔️': ['链接已复制！✔️', 'リンクをコピーしました！✔️', '鏈接已複製！✔️'],
       'CRITICAL SMASH!': ['暴击冲撞！', 'クリティカルスマッシュ！', '暴擊衝撞！'],
       '⚡ XTREME DASH!': ['⚡ 极限弹射！', '⚡ エクストリームダッシュ！', '⚡ 極限彈射！'],
       '⚡ XTREME SMASH!': ['⚡ 极限暴击！', '⚡ エクストリームスマッシュ！', '⚡ 極限暴擊！'],
@@ -197,6 +198,24 @@
       } catch (e) { }
     }
 
+    playRingOut() {
+      if (!this.enabled || !this.ctx) return;
+      try {
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(620, now);
+        osc.frequency.exponentialRampToValueAtTime(70, now + 0.35);
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.linearRampToValueAtTime(0.001, now + 0.38);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.4);
+      } catch (e) { }
+    }
+
     playWin() {
       if (!this.enabled || !this.ctx) return;
       try {
@@ -226,50 +245,23 @@
     }
   }
 
-  // --- EMOJI ATTRIBUTE CALCULATION SYSTEM ---
-  const EMOJI_PRESETS = {
-    '🔥': { mass: 76, attack: 95, speed: 88, endurance: 68, tier: 'A', name: 'Inferno Fire', desc: 'Explosive blaze momentum' },
-    '💣': { mass: 90, attack: 98, speed: 70, endurance: 65, tier: 'A', name: 'Heavy Bomb', desc: 'Devastating shockwave clash' },
-    '⚡': { mass: 60, attack: 88, speed: 99, endurance: 74, tier: 'S', name: 'Lightning Volt', desc: 'Max RPM speed, electric cuts' },
-    '💎': { mass: 96, attack: 72, speed: 65, endurance: 98, tier: 'S', name: 'Diamond Core', desc: 'Extreme defensive mass density' },
-    '🚀': { mass: 78, attack: 92, speed: 96, endurance: 64, tier: 'A', name: 'Cosmic Rocket', desc: 'Piercing linear velocity' },
-    '🥊': { mass: 84, attack: 91, speed: 82, endurance: 76, tier: 'A', name: 'Brawler Punch', desc: 'Heavy knockout punch recoil' },
-    '🤡': { mass: 70, attack: 76, speed: 84, endurance: 82, tier: 'B', name: 'Chaos Clown', desc: 'Unpredictable wobble bounce' },
-    '💀': { mass: 74, attack: 94, speed: 84, endurance: 70, tier: 'A', name: 'Grim Skull', desc: 'Lethal sharp edge attacks' },
-    '🗿': { mass: 100, attack: 68, speed: 52, endurance: 100, tier: 'S', name: 'Moai Fortress', desc: 'Immovable ancient rock armor' },
-    '🍕': { mass: 74, attack: 70, speed: 78, endurance: 86, tier: 'B', name: 'Pizza Wheel', desc: 'Balanced circular distribution' },
-    '👑': { mass: 86, attack: 88, speed: 86, endurance: 88, tier: 'S', name: 'Royal Crown', desc: 'Emperor all-round stat line' },
-    '🌪️': { mass: 65, attack: 78, speed: 94, endurance: 94, tier: 'B', name: 'Vortex Tornado', desc: 'Stamina siphon & outspinning' },
-    '🥑': { mass: 75, attack: 68, speed: 75, endurance: 82, tier: 'B', name: 'Avocado Seed', desc: 'Dense organic weighted core' },
-    '👾': { mass: 72, attack: 86, speed: 90, endurance: 78, tier: 'A', name: 'Retro Invader', desc: 'Cyber geometry kinetic strike' },
-    '👹': { mass: 110, attack: 100, speed: 75, endurance: 90, tier: 'BOSS', name: 'Oni Demon Boss', desc: 'Colossal titan boss brute' },
-    '🐉': { mass: 92, attack: 96, speed: 90, endurance: 84, tier: 'S', name: 'Mythic Dragon', desc: 'Supreme elemental power' }
-  };
-
-  function computeEmojiStats(emoji) {
-    if (EMOJI_PRESETS[emoji]) return { ...EMOJI_PRESETS[emoji] };
-    
-    // Hash-based deterministic computation for ANY emoji/character
-    let hash = 0;
-    for (let i = 0; i < emoji.length; i++) {
-      hash = (hash << 5) - hash + emoji.charCodeAt(i);
-      hash |= 0;
-    }
-    const absH = Math.abs(hash);
-    const mass = 55 + (absH % 45);
-    const attack = 60 + ((absH >>> 3) % 40);
-    const speed = 60 + ((absH >>> 5) % 40);
-    const endurance = 55 + ((absH >>> 7) % 45);
-
-    const score = mass + attack + speed + endurance;
-    let tier = 'B';
-    if (score > 340) tier = 'S';
-    else if (score > 300) tier = 'A';
-    else if (score < 260) tier = 'C';
-
-    return { mass, attack, speed, endurance, tier, name: `Custom ${emoji}`, desc: 'Dynamic Unicode Physics Top' };
+  function trackEngagement(eventName, details = {}) {
+    try {
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('emojiBladeTrack', { detail: { event: eventName, ...details, timestamp: Date.now() } }));
+        if (Array.isArray(window.dataLayer)) {
+          window.dataLayer.push({ event: `emojiblade_${eventName}`, ...details });
+        }
+      }
+      const raw = readStored('emojiblade_stats', '{}');
+      let stats = {};
+      try { stats = JSON.parse(raw); } catch (_) {}
+      stats[eventName] = (stats[eventName] || 0) + 1;
+      writeStored('emojiblade_stats', JSON.stringify(stats));
+    } catch (_) {}
   }
 
+  // --- EMOJI ATTRIBUTE CALCULATION SYSTEM ---
   // --- OPPONENT ROSTER ---
   const ENEMY_ROSTER = [
     { emoji: '🍕', style: 'gold' },
@@ -387,6 +379,8 @@
       this.dashTicks = 0;
       this.xtremeCooldown = 0;
       this.xtremeTicks = 0;
+      this.isRingOut = false;
+      this.ringOutTime = 0;
       this.trail = [];
     }
 
@@ -419,6 +413,8 @@
       this.dashTicks = 0;
       this.xtremeCooldown = 0;
       this.xtremeTicks = 0;
+      this.isRingOut = false;
+      this.ringOutTime = 0;
       this.trail = [];
     }
 
@@ -447,8 +443,8 @@
       sfx.playLaunch();
     }
 
-    update(arenaCenterX, arenaCenterY, arenaRadius, onXtremeDash) {
-      if (!this.isLaunched) return;
+    update(arenaCenterX, arenaCenterY, arenaRadius, onXtremeDash, isHazardMode = false, onRingOut = null) {
+      if (!this.isLaunched || this.isRingOut) return;
       this.dashCooldown = Math.max(0, this.dashCooldown - 1);
       this.dashTicks = Math.max(0, this.dashTicks - 1);
       this.xtremeCooldown = Math.max(0, this.xtremeCooldown - 1);
@@ -488,38 +484,62 @@
         const nx = (this.x - arenaCenterX) / distFromCenter;
         const ny = (this.y - arenaCenterY) / distFromCenter;
 
-        this.x = arenaCenterX + nx * maxDist;
-        this.y = arenaCenterY + ny * maxDist;
-
-        // Xtreme Rail arcs (Upper: -140° to -40°, Lower: 40° to 140°)
+        // Check if hitting open hazard pockets (Left: 158°~202°, Right: -22°~22°)
         const contactAngle = Math.atan2(ny, nx);
-        const inUpperRail = contactAngle >= -Math.PI * 0.78 && contactAngle <= -Math.PI * 0.22;
-        const inLowerRail = contactAngle >= Math.PI * 0.22 && contactAngle <= Math.PI * 0.78;
-        const onRail = inUpperRail || inLowerRail;
+        const inRightPocket = isHazardMode && (contactAngle >= -Math.PI * 0.12 && contactAngle <= Math.PI * 0.12);
+        const inLeftPocket = isHazardMode && (contactAngle >= Math.PI * 0.88 || contactAngle <= -Math.PI * 0.88);
+        const inHazardPocket = inRightPocket || inLeftPocket;
 
-        if (onRail && this.xtremeCooldown === 0 && this.isSpinning && this.energy > 8) {
-          this.xtremeTicks = 16;
-          this.xtremeCooldown = 85;
-          this.energy = Math.max(5, this.energy - 3);
-
-          const currentSpeed = Math.hypot(this.vx, this.vy);
-          const boostSpd = Math.max(16, Math.min(22, currentSpeed + 8.5));
-          const dotTan = this.vx * (-ny) + this.vy * nx;
-          const tanDir = dotTan >= 0 ? 1 : -1;
-          this.vx = (tanDir * (-ny) * 0.65 - nx * 0.76) * boostSpd;
-          this.vy = (tanDir * nx * 0.65 - ny * 0.76) * boostSpd;
-
-          sfx.playXtremeDash();
-          triggerHaptic([25, 35, 25]);
-          if (typeof onXtremeDash === 'function') onXtremeDash(this);
+        if (inHazardPocket) {
+          const speed = Math.hypot(this.vx, this.vy);
+          if (speed >= 3.2 || this.dashTicks > 0 || this.xtremeTicks > 0) {
+            if (distFromCenter >= arenaRadius + this.radius * 0.25) {
+              this.isRingOut = true;
+              this.isSpinning = false;
+              this.isAlive = false;
+              this.ringOutTime = performance.now();
+              if (typeof onRingOut === 'function') onRingOut(this);
+              return;
+            }
+          } else {
+            this.x = arenaCenterX + nx * maxDist;
+            this.y = arenaCenterY + ny * maxDist;
+            this.vx = -this.vx * 0.45;
+            this.vy = -this.vy * 0.45;
+          }
         } else {
-          const dot = this.vx * nx + this.vy * ny;
-          if (dot > 0) {
-            this.vx = (this.vx - 1.7 * dot * nx) * 0.8;
-            this.vy = (this.vy - 1.7 * dot * ny) * 0.8;
-            this.energy -= 1.1; // wall friction
-            sfx.playClash(0.35, false);
-            triggerHaptic(12);
+          this.x = arenaCenterX + nx * maxDist;
+          this.y = arenaCenterY + ny * maxDist;
+
+          // Xtreme Rail arcs (Upper: -140° to -40°, Lower: 40° to 140°)
+          const inUpperRail = contactAngle >= -Math.PI * 0.78 && contactAngle <= -Math.PI * 0.22;
+          const inLowerRail = contactAngle >= Math.PI * 0.22 && contactAngle <= Math.PI * 0.78;
+          const onRail = inUpperRail || inLowerRail;
+
+          if (onRail && this.xtremeCooldown === 0 && this.isSpinning && this.energy > 8) {
+            this.xtremeTicks = 16;
+            this.xtremeCooldown = 85;
+            this.energy = Math.max(5, this.energy - 3);
+
+            const currentSpeed = Math.hypot(this.vx, this.vy);
+            const boostSpd = Math.max(16, Math.min(22, currentSpeed + 8.5));
+            const dotTan = this.vx * (-ny) + this.vy * nx;
+            const tanDir = dotTan >= 0 ? 1 : -1;
+            this.vx = (tanDir * (-ny) * 0.65 - nx * 0.76) * boostSpd;
+            this.vy = (tanDir * nx * 0.65 - ny * 0.76) * boostSpd;
+
+            sfx.playXtremeDash();
+            triggerHaptic([25, 35, 25]);
+            if (typeof onXtremeDash === 'function') onXtremeDash(this);
+          } else {
+            const dot = this.vx * nx + this.vy * ny;
+            if (dot > 0) {
+              this.vx = (this.vx - 1.7 * dot * nx) * 0.8;
+              this.vy = (this.vy - 1.7 * dot * ny) * 0.8;
+              this.energy -= 1.1; // wall friction
+              sfx.playClash(0.35, false);
+              triggerHaptic(12);
+            }
           }
         }
       }
@@ -545,6 +565,23 @@
     }
 
     draw(ctx) {
+      if (this.isRingOut) {
+        const fallAge = performance.now() - (this.ringOutTime || performance.now());
+        const fallProgress = Math.min(1, fallAge / 650);
+        const scale = Math.max(0.01, 1 - fallProgress);
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.scale(scale, scale);
+        ctx.globalAlpha = Math.max(0, 1 - fallProgress * 1.5);
+        ctx.rotate(this.angle + fallProgress * 8);
+        ctx.font = `${Math.round(this.radius * 1.1)}px sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(this.emoji, 0, 0);
+        ctx.restore();
+        return;
+      }
+
       if (this.trail.length && !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
         ctx.save();
         this.trail.forEach((point, index) => {
@@ -728,6 +765,7 @@
       this.arenaCenterX = 400;
       this.arenaCenterY = 300;
       this.arenaRadius = 250;
+      this.isHazardMode = false;
 
       this.initDom();
       this.initEvents();
@@ -762,6 +800,8 @@
       this.statusMsg = document.getElementById('arena-status');
       this.countdownOverlay = document.getElementById('countdown-overlay');
       this.demoStation = document.querySelector('.battle-station');
+      this.arenaHazardSelect = document.getElementById('arena-hazard-select');
+      this.copyChallengeBtn = document.getElementById('copy-challenge-btn');
       this.dashButtons = [document.getElementById('player-dash-btn'), document.getElementById('enemy-dash-btn')];
       this.smashFeedback = document.getElementById('smash-feedback');
 
@@ -775,6 +815,10 @@
         this.playerInput.value = normalizeEmoji(urlEmoji);
         this.playerTop.configure(urlEmoji, 'blaze');
       }
+      if (params.get('hazard') === '1' || params.get('arena') === 'hazard') {
+        this.isHazardMode = true;
+        if (this.arenaHazardSelect) this.arenaHazardSelect.value = 'hazard';
+      }
       if (params.get('mode') === '2p') {
         this.is2PMode = true;
         this.mode2PBtn.classList.add('active');
@@ -782,6 +826,17 @@
         this.rivalModeSelect.value = 'custom';
         this.customEnemyInput.style.display = 'inline-block';
         this.customEnemyInput.value = normalizeEmoji(params.get('rival') || '💎');
+      } else if (params.get('rival')) {
+        this.rivalModeSelect.value = 'custom';
+        this.customEnemyInput.style.display = 'inline-block';
+        this.customEnemyInput.value = normalizeEmoji(params.get('rival'));
+      }
+      if (params.get('style') && ['blaze', 'cyber', 'gold', 'obsidian'].includes(params.get('style'))) {
+        this.bladeStyleSelect.value = params.get('style');
+        this.playerTop.configure(this.playerInput.value, params.get('style'));
+      }
+      if (params.get('challenge') === '1') {
+        this.statusMsg.textContent = translate('⚔️ CHALLENGE ACCEPTED: Defeat rival blade!');
       }
     }
 
@@ -851,13 +906,17 @@
       document.getElementById('enemy-tier').textContent = this.enemyTop.isBoss ? '🔥 BOSS' : `${this.enemyTop.stats.tier}-TIER`;
 
       this.updateHudBars();
-      this.statusMsg.textContent = translate(this.enemyTop.isBoss ? '⚠️ WARNING: BOSS APPROACHING!' : 'Drag player top or set angle & launch!');
+      if (this.isHazardMode && !this.enemyTop.isBoss) {
+        this.statusMsg.textContent = translate('⚠️ HAZARD ARENA: Beware the open pockets!');
+      } else {
+        this.statusMsg.textContent = translate(this.enemyTop.isBoss ? '⚠️ WARNING: BOSS APPROACHING!' : 'Drag player top or set angle & launch!');
+      }
       this.nextBattleBtn.textContent = translate(!this.is2PMode && this.rivalModeSelect.value === 'progression' ? 'Next Stage ⚡' : 'Play Again ⚡');
     }
 
     setConfigurationLocked(locked) {
-      document.querySelectorAll('.emoji-chip, #player-emoji-input, #random-player-btn, #blade-style-select, #rival-mode-select, #custom-enemy-input, #mode-streak-btn, #mode-2p-btn').forEach(el => { el.disabled = locked; });
-      [this.playerInput, this.randomPlayerBtn, this.bladeStyleSelect, this.rivalModeSelect, this.customEnemyInput, this.modeStreakBtn, this.mode2PBtn].forEach(el => { if (el) el.disabled = locked; });
+      document.querySelectorAll('.emoji-chip, #player-emoji-input, #random-player-btn, #blade-style-select, #rival-mode-select, #arena-hazard-select, #custom-enemy-input, #mode-streak-btn, #mode-2p-btn').forEach(el => { el.disabled = locked; });
+      [this.playerInput, this.randomPlayerBtn, this.bladeStyleSelect, this.rivalModeSelect, this.arenaHazardSelect, this.customEnemyInput, this.modeStreakBtn, this.mode2PBtn].forEach(el => { if (el) el.disabled = locked; });
       this.powerSlider.disabled = locked;
       this.angleSlider.disabled = locked;
       this.launchBtn.disabled = locked;
@@ -896,6 +955,32 @@
 
     initEvents() {
       this.dashButtons.forEach((button, index) => button?.addEventListener('click', () => this.requestDash(index === 1)));
+      this.arenaHazardSelect?.addEventListener('change', () => {
+        this.isHazardMode = this.arenaHazardSelect.value === 'hazard';
+        this.setupStage();
+      });
+      this.copyChallengeBtn?.addEventListener('click', () => {
+        const url = new URL(window.location.href);
+        url.search = '';
+        url.searchParams.set('challenge', '1');
+        url.searchParams.set('emoji', this.playerTop.emoji);
+        url.searchParams.set('rival', this.enemyTop.emoji);
+        url.searchParams.set('style', this.playerTop.style);
+        if (this.isHazardMode) url.searchParams.set('hazard', '1');
+        const shareText = url.toString();
+        const done = () => {
+          this.copyChallengeBtn.textContent = translate('Link Copied! ✔️');
+          setTimeout(() => {
+            this.copyChallengeBtn.textContent = translate('⚔️ Challenge Link');
+          }, 2000);
+        };
+        if (navigator.clipboard?.writeText) {
+          navigator.clipboard.writeText(shareText).then(done).catch(() => prompt('Copy Challenge Link:', shareText));
+        } else {
+          prompt('Copy Challenge Link:', shareText);
+        }
+        trackEngagement('copy_challenge', { hazard: this.isHazardMode, emoji: this.playerTop.emoji, rival: this.enemyTop.emoji });
+      });
       window.addEventListener('keydown', event => {
         if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey
           || event.target.closest?.('input, select, textarea, button, a, [contenteditable]:not([contenteditable="false"]), [role="button"]')) return;
@@ -1059,11 +1144,20 @@
 
       // Modal Next Stage
       this.nextBattleBtn.addEventListener('click', () => {
+        trackEngagement('replay_click', {
+          stage: this.stage,
+          mode: this.is2PMode ? '2p' : this.rivalModeSelect?.value || 'progression',
+          hazard: !!this.isHazardMode
+        });
         this.setupStage();
       });
 
       // Share Card Generator
       this.shareCardBtn.addEventListener('click', () => {
+        trackEngagement('share_card', {
+          streak: this.winStreak,
+          stage: this.stage
+        });
         this.generateShareCard();
       });
 
@@ -1215,6 +1309,13 @@
       }
 
       this.statusMsg.textContent = translate('⚡ CLASH IN PROGRESS!');
+      trackEngagement('launch', {
+        mode: this.is2PMode ? '2p' : this.rivalModeSelect?.value || 'progression',
+        hazard: !!this.isHazardMode,
+        stage: this.stage,
+        bladeEmoji: this.playerTop.emoji,
+        bladeStyle: this.playerTop.style
+      });
     }
 
     requestDash(enemy = false) {
@@ -1328,72 +1429,141 @@
     checkBattleOutcome() {
       if (this.battleState !== 'battling') return;
 
-      const playerStopped = !this.playerTop.isSpinning || this.playerTop.energy <= 0;
-      const enemyStopped = !this.enemyTop.isSpinning || this.enemyTop.energy <= 0;
+      const playerOut = !!this.playerTop.isRingOut;
+      const enemyOut = !!this.enemyTop.isRingOut;
+      const playerStopped = playerOut || !this.playerTop.isSpinning || this.playerTop.energy <= 0;
+      const enemyStopped = enemyOut || !this.enemyTop.isSpinning || this.enemyTop.energy <= 0;
 
-      if (playerStopped || enemyStopped) {
-        this.battleState = 'finished';
-        const battleDuration = ((performance.now() - this.battleStartTime) / 1000).toFixed(1);
-        const playerWon = this.playerTop.energy > this.enemyTop.energy;
-        const draw = Math.max(0, this.playerTop.energy) === Math.max(0, this.enemyTop.energy);
-        const progression = !this.is2PMode && this.rivalModeSelect.value === 'progression';
-        this.nextBattleBtn.textContent = translate(progression
-          ? (playerWon && !draw ? 'Next Stage ⚡' : 'Retry Stage ⚡')
-          : 'Play Again ⚡');
+      if (!playerStopped && !enemyStopped) return;
 
-        const banner = document.getElementById('result-banner');
-        const summary = document.getElementById('result-summary');
-        document.getElementById('res-hit-count').textContent = this.battleHits;
-        document.getElementById('res-time-val').textContent = `${battleDuration}s`;
-        document.getElementById('res-type-val').textContent = playerWon ? 'Outspun' : 'Spin Depleted';
-
-        if (draw) {
-          banner.textContent = 'DRAW';
-          banner.className = 'result-banner';
-          summary.textContent = translate('Both tops stopped together. Play again!');
-        } else if (playerWon) {
-          banner.textContent = this.is2PMode ? 'PLAYER 1 WINS!' : 'VICTORY! 🏆';
-          banner.className = 'result-banner';
-          summary.textContent = `${this.playerTop.emoji} crushed ${this.enemyTop.emoji}'s stamina!`;
-          if (!this.is2PMode && this.rivalModeSelect.value === 'progression') this.winStreak++;
-          if (!this.is2PMode && this.rivalModeSelect.value === 'progression' && this.winStreak > this.bestStreak) {
-            this.bestStreak = this.winStreak;
-            writeStored('emojiblade_best_streak', String(this.bestStreak));
-            this.bestStreakEl.textContent = this.bestStreak;
-          }
-
-          // Unlock trophy badge
-          if (!this.is2PMode && this.rivalModeSelect.value === 'progression' && !this.unlockedBadges.includes(this.playerTop.emoji)) {
-            this.unlockedBadges.push(this.playerTop.emoji);
-            writeStored('emojiblade_badges', JSON.stringify(this.unlockedBadges));
-            this.renderBadges();
-          }
-
-          if (!this.is2PMode && this.rivalModeSelect.value === 'progression') this.stage++;
-          sfx.playWin();
-          this.particles.emitSparks(this.playerTop.x, this.playerTop.y, '#ffd32a', 36, 9);
-        } else {
-          banner.textContent = this.is2PMode ? 'PLAYER 2 WINS!' : 'DEFEAT 💥';
-          banner.className = 'result-banner defeat';
-          summary.textContent = `${this.enemyTop.emoji} outlasted your blade in the final clash!`;
-          if (!this.is2PMode && this.rivalModeSelect.value === 'progression') this.winStreak = 0;
+      // When one top is knocked out, wait 60ms to detect simultaneous double ring-out
+      if ((playerOut || enemyOut) && !(playerOut && enemyOut)) {
+        if (this.ringOutWaitStart == null) {
+          this.ringOutWaitStart = performance.now();
+          return;
         }
-
-        this.streakCounter.textContent = this.winStreak;
-        banner.textContent = translate(banner.textContent);
-        document.getElementById('res-type-val').textContent = translate(draw ? 'DRAW' : playerWon ? 'Outspun' : 'Spin Depleted');
-        if (document.documentElement.lang !== 'en' && !draw) {
-          const lang = document.documentElement.lang;
-          summary.textContent = `${playerWon ? this.playerTop.emoji : this.enemyTop.emoji} ${lang === 'ja' ? 'の勝利！' : lang === 'zh-Hant' ? '獲勝！' : '获胜！'}`;
-        } else if (draw) {
-          summary.textContent = translate(summary.textContent);
+        if (performance.now() - this.ringOutWaitStart < 60) {
+          return;
         }
-        this.setConfigurationLocked(false);
-        this.resultTimer = setTimeout(() => {
-          if (this.battleState !== 'finished') return;
-          this.resultModal.style.display = 'flex';
-        }, 600);
       }
+      this.ringOutWaitStart = null;
+
+      this.battleState = 'finished';
+      const battleDuration = ((performance.now() - this.battleStartTime) / 1000).toFixed(1);
+
+      let draw = false;
+      let playerWon = false;
+      let winType = 'Outspun';
+
+      if (playerOut && enemyOut) {
+        const timeDiff = Math.abs((this.playerTop.ringOutTime || 0) - (this.enemyTop.ringOutTime || 0));
+        if (timeDiff <= 60) {
+          draw = true;
+          winType = 'DRAW';
+        } else if (this.playerTop.ringOutTime > this.enemyTop.ringOutTime) {
+          playerWon = true;
+          winType = 'Over Finish';
+        } else {
+          playerWon = false;
+          winType = 'Knocked Out';
+        }
+      } else if (enemyOut) {
+        playerWon = true;
+        winType = 'Over Finish';
+      } else if (playerOut) {
+        playerWon = false;
+        winType = 'Knocked Out';
+      } else {
+        draw = Math.max(0, this.playerTop.energy) === Math.max(0, this.enemyTop.energy);
+        playerWon = this.playerTop.energy > this.enemyTop.energy;
+        winType = playerWon ? 'Outspun' : 'Spin Depleted';
+      }
+
+      const progression = !this.is2PMode && this.rivalModeSelect.value === 'progression';
+      this.nextBattleBtn.textContent = translate(progression
+        ? (playerWon && !draw ? 'Next Stage ⚡' : 'Retry Stage ⚡')
+        : 'Play Again ⚡');
+
+      const banner = document.getElementById('result-banner');
+      const summary = document.getElementById('result-summary');
+      document.getElementById('res-hit-count').textContent = this.battleHits;
+      document.getElementById('res-time-val').textContent = `${battleDuration}s`;
+      document.getElementById('res-type-val').textContent = translate(winType);
+
+      if (draw) {
+        banner.textContent = 'DRAW';
+        banner.className = 'result-banner';
+        summary.textContent = translate((playerOut && enemyOut)
+          ? 'Both tops knocked out simultaneously. Play again!'
+          : 'Both tops stopped together. Play again!');
+      } else if (playerWon) {
+        banner.textContent = winType === 'Over Finish' ? 'OVER FINISH! 🕳️' : (this.is2PMode ? 'PLAYER 1 WINS!' : 'VICTORY! 🏆');
+        banner.className = 'result-banner';
+        if (winType === 'Over Finish') {
+          summary.textContent = `${this.playerTop.emoji} blasted ${this.enemyTop.emoji} out of the arena!`;
+        } else {
+          summary.textContent = `${this.playerTop.emoji} crushed ${this.enemyTop.emoji}'s stamina!`;
+        }
+        if (!this.is2PMode && this.rivalModeSelect.value === 'progression') this.winStreak++;
+        if (!this.is2PMode && this.rivalModeSelect.value === 'progression' && this.winStreak > this.bestStreak) {
+          this.bestStreak = this.winStreak;
+          writeStored('emojiblade_best_streak', String(this.bestStreak));
+          this.bestStreakEl.textContent = this.bestStreak;
+        }
+
+        // Unlock trophy badge
+        if (!this.is2PMode && this.rivalModeSelect.value === 'progression' && !this.unlockedBadges.includes(this.playerTop.emoji)) {
+          this.unlockedBadges.push(this.playerTop.emoji);
+          writeStored('emojiblade_badges', JSON.stringify(this.unlockedBadges));
+          this.renderBadges();
+        }
+
+        if (!this.is2PMode && this.rivalModeSelect.value === 'progression') this.stage++;
+        sfx.playWin();
+        this.particles.emitSparks(this.playerTop.x, this.playerTop.y, '#ffd32a', 36, 9);
+      } else {
+        banner.textContent = winType === 'Knocked Out' ? 'RING OUT! 💥' : (this.is2PMode ? 'PLAYER 2 WINS!' : 'DEFEAT 💥');
+        banner.className = 'result-banner defeat';
+        if (winType === 'Knocked Out') {
+          summary.textContent = `${this.playerTop.emoji} was blasted into the hazard pocket!`;
+        } else {
+          summary.textContent = `${this.enemyTop.emoji} outlasted your blade in the final clash!`;
+        }
+        if (!this.is2PMode && this.rivalModeSelect.value === 'progression') this.winStreak = 0;
+      }
+
+      this.streakCounter.textContent = this.winStreak;
+      banner.textContent = translate(banner.textContent);
+      if (document.documentElement.lang !== 'en' && !draw) {
+        const lang = document.documentElement.lang;
+        if (winType === 'Over Finish' || winType === 'Knocked Out') {
+          const winnerEmoji = playerWon ? this.playerTop.emoji : this.enemyTop.emoji;
+          const loserEmoji = playerWon ? this.enemyTop.emoji : this.playerTop.emoji;
+          summary.textContent = `${winnerEmoji} KO ${loserEmoji}!`;
+        } else {
+          summary.textContent = `${playerWon ? this.playerTop.emoji : this.enemyTop.emoji} ${lang === 'ja' ? 'の勝利！' : lang === 'zh-Hant' ? '獲勝！' : '获胜！'}`;
+        }
+      } else if (draw) {
+        summary.textContent = translate(summary.textContent);
+      }
+
+      trackEngagement('battle_finish', {
+        playerWon,
+        draw,
+        winType,
+        duration: Number(battleDuration),
+        hits: this.battleHits,
+        hazard: !!this.isHazardMode,
+        mode: this.is2PMode ? '2p' : this.rivalModeSelect.value,
+        streak: this.winStreak,
+        stage: this.stage
+      });
+
+      this.setConfigurationLocked(false);
+      this.resultTimer = setTimeout(() => {
+        if (this.battleState !== 'finished') return;
+        this.resultModal.style.display = 'flex';
+      }, 600);
     }
 
     drawArena() {
@@ -1500,21 +1670,69 @@
           ctx.restore();
         }
 
-        // Perimeter Safety Energy Bars (Neon Blue P1 & Neon Crimson P2)
-        for (const [start, color] of [[Math.PI * .85, '#1676e8'], [-Math.PI * .15, '#ed583d']]) {
-          ctx.save();
-          ctx.strokeStyle = color;
-          ctx.lineWidth = 5;
-          ctx.shadowColor = color;
-          ctx.shadowBlur = 8;
-          ctx.beginPath(); ctx.arc(0, 0, r + 2, start, start + Math.PI * .3); ctx.stroke();
-          ctx.restore();
-        }
+        if (this.isHazardMode) {
+          // Open Hazard Pockets on Left & Right
+          const pockets = [
+            { start: -Math.PI * 0.12, end: Math.PI * 0.12 }, // Right Pocket (-22° ~ 22°)
+            { start: Math.PI * 0.88, end: Math.PI * 1.12 }   // Left Pocket (158° ~ 202°)
+          ];
 
-        // 6. Center Stadium Typography
-        ctx.fillStyle = '#64748b';
-        ctx.textAlign = 'center';
-        ctx.font = '700 12px monospace'; ctx.fillText('EB / 01', 0, 4);
+          for (const pocket of pockets) {
+            ctx.save();
+            // Chasm void cut into the rim
+            ctx.fillStyle = '#090d16';
+            ctx.beginPath();
+            ctx.arc(0, 0, r + 20, pocket.start, pocket.end);
+            ctx.arc(0, 0, r - 8, pocket.end, pocket.start, true);
+            ctx.closePath();
+            ctx.fill();
+
+            // Glowing red hazard boundary lip
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 3.5;
+            ctx.shadowColor = '#ef4444';
+            ctx.shadowBlur = 10;
+            ctx.beginPath();
+            ctx.arc(0, 0, r - 6, pocket.start, pocket.end);
+            ctx.stroke();
+
+            // Hazard warning tick chevrons
+            ctx.strokeStyle = '#f87171';
+            ctx.lineWidth = 2;
+            ctx.shadowBlur = 0;
+            const ticks = 4;
+            for (let t = 0; t <= ticks; t++) {
+              const ang = pocket.start + (t / ticks) * (pocket.end - pocket.start);
+              ctx.beginPath();
+              ctx.moveTo(Math.cos(ang) * (r - 6), Math.sin(ang) * (r - 6));
+              ctx.lineTo(Math.cos(ang) * (r + 14), Math.sin(ang) * (r + 14));
+              ctx.stroke();
+            }
+            ctx.restore();
+          }
+
+          // Center Stadium Typography - Hazard Mode
+          ctx.fillStyle = '#ef4444';
+          ctx.textAlign = 'center';
+          ctx.font = '700 12px monospace';
+          ctx.fillText('EB / HAZARD ⚠️', 0, 4);
+        } else {
+          // Perimeter Safety Energy Bars (Neon Blue P1 & Neon Crimson P2)
+          for (const [start, color] of [[Math.PI * .85, '#1676e8'], [-Math.PI * .15, '#ed583d']]) {
+            ctx.save();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 5;
+            ctx.shadowColor = color;
+            ctx.shadowBlur = 8;
+            ctx.beginPath(); ctx.arc(0, 0, r + 2, start, start + Math.PI * .3); ctx.stroke();
+            ctx.restore();
+          }
+
+          // 6. Center Stadium Typography
+          ctx.fillStyle = '#64748b';
+          ctx.textAlign = 'center';
+          ctx.font = '700 12px monospace'; ctx.fillText('EB / 01', 0, 4);
+        }
         ctx.restore();
         return;
       }
@@ -1662,8 +1880,16 @@
           this.applyScreenShake(5);
           this.statusMsg.textContent = translate('⚡ XTREME DASH!');
         };
-        this.playerTop.update(this.arenaCenterX, this.arenaCenterY, this.arenaRadius, handleXtreme);
-        this.enemyTop.update(this.arenaCenterX, this.arenaCenterY, this.arenaRadius, handleXtreme);
+        const handleRingOut = top => {
+          this.particles.emitSparks(top.x, top.y, '#ef4444', 32, 9);
+          this.applyScreenShake(8);
+          sfx.playRingOut();
+          if (typeof navigator !== 'undefined' && navigator.vibrate) {
+            try { navigator.vibrate([60, 80, 100]); } catch (_) {}
+          }
+        };
+        this.playerTop.update(this.arenaCenterX, this.arenaCenterY, this.arenaRadius, handleXtreme, this.isHazardMode, handleRingOut);
+        this.enemyTop.update(this.arenaCenterX, this.arenaCenterY, this.arenaRadius, handleXtreme, this.isHazardMode, handleRingOut);
         this.handleTopCollisions();
         this.updateHudBars();
         this.checkBattleOutcome();

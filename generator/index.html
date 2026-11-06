@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emoji Top Builder &amp; Stat Calculator - Emoji Blade</title>
+  <meta name="description" content="Calculate stats, mass, speed, endurance, attack and battle tier for any custom emoji top. Generate your build and launch into the arena.">
+  <link rel="canonical" href="https://emojiblade.online/generator/">
+  <link rel="alternate" hreflang="x-default" href="https://emojiblade.online/generator/">
+  <link rel="alternate" hreflang="en" href="https://emojiblade.online/generator/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://emojiblade.online/zh-hans/generator/">
+  <link rel="alternate" hreflang="zh-Hant" href="https://emojiblade.online/zh-hant/generator/">
+  <link rel="alternate" hreflang="ja" href="https://emojiblade.online/ja/generator/">
+  <link rel="stylesheet" href="/style.css?v=20261023-1">
+  <meta property="og:title" content="Emoji Top Builder &amp; Stat Calculator - Emoji Blade">
+  <meta property="og:description" content="Calculate stats, mass, speed, endurance, attack and battle tier for any custom emoji top. Generate your build and launch into the arena.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://emojiblade.online/generator/">
+  <meta property="og:image" content="https://emojiblade.online/social-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <style>
+    .gen-container {
+      max-width: 860px;
+      margin: 30px auto;
+      padding: 0 16px;
+    }
+    .gen-card {
+      background: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      border-radius: var(--radius-lg, 16px);
+      padding: 32px 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    .gen-input-row {
+      display: flex;
+      gap: 12px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    .gen-input {
+      flex: 1;
+      min-width: 200px;
+      background: rgba(16, 24, 40, 0.8);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 24px;
+      padding: 12px 18px;
+      text-align: center;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .gen-input:focus {
+      border-color: var(--accent-cyan);
+    }
+    .quick-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+      justify-content: center;
+    }
+    .quick-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: transform 0.15s, background 0.15s;
+    }
+    .quick-chip:hover {
+      transform: scale(1.15);
+      background: rgba(0, 240, 255, 0.15);
+      border-color: var(--accent-cyan);
+    }
+    .preview-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .spinning-top-preview {
+      font-size: 72px;
+      display: inline-block;
+      animation: spinPreview 4s linear infinite;
+      user-select: none;
+      margin-bottom: 12px;
+    }
+    @keyframes spinPreview {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .tier-pill {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 800;
+      padding: 4px 14px;
+      border-radius: 50px;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+    .tier-pill.tier-s { background: rgba(255, 71, 87, 0.2); color: #ff4757; border: 1px solid #ff4757; }
+    .tier-pill.tier-a { background: rgba(255, 165, 2, 0.2); color: #ffa502; border: 1px solid #ffa502; }
+    .tier-pill.tier-b { background: rgba(59, 130, 246, 0.2); color: #3b82f6; border: 1px solid #3b82f6; }
+    .tier-pill.tier-c { background: rgba(148, 163, 184, 0.2); color: #94a3b8; border: 1px solid #94a3b8; }
+    .stat-bars-container {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .stat-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .stat-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .stat-bar-track {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .stat-bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      transition: width 0.3s ease;
+    }
+    .fill-mass { background: linear-gradient(90deg, #3b82f6, #00f0ff); }
+    .fill-attack { background: linear-gradient(90deg, #ff4757, #ff6b81); }
+    .fill-speed { background: linear-gradient(90deg, #ffa502, #ffda79); }
+    .fill-endurance { background: linear-gradient(90deg, #2ed573, #7bed9f); }
+    .gen-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    .toast-notify {
+      display: none;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--accent-cyan);
+      text-align: center;
+    }
+  </style>
+  <link rel="stylesheet" href="/generator.css?v=20261106-1">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Emoji Top Builder & Stat Calculator",
+    "description": "Calculate stats, mass, speed, endurance, attack and battle tier for any custom emoji top. Generate your build and launch into the arena.",
+    "url": "https://emojiblade.online/generator/",
+    "applicationCategory": "GameApplication",
+    "operatingSystem": "Web browser",
+    "isAccessibleForFree": true
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-container">
+      <a href="/" class="brand-logo">
+        <span class="logo-emoji">🌀</span>
+        <div class="logo-text">
+          <span class="logo-title">EMOJI<span class="accent-text">BLADE</span></span>
+          <span class="logo-sub">STAT CALCULATOR</span>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="/" class="nav-link">Play Arena</a>
+        <a href="/tier-list/" class="nav-link">Tier List</a>
+        <a href="/characters/" class="nav-link">Characters</a>
+        <a href="/generator/" class="nav-link active">Builder Tool</a>
+        <a href="/guide/" class="nav-link">How to Play</a>
+        <a href="/2-player-duel/" class="nav-link">2 Players</a>
+        <a href="/unblocked/" class="nav-link" style="color: #10b981;">Browser Access</a>
+      </nav>
+      <div class="header-actions">
+        <a href="/" class="primary-glow-btn" style="padding: 6px 14px; font-size: 13px; text-decoration: none;">Play Now ↗</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="gen-container">
+    <article class="gen-card">
+      <span class="sub-badge">INTERACTIVE WORKSHOP</span>
+      <h1 style="font-size: 26px; margin: 8px 0 12px;">Emoji Top Builder &amp; Stat Calculator</h1>
+      <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6;">
+        Type or paste any Unicode character or emoji below. The official deterministic algorithm calculates your top's Mass, Attack, Speed, Endurance, and Battle Tier in real time.
+      </p>
+
+      <div class="gen-input-row">
+        <input type="text" id="calcEmojiInput" class="gen-input" value="🦄" maxlength="128" placeholder="Type or paste any emoji" aria-label="Input custom emoji top">
+      </div>
+
+      <div class="quick-chips">
+        <button type="button" class="quick-chip" data-emoji="🦄">🦄</button>
+        <button type="button" class="quick-chip" data-emoji="🤖">🤖</button>
+        <button type="button" class="quick-chip" data-emoji="🦁">🦁</button>
+        <button type="button" class="quick-chip" data-emoji="🍣">🍣</button>
+        <button type="button" class="quick-chip" data-emoji="🎮">🎮</button>
+        <button type="button" class="quick-chip" data-emoji="🪐">🪐</button>
+        <button type="button" class="quick-chip" data-emoji="👻">👻</button>
+        <button type="button" class="quick-chip" data-emoji="🎃">🎃</button>
+        <button type="button" class="quick-chip" data-emoji="🐱">🐱</button>
+        <button type="button" class="quick-chip" data-emoji="⚽️">⚽️</button>
+        <button type="button" class="quick-chip" data-emoji="🦖">🦖</button>
+        <button type="button" class="quick-chip" data-emoji="🌶️">🌶️</button>
+      </div>
+
+      <div class="preview-box">
+        <div class="spinning-top-preview" id="topAvatar">🦄</div>
+        <div id="topName" style="font-size: 18px; font-weight: 700; margin-bottom: 6px;">Custom 🦄</div>
+        <div id="tierPill" class="tier-pill tier-s">S-TIER RATING</div>
+
+        <div class="stat-bars-container">
+          <div class="stat-row">
+            <div class="stat-labels">
+              <span>Mass (Collision Weight)</span>
+              <strong id="massVal">85 / 100</strong>
+            </div>
+            <div class="stat-bar-track">
+              <div class="stat-bar-fill fill-mass" id="massBar" style="width: 85%;"></div>
+            </div>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-labels">
+              <span>Attack (Impact Force)</span>
+              <strong id="attackVal">82 / 100</strong>
+            </div>
+            <div class="stat-bar-track">
+              <div class="stat-bar-fill fill-attack" id="attackBar" style="width: 82%;"></div>
+            </div>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-labels">
+              <span>Speed (Velocity &amp; Spin)</span>
+              <strong id="speedVal">90 / 100</strong>
+            </div>
+            <div class="stat-bar-track">
+              <div class="stat-bar-fill fill-speed" id="speedBar" style="width: 90%;"></div>
+            </div>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-labels">
+              <span>Endurance (Stamina)</span>
+              <strong id="enduranceVal">88 / 100</strong>
+            </div>
+            <div class="stat-bar-track">
+              <div class="stat-bar-fill fill-endurance" id="enduranceBar" style="width: 88%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gen-actions">
+        <a id="launchArenaBtn" href="/?emoji=%F0%9F%A6%84" class="primary-glow-btn" style="text-decoration: none; padding: 12px 24px;">Battle with 🦄 in Arena 🚀</a>
+        <button type="button" id="copyShareBtn" class="secondary-btn" >📋 Copy Build Link</button>
+      </div>
+      <div id="toastNotify" class="toast-notify">Build link copied to clipboard!</div>
+
+      <section style="margin-top: 40px; border-top: 1px solid var(--bg-card-border); padding-top: 24px;">
+        <h2 style="font-size: 20px; margin-bottom: 12px;">How Custom Emoji Physics Work</h2>
+        <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6; margin-bottom: 12px;">
+          Emoji Blade utilizes a deterministic hash algorithm directly from the game engine. Every unique character or emoji produces a permanent, unchangeable stat profile across four core attributes:
+        </p>
+        <ul style="color: var(--text-muted); font-size: 14px; line-height: 1.8; margin-left: 20px; margin-bottom: 16px;">
+          <li><strong>Mass (Weight):</strong> Heavy tops absorb critical collision recoil and suffer less knockback when hit.</li>
+          <li><strong>Attack (Clash):</strong> Contributes directly to the energy drain inflicted upon the rival top during wall rebounds and direct impacts.</li>
+          <li><strong>Speed (Rating):</strong> Increases launch velocity, arena momentum, and visual spin speed.</li>
+          <li><strong>Endurance (Stamina):</strong> Reduces continuous passive energy dissipation as your top spins in the center bowl.</li>
+        </ul>
+        <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6;">
+          Looking for pre-tuned tournament champions? Check our <a href="/tier-list/" style="color: var(--accent-cyan);">Preset Tier List</a> or test specific matchups in the <a href="/vs/" style="color: var(--accent-cyan);">VS Matchup Center</a>.
+        </p>
+      </section>
+    </article>
+
+    <nav class="player-resource-links" aria-label="Page languages" style="margin-top: 20px;">
+      <a href="/generator/">English</a>
+      <a href="/zh-hans/generator/">简体中文</a>
+      <a href="/zh-hant/generator/">繁體中文</a>
+      <a href="/ja/generator/">日本語</a>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <div class="section-container footer-bottom">
+      <p>© 2026 Emoji Blade Online. All rights reserved. <a href="/" style="color:var(--accent-cyan);">Back to Game</a></p>
+    </div>
+  </footer>
+
+  <script src="/top-stats.js?v=20261106-1"></script>
+  <script src="/generator.js?v=20261106-1"></script>
+</body>
+</html>

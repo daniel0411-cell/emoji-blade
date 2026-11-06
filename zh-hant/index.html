@@ -123,6 +123,7 @@
         <a href="/zh-hant/" class="nav-link active">競技場</a>
         <a href="/zh-hant/tier-list/" class="nav-link">強度天梯榜</a>
         <a href="/zh-hant/characters/" class="nav-link">角色圖鑑</a>
+        <a href="/zh-hant/generator/" class="nav-link">工坊工具</a>
         <a href="/zh-hant/guide/" class="nav-link">玩法攻略</a>
         <a href="/zh-hant/unblocked/" class="nav-link" style="color: #10b981;">瀏覽器訪問</a>
       </nav>
@@ -242,6 +243,7 @@
                 <div class="modal-btn-row">
                   <button id="next-battle-btn" class="primary-glow-btn">下一關 ⚡</button>
                   <button id="share-card-btn" class="secondary-btn">📸 分享戰績卡</button>
+                  <button id="copy-challenge-btn" class="secondary-btn">⚔️ 挑戰鏈接</button>
                 </div>
               </div>
             </div>
@@ -362,6 +364,14 @@
                 <option value="custom">自定義對手</option>
               </select>
               <input type="text" id="custom-enemy-input" value="💎" maxlength="128" style="display:none;" title="自定義對手錶情" aria-label="自定義對手錶情">
+            </div>
+
+            <div class="rival-selector-row">
+              <label for="arena-hazard-select">擂台規則:</label>
+              <select id="arena-hazard-select">
+                <option value="standard">標準全彈力場（無出界）</option>
+                <option value="hazard">危險脫出袋（出界絕殺 ⚠️）</option>
+              </select>
             </div>
 
             <!-- Sliders for Launch -->
@@ -491,7 +501,7 @@
     <section class="content-section player-info-section" aria-label="繼續探索">
       <div class="section-container">
         <div class="player-info-grid"><article class="player-info-card" data-index="01"><h2>怎麼玩 Emoji Blade</h2><p>選擇表情陀螺，設定發射角度和力道，或在場內向後拉動陀螺並鬆開發射。讓對手先耗盡旋轉能量即可獲勝。場地邊緣會反彈，不存在出界獲勝。</p></article><article class="player-info-card" data-index="02"><h2>屬性與暴擊</h2><p>重量影響碰撞響應和傷害，攻擊影響對手能量損失，速度影響初始移動和旋轉動畫，耐力減少持續能量消耗。暴擊傷害為雙方各承受 1.5 倍。外環造型不改變碰撞形狀。</p></article><article class="player-info-card" data-index="03"><h2>單人和本地雙人</h2><p>單人關卡模式每五關遇到 Boss。本地雙人由玩家一先設定發射引數，再由玩家二設定，隨後同時發射；雙人對戰不計入單人連勝和徽章。</p></article></div>
-        <nav class="player-resource-links" aria-label="繼續探索"><a href="/zh-hant/characters/">角色屬性</a><a href="/zh-hant/guide/">發射指南</a><a href="/zh-hant/2-player-duel/">本地雙人指南</a><a href="/zh-hant/faq/">常見問題</a><a href="/zh-hant/spinning-top-simulator/">模擬器介紹</a><a href="/zh-hant/vs/">對決比較</a></nav>
+        <nav class="player-resource-links" aria-label="繼續探索"><a href="/zh-hant/characters/">角色屬性</a><a href="/zh-hant/generator/">自訂陀螺計算器</a><a href="/zh-hant/guide/">發射指南</a><a href="/zh-hant/2-player-duel/">本地雙人指南</a><a href="/zh-hant/faq/">常見問題</a><a href="/zh-hant/spinning-top-simulator/">模擬器介紹</a><a href="/zh-hant/vs/">對決比較</a></nav>
       </div>
     </section>
   </main>
@@ -500,11 +510,12 @@
   <footer class="site-footer">
     <div class="section-container footer-inner">
       <div class="footer-brand"><span class="logo-emoji" aria-hidden="true">🌀</span><strong>Emoji Blade</strong><p>免費的瀏覽器表情陀螺對戰遊戲，無需下載或註冊。</p><small class="disclaimer">獨立作品，與 Beyblade 品牌及其權利方無關聯，也未獲其背書。</small></div>
-      <nav class="footer-links-group" aria-label="繼續探索"><div class="footer-col"><strong>玩法與模式</strong><a href="/zh-hant/">進入競技場</a><a href="/zh-hant/?mode=2p">本地雙人對戰</a><a href="/zh-hant/unblocked/">瀏覽器訪問說明</a></div><div class="footer-col"><strong>指南與圖鑑</strong><a href="/zh-hant/characters/">角色屬性</a><a href="/zh-hant/guide/">發射指南</a><a href="/zh-hant/faq/">常見問題</a><a href="/zh-hant/spinning-top-simulator/">模擬器介紹</a></div><div class="footer-col"><strong>法律與聯絡</strong><p class="support-language-note">以下支援頁面目前僅提供英文。</p><a href="/about/">關於遊戲</a><a href="/contact/">聯絡與回饋</a><a href="/privacy/">隱私政策</a><a href="/terms/">服務條款</a><a href="/embed/">嵌入遊戲</a></div><div class="footer-col"><strong>語言</strong><a href="/">English</a><a href="/zh-hans/">简体中文</a><a href="/zh-hant/">繁體中文</a><a href="/ja/">日本語</a></div></nav>
+      <nav class="footer-links-group" aria-label="繼續探索"><div class="footer-col"><strong>玩法與模式</strong><a href="/zh-hant/">進入競技場</a><a href="/zh-hant/?mode=2p">本地雙人對戰</a><a href="/zh-hant/unblocked/">瀏覽器訪問說明</a></div><div class="footer-col"><strong>指南與圖鑑</strong><a href="/zh-hant/characters/">角色屬性</a><a href="/zh-hant/generator/">戰力計算器</a><a href="/zh-hant/guide/">發射指南</a><a href="/zh-hant/faq/">常見問題</a><a href="/zh-hant/spinning-top-simulator/">模擬器介紹</a></div><div class="footer-col"><strong>法律與聯絡</strong><p class="support-language-note">以下支援頁面目前僅提供英文。</p><a href="/about/">關於遊戲</a><a href="/contact/">聯絡與回饋</a><a href="/privacy/">隱私政策</a><a href="/terms/">服務條款</a><a href="/embed/">嵌入遊戲</a></div><div class="footer-col"><strong>語言</strong><a href="/">English</a><a href="/zh-hans/">简体中文</a><a href="/zh-hant/">繁體中文</a><a href="/ja/">日本語</a></div></nav>
     </div>
     <div class="footer-bottom"><p>© 2026 Emoji Blade</p></div>
   </footer>
 
-  <script src="/game.js?v=20261029-2"></script>
+  <script src="/top-stats.js?v=20261106-1"></script>
+  <script src="/game.js?v=20261106-1"></script>
 </body>
 </html>

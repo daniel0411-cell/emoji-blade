@@ -120,6 +120,7 @@
         <a href="/" class="nav-link active">Play Arena</a>
         <a href="/tier-list/" class="nav-link">Tier List</a>
         <a href="/characters/" class="nav-link">Characters</a>
+        <a href="/generator/" class="nav-link">Top Builder</a>
         <a href="/guide/" class="nav-link">How to Play</a>
         <a href="/unblocked/" class="nav-link" style="color: #059669; font-weight: 700;">Unblocked ⚡</a>
       </nav>
@@ -239,6 +240,7 @@
                 <div class="modal-btn-row">
                   <button id="next-battle-btn" class="primary-glow-btn">Next Stage ⚡</button>
                   <button id="share-card-btn" class="secondary-btn">📸 Share Card</button>
+                  <button id="copy-challenge-btn" class="secondary-btn">⚔️ Challenge Link</button>
                 </div>
               </div>
             </div>
@@ -359,6 +361,14 @@
                 <option value="custom">Custom Challenger</option>
               </select>
               <input type="text" id="custom-enemy-input" value="💎" maxlength="128" style="display:none;" title="Custom rival emoji">
+            </div>
+
+            <div class="rival-selector-row">
+              <label for="arena-hazard-select">Arena Hazard:</label>
+              <select id="arena-hazard-select">
+                <option value="standard">Standard (Rebound Walls)</option>
+                <option value="hazard">Hazard Pockets (Over Finish ⚠️)</option>
+              </select>
             </div>
 
             <!-- Sliders for Launch -->
@@ -489,7 +499,7 @@
     <section class="content-section player-info-section" aria-label="Explore the game">
       <div class="section-container">
         <div class="player-info-grid"><article class="player-info-card" data-index="01"><h2>How to play Emoji Blade</h2><p>Choose an emoji top, set launch angle and power, or pull backward from your top in the arena and release. Win when the rival runs out of energy first. Walls rebound the tops; there are no ring-out wins.</p></article><article class="player-info-card" data-index="02"><h2>Stats and critical clashes</h2><p>Mass affects collision response and damage, attack contributes to damage, speed affects launch velocity and the spin animation, and endurance reduces passive energy drain. Critical clashes apply 1.5x damage to both tops. Ring artwork does not change collision geometry.</p></article><article class="player-info-card" data-index="03"><h2>Solo and local two-player modes</h2><p>Progression includes a Boss every fifth stage. Local players choose launches in turn, then both tops launch together. Local duels do not affect solo streaks or trophies.</p></article></div>
-        <nav class="player-resource-links" aria-label="Explore the game"><a href="/characters/">Character ratings</a><a href="/guide/">Launch guide</a><a href="/2-player-duel/">Local 2-player duel</a><a href="/faq/">FAQ</a><a href="/spinning-top-simulator/">Simulator overview</a><a href="/vs/">Matchup comparisons</a></nav>
+        <nav class="player-resource-links" aria-label="Explore the game"><a href="/characters/">Character ratings</a><a href="/generator/">Custom top calculator</a><a href="/guide/">Launch guide</a><a href="/2-player-duel/">Local 2-player duel</a><a href="/faq/">FAQ</a><a href="/spinning-top-simulator/">Simulator overview</a><a href="/vs/">Matchup comparisons</a></nav>
       </div>
     </section>
   </main>
@@ -498,11 +508,12 @@
   <footer class="site-footer">
     <div class="section-container footer-inner">
       <div class="footer-brand"><span class="logo-emoji" aria-hidden="true">🌀</span><strong>Emoji Blade</strong><p>A free browser emoji spinning-top game. No download or registration required.</p><small class="disclaimer">Independent game; not affiliated with or endorsed by Beyblade or its rights holders.</small></div>
-      <nav class="footer-links-group" aria-label="Explore the game"><div class="footer-col"><strong>Play & modes</strong><a href="/">Play the arena</a><a href="/?mode=2p">Play a local duel</a><a href="/unblocked/">Browser access</a></div><div class="footer-col"><strong>Guides & info</strong><a href="/characters/">Character ratings</a><a href="/guide/">Launch guide</a><a href="/faq/">FAQ</a><a href="/spinning-top-simulator/">Simulator overview</a></div><div class="footer-col"><strong>Legal & support</strong><a href="/about/">About</a><a href="/contact/">Contact</a><a href="/privacy/">Privacy policy</a><a href="/terms/">Terms of service</a><a href="/embed/">Embed the game</a></div><div class="footer-col"><strong>Languages</strong><a href="/">English</a><a href="/zh-hans/">简体中文</a><a href="/zh-hant/">繁體中文</a><a href="/ja/">日本語</a></div></nav>
+      <nav class="footer-links-group" aria-label="Explore the game"><div class="footer-col"><strong>Play & modes</strong><a href="/">Play the arena</a><a href="/?mode=2p">Play a local duel</a><a href="/unblocked/">Browser access</a></div><div class="footer-col"><strong>Guides & info</strong><a href="/characters/">Character ratings</a><a href="/generator/">Custom top calculator</a><a href="/guide/">Launch guide</a><a href="/faq/">FAQ</a><a href="/spinning-top-simulator/">Simulator overview</a></div><div class="footer-col"><strong>Legal & support</strong><a href="/about/">About</a><a href="/contact/">Contact</a><a href="/privacy/">Privacy policy</a><a href="/terms/">Terms of service</a><a href="/embed/">Embed the game</a></div><div class="footer-col"><strong>Languages</strong><a href="/">English</a><a href="/zh-hans/">简体中文</a><a href="/zh-hant/">繁體中文</a><a href="/ja/">日本語</a></div></nav>
     </div>
     <div class="footer-bottom"><p>© 2026 Emoji Blade</p></div>
   </footer>
 
-  <script src="/game.js?v=20261029-2"></script>
+  <script src="/top-stats.js?v=20261106-1"></script>
+  <script src="/game.js?v=20261106-1"></script>
 </body>
 </html>

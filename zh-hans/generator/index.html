@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emoji 陀螺属性与战力计算器 - Emoji Blade</title>
+  <meta name="description" content="输入任意 Emoji 计算专属重量、攻击、速度、耐力与战斗评级。生成你的自定义表情陀螺并一键进入竞技场对战。">
+  <link rel="canonical" href="https://emojiblade.online/zh-hans/generator/">
+  <link rel="alternate" hreflang="x-default" href="https://emojiblade.online/generator/">
+  <link rel="alternate" hreflang="en" href="https://emojiblade.online/generator/">
+  <link rel="alternate" hreflang="zh-Hans" href="https://emojiblade.online/zh-hans/generator/">
+  <link rel="alternate" hreflang="zh-Hant" href="https://emojiblade.online/zh-hant/generator/">
+  <link rel="alternate" hreflang="ja" href="https://emojiblade.online/ja/generator/">
+  <link rel="stylesheet" href="/style.css?v=20261023-1">
+  <meta property="og:title" content="Emoji 陀螺属性与战力计算器 - Emoji Blade">
+  <meta property="og:description" content="输入任意 Emoji 计算专属重量、攻击、速度、耐力与战斗评级。生成你的自定义表情陀螺并一键进入竞技场对战。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://emojiblade.online/zh-hans/generator/">
+  <meta property="og:image" content="https://emojiblade.online/social-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <style>
+    .gen-container {
+      max-width: 860px;
+      margin: 30px auto;
+      padding: 0 16px;
+    }
+    .gen-card {
+      background: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      border-radius: var(--radius-lg, 16px);
+      padding: 32px 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    .gen-input-row {
+      display: flex;
+      gap: 12px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    .gen-input {
+      flex: 1;
+      min-width: 200px;
+      background: rgba(16, 24, 40, 0.8);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 24px;
+      padding: 12px 18px;
+      text-align: center;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .gen-input:focus {
+      border-color: var(--accent-cyan);
+    }
+    .quick-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+      justify-content: center;
+    }
+    .quick-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 20px;
+      cursor: pointer;
+      transition: transform 0.15s, background 0.15s;
+    }
+    .quick-chip:hover {
+      transform: scale(1.15);
+      background: rgba(0, 240, 255, 0.15);
+      border-color: var(--accent-cyan);
+    }
+    .preview-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .spinning-top-preview {
+      font-size: 72px;
+      display: inline-block;
+      animation: spinPreview 4s linear infinite;
+      user-select: none;
+      margin-bottom: 12px;
+    }
+    @keyframes spinPreview {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .tier-pill {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 800;
+      padding: 4px 14px;
+      border-radius: 50px;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+    .tier-pill.tier-s { background: rgba(255, 71, 87, 0.2); color: #ff4757; border: 1px solid #ff4757; }
+    .tier-pill.tier-a { background: rgba(255, 165, 2, 0.2); color: #ffa502; border: 1px solid #ffa502; }
+    .tier-pill.tier-b { background: rgba(59, 130, 246, 0.2); color: #3b82f6; border: 1px solid #3b82f6; }
+    .tier-pill.tier-c { background: rgba(148, 163, 184, 0.2); color: #94a3b8; border: 1px solid #94a3b8; }
+    .stat-bars-container {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .stat-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .stat-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .stat-bar-track {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .stat-bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      transition: width 0.3s ease;
+    }
+    .fill-mass { background: linear-gradient(90deg, #3b82f6, #00f0ff); }
+    .fill-attack { background: linear-gradient(90deg, #ff4757, #ff6b81); }
+    .fill-speed { background: linear-gradient(90deg, #ffa502, #ffda79); }
+    .fill-endurance { background: linear-gradient(90deg, #2ed573, #7bed9f); }
+    .gen-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    .toast-notify {
+      display: none;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--accent-cyan);
+      text-align: center;
+    }
+  </style>
+  <link rel="stylesheet" href="/generator.css?v=20261106-1">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Emoji 陀螺属性与战力计算器",
+    "description": "输入任意 Emoji 计算专属重量、攻击、速度、耐力与战斗评级。生成你的自定义表情陀螺并一键进入竞技场对战。",
+    "url": "https://emojiblade.online/zh-hans/generator/",
+    "inLanguage": "zh-Hans"
+  }
+  </script>
+</head>
+<body>
+  <header class="site-header localized-content-header">
+    <div class="header-container">
+      <a class="brand-logo" href="/zh-hans/"><span class="logo-title">EMOJI<span class="accent-text">BLADE</span></span></a>
+      <nav class="nav-links">
+        <a class="nav-link" href="/zh-hans/characters/">角色图鉴</a>
+        <a class="nav-link" href="/zh-hans/guide/">玩法指南</a>
+        <a class="nav-link" href="/zh-hans/faq/">常见问题</a>
+        <a class="nav-link" href="/zh-hans/2-player-duel/">本地双人对战</a>
+        <a class="nav-link" href="/zh-hans/spinning-top-simulator/">陀螺模拟器</a>
+        <a class="nav-link" href="/zh-hans/tier-list/">预设强度榜</a>
+        <a class="nav-link" href="/zh-hans/unblocked/">浏览器访问说明</a>
+      </nav>
+      <div class="lang-switch-links">
+        <a href="/generator/">English</a>
+        <a href="/zh-hans/generator/">简体中文</a>
+        <a href="/zh-hant/generator/">繁體中文</a>
+        <a href="/ja/generator/">日本語</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="gen-container">
+    <article class="gen-card">
+      <span class="sub-badge">互动工坊</span>
+      <h1 style="font-size: 26px; margin: 8px 0 12px;">Emoji 陀螺属性与战力计算器</h1>
+      <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6;">
+        输入或粘贴任意 Unicode Emoji 字符，内置算法将实时计算其四维碰撞属性（重量、攻击、速度、耐力）与综合战斗评级。
+      </p>
+
+      <div class="gen-input-row">
+        <input type="text" id="calcEmojiInput" class="gen-input" value="🦄" maxlength="128" placeholder="输入或粘贴任意 Emoji" aria-label="输入自定义表情陀螺">
+      </div>
+
+      <div class="quick-chips">
+        <button type="button" class="quick-chip" data-emoji="🦄">🦄</button>
+        <button type="button" class="quick-chip" data-emoji="🤖">🤖</button>
+        <button type="button" class="quick-chip" data-emoji="🦁">🦁</button>
+        <button type="button" class="quick-chip" data-emoji="🍣">🍣</button>
+        <button type="button" class="quick-chip" data-emoji="🎮">🎮</button>
+        <button type="button" class="quick-chip" data-emoji="🪐">🪐</button>
+        <button type="button" class="quick-chip" data-emoji="👻">👻</button>
+        <button type="button" class="quick-chip" data-emoji="🎃">🎃</button>
+        <button type="button" class="quick-chip" data-emoji="🐱">🐱</button>
+        <button type="button" class="quick-chip" data-emoji="⚽️">⚽️</button>
+        <button type="button" class="quick-chip" data-emoji="🦖">🦖</button>
+        <button type="button" class="quick-chip" data-emoji="🌶️">🌶️</button>
+      </div>
+
+      <div class="preview-box">
+        <div class="spinning-top-preview" id="topAvatar">🦄</div>
+        <div id="topName" style="font-size: 18px; font-weight: 700; margin-bottom: 6px;">自定义 🦄</div>
+        <div id="tierPill" class="tier-pill tier-s">S 级综合评定</div>
+
+        <div class="stat-bars-container">
+          <div class="stat-row">
+            <div class="stat-labels">
+              <span>重量 Mass（防反弹与减伤）</span>
+              <strong id="massVal">85 / 100</strong>
+            </div>
+            <div class="stat-bar-track">
+              <div class="stat-bar-fill fill-mass" id="massBar" style="width: 85%;"></div>
+            </div>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-labels">
+              <span>攻击 Attack（碰撞伤害输出）</span>
+              <strong id="attackVal">82 / 100</strong>
+            </div>
+            <div class="stat-bar-track">
+              <div class="stat-bar-fill fill-attack" id="attackBar" style="width: 82%;"></div>
+            </div>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-labels">
+              <span>速度 Speed（发射初速与转速）</span>
+              <strong id="speedVal">90 / 100</strong>
+            </div>
+            <div class="stat-bar-track">
+              <div class="stat-bar-fill fill-speed" id="speedBar" style="width: 90%;"></div>
+            </div>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-labels">
+              <span>耐力 Endurance（抗自然摩擦衰减）</span>
+              <strong id="enduranceVal">88 / 100</strong>
+            </div>
+            <div class="stat-bar-track">
+              <div class="stat-bar-fill fill-endurance" id="enduranceBar" style="width: 88%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gen-actions">
+        <a id="launchArenaBtn" href="/zh-hans/?emoji=%F0%9F%A6%84" class="primary-glow-btn" style="text-decoration: none; padding: 12px 24px;">带着 🦄 进入竞技场 🚀</a>
+        <button type="button" id="copyShareBtn" class="secondary-btn" >📋 复制配置链接</button>
+      </div>
+      <div id="toastNotify" class="toast-notify">配置链接已复制到剪贴板！</div>
+
+      <section style="margin-top: 40px; border-top: 1px solid var(--bg-card-border); padding-top: 24px;">
+        <h2 style="font-size: 20px; margin-bottom: 12px;">四维物理属性说明</h2>
+        <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6; margin-bottom: 12px;">
+          Emoji Blade 使用游戏引擎的原生哈希算法，保证每一个字符生成的属性完全固定、不可作弊：
+        </p>
+        <ul style="color: var(--text-muted); font-size: 14px; line-height: 1.8; margin-left: 20px; margin-bottom: 16px;">
+          <li><strong>重量 Mass：</strong>重型陀螺在发生猛烈碰撞时更不易被撞飞，可大幅降低受到致命冲撞时的硬直。</li>
+          <li><strong>攻击 Attack：</strong>决定直接撞击对手时所消耗对方的能量上限。</li>
+          <li><strong>速度 Speed：</strong>决定发射出膛时的移动速度与旋转动量。</li>
+          <li><strong>耐力 Endurance：</strong>决定空转时的基础能耗衰减速度，耐力越高转得越久。</li>
+        </ul>
+        <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6;">
+          查看默认角色属性请访问 <a href="/zh-hans/characters/" style="color: var(--accent-cyan);">角色图鉴</a> 或查看 <a href="/zh-hans/tier-list/" style="color: var(--accent-cyan);">预设强度榜</a>。
+        </p>
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="section-container footer-bottom">
+      <p>© 2026 Emoji Blade Online. 保留所有权利。<a href="/zh-hans/" style="color:var(--accent-cyan);">返回游戏</a></p>
+    </div>
+  </footer>
+
+  <script src="/top-stats.js?v=20261106-1"></script>
+  <script src="/generator.js?v=20261106-1"></script>
+</body>
+</html>

@@ -727,7 +727,16 @@ canvas#battleCanvas {
 
 .modal-btn-row {
   display: flex;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.modal-btn-row .primary-glow-btn {
+  flex: 1 1 100%;
+}
+
+.modal-btn-row .secondary-btn {
+  flex: 1 1 140px;
 }
 
 .primary-glow-btn {
