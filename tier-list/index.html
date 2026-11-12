@@ -24,26 +24,6 @@
   }
   </script>
   <link rel="stylesheet" href="/style.css?v=20261023-1">
-  <style>
-    .tier-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 24px 0;
-      font-size: 14px;
-    }
-    .tier-table th, .tier-table td {
-      padding: 12px 14px;
-      text-align: left;
-      border-bottom: 1px solid var(--bg-card-border);
-    }
-    .tier-table th {
-      background: rgba(0, 0, 0, 0.4);
-      color: var(--accent-cyan);
-    }
-    .tier-badge-s { color: #ff4757; font-weight: 800; }
-    .tier-badge-a { color: #ffa502; font-weight: 800; }
-    .tier-badge-b { color: #3b82f6; font-weight: 800; }
-  </style>
   <link rel="alternate" hreflang="x-default" href="https://emojiblade.online/tier-list/">
   <link rel="alternate" hreflang="en" href="https://emojiblade.online/tier-list/">
   <link rel="alternate" hreflang="zh-Hans" href="https://emojiblade.online/zh-hans/tier-list/">
@@ -90,6 +70,7 @@
         <li><strong>🗿 Moai (Immovable Fortress):</strong> With 100 Mass, Moai is resistant to collision damage. Its 52 Speed gives it lower initial launch velocity. <a href="/characters/moai/">View Moai Stats ↗</a></li>
         <li><strong>⚡ Lightning (RPM Shredder):</strong> 99 Speed increases launch velocity. Critical hits use the same rule for every top. <a href="/characters/lightning/">View Lightning Stats ↗</a></li>
         <li><strong>👑 Crown (Royal All-Rounder):</strong> 86 Mass and Speed, with 88 Attack and Endurance, provide a balanced set of ratings.</li>
+        <li><strong>🐉 Dragon:</strong> 96 Attack and 90 Speed, with 92 Mass; its 84 Endurance is lower than Crown's. <a href="/characters/dragon/">View Dragon Stats ↗</a></li>
       </ul>
 
       <h2>The A-Tier (Aggressive Strikers)</h2>
@@ -101,78 +82,51 @@
         <li><strong>💣 Bomb (Kinetic Detonator):</strong> 98 Attack contributes to collision damage; its 65 Endurance is lower than Diamond's. <a href="/characters/bomb/">View Bomb Stats ↗</a></li>
         <li><strong>🚀 Rocket (Linear Missile):</strong> High straight-line velocity, useful for high-speed opening collisions. <a href="/characters/rocket/">View Rocket Stats ↗</a></li>
         <li><strong>🥊 Boxing Glove (Brawler Strike):</strong> 84 Mass, 91 Attack, 82 Speed and 76 Endurance.</li>
+        <li><strong>💀 Skull:</strong> 94 Attack and 84 Speed, with 74 Mass and 70 Endurance.</li>
+        <li><strong>👾 Invader:</strong> 90 Speed and 86 Attack; these are base ratings, without stage Boss bonuses. <a href="/characters/invader/">View Invader Stats ↗</a></li>
       </ul>
 
-      <h2>Attribute Comparison Matrix</h2>
-      <table class="tier-table">
-        <thead>
-          <tr>
-            <th>Emoji</th>
-            <th>Tier</th>
-            <th>Mass (Weight)</th>
-            <th>Attack</th>
-            <th>Speed (Rating)</th>
-            <th>Stamina</th>
-            <th>Stat Trade-Off</th>
-          </tr>
-        </thead>
+      <h2>The B-Tier Presets and Boss Label</h2>
+      <p>Clown, Pizza, Tornado and Avocado carry B labels. This does not mean every rating is below an A or S preset: Tornado has 94 Speed and 94 Endurance, while Pizza has 86 Endurance. Oni carries a BOSS label and has 110 base Mass; selecting Oni yourself does not apply progression Boss bonuses.</p>
+
+      <h2 id="preset-ratings">All 16 Presets: Base Ratings</h2>
+      <p>These are game ratings, not grams, measured RPM or win percentages. Stage Boss bonuses are excluded.</p>
+      <div class="stats-table-scroll" tabindex="0" role="region" aria-label="All preset ratings">
+      <table class="character-stats-table">
+        <caption>Character links select a top in the arena. S, A, B and BOSS are preset labels.</caption>
+        <thead><tr><th scope="col">Character</th><th scope="col">Tier</th><th scope="col">Mass</th><th scope="col">Attack</th><th scope="col">Speed</th><th scope="col">Endurance</th></tr></thead>
         <tbody>
-          <tr>
-            <td>💎 Diamond</td>
-            <td><span class="tier-badge-s">S</span></td>
-            <td>96</td>
-            <td>72</td>
-            <td>65</td>
-            <td>98</td>
-            <td>High mass and endurance; lower speed</td>
-          </tr>
-          <tr>
-            <td>🗿 Moai</td>
-            <td><span class="tier-badge-s">S</span></td>
-            <td>100</td>
-            <td>68</td>
-            <td>52</td>
-            <td>100</td>
-            <td>100 endurance; 52 speed</td>
-          </tr>
-          <tr>
-            <td>⚡ Lightning</td>
-            <td><span class="tier-badge-s">S</span></td>
-            <td>60</td>
-            <td>88</td>
-            <td>99</td>
-            <td>74</td>
-            <td>99 speed; 60 mass</td>
-          </tr>
-          <tr>
-            <td>🔥 Fire</td>
-            <td><span class="tier-badge-a">A</span></td>
-            <td>76</td>
-            <td>95</td>
-            <td>88</td>
-            <td>68</td>
-            <td>95 attack; 68 endurance</td>
-          </tr>
-          <tr>
-            <td>💣 Bomb</td>
-            <td><span class="tier-badge-a">A</span></td>
-            <td>90</td>
-            <td>98</td>
-            <td>70</td>
-            <td>65</td>
-            <td>98 attack; 65 endurance</td>
-          </tr>
-          <tr>
-            <td>🤡 Clown</td>
-            <td><span class="tier-badge-b">B</span></td>
-            <td>70</td>
-            <td>76</td>
-            <td>84</td>
-            <td>82</td>
-            <td>Moderate attack; 82 endurance</td>
-          </tr>
+<tr data-preset="🔥"><th scope="row"><a href="/?emoji=%F0%9F%94%A5">🔥 Fire</a></th><td>A</td><td>76</td><td>95</td><td>88</td><td>68</td></tr>
+<tr data-preset="💣"><th scope="row"><a href="/?emoji=%F0%9F%92%A3">💣 Bomb</a></th><td>A</td><td>90</td><td>98</td><td>70</td><td>65</td></tr>
+<tr data-preset="⚡"><th scope="row"><a href="/?emoji=%E2%9A%A1">⚡ Lightning</a></th><td>S</td><td>60</td><td>88</td><td>99</td><td>74</td></tr>
+<tr data-preset="💎"><th scope="row"><a href="/?emoji=%F0%9F%92%8E">💎 Diamond</a></th><td>S</td><td>96</td><td>72</td><td>65</td><td>98</td></tr>
+<tr data-preset="🚀"><th scope="row"><a href="/?emoji=%F0%9F%9A%80">🚀 Rocket</a></th><td>A</td><td>78</td><td>92</td><td>96</td><td>64</td></tr>
+<tr data-preset="🥊"><th scope="row"><a href="/?emoji=%F0%9F%A5%8A">🥊 Boxing Glove</a></th><td>A</td><td>84</td><td>91</td><td>82</td><td>76</td></tr>
+<tr data-preset="🤡"><th scope="row"><a href="/?emoji=%F0%9F%A4%A1">🤡 Clown</a></th><td>B</td><td>70</td><td>76</td><td>84</td><td>82</td></tr>
+<tr data-preset="💀"><th scope="row"><a href="/?emoji=%F0%9F%92%80">💀 Skull</a></th><td>A</td><td>74</td><td>94</td><td>84</td><td>70</td></tr>
+<tr data-preset="🗿"><th scope="row"><a href="/?emoji=%F0%9F%97%BF">🗿 Moai</a></th><td>S</td><td>100</td><td>68</td><td>52</td><td>100</td></tr>
+<tr data-preset="🍕"><th scope="row"><a href="/?emoji=%F0%9F%8D%95">🍕 Pizza</a></th><td>B</td><td>74</td><td>70</td><td>78</td><td>86</td></tr>
+<tr data-preset="👑"><th scope="row"><a href="/?emoji=%F0%9F%91%91">👑 Crown</a></th><td>S</td><td>86</td><td>88</td><td>86</td><td>88</td></tr>
+<tr data-preset="🌪️"><th scope="row"><a href="/?emoji=%F0%9F%8C%AA%EF%B8%8F">🌪️ Tornado</a></th><td>B</td><td>65</td><td>78</td><td>94</td><td>94</td></tr>
+<tr data-preset="🥑"><th scope="row"><a href="/?emoji=%F0%9F%A5%91">🥑 Avocado</a></th><td>B</td><td>75</td><td>68</td><td>75</td><td>82</td></tr>
+<tr data-preset="👾"><th scope="row"><a href="/?emoji=%F0%9F%91%BE">👾 Invader</a></th><td>A</td><td>72</td><td>86</td><td>90</td><td>78</td></tr>
+<tr data-preset="👹"><th scope="row"><a href="/?emoji=%F0%9F%91%B9">👹 Oni</a></th><td>BOSS</td><td>110</td><td>100</td><td>75</td><td>90</td></tr>
+<tr data-preset="🐉"><th scope="row"><a href="/?emoji=%F0%9F%90%89">🐉 Dragon</a></th><td>S</td><td>92</td><td>96</td><td>90</td><td>84</td></tr>
         </tbody>
       </table>
+      </div>
+
+      <section id="choose-by-goal">
+        <h2>Which Top Should You Choose?</h2>
+        <p>Pick the behavior you want to investigate, then compare both tops before a local duel. These pairs are starting points for testing, not proven winning builds.</p>
+        <ul>
+          <li><strong>Lower passive energy loss:</strong> Moai has 100 Endurance and 52 Speed; Diamond has 98 and 65. Endurance does not directly reduce collision damage. <a class="comparison-link" href="/generator/?emoji=%F0%9F%97%BF&amp;rival=%F0%9F%92%8E">Compare Moai and Diamond</a>.</li>
+          <li><strong>Faster launch:</strong> Lightning has 99 Speed and 60 Mass; Rocket has 96 and 78. More speed does not guarantee control in Hazard. <a class="comparison-link" href="/generator/?emoji=%E2%9A%A1&amp;rival=%F0%9F%9A%80">Compare Lightning and Rocket</a>.</li>
+          <li><strong>Higher attack:</strong> Bomb has 98 Attack and 70 Speed; Fire has 95 and 88. Attack contributes to collision damage, not collision impulse. <a class="comparison-link" href="/generator/?emoji=%F0%9F%92%A3&amp;rival=%F0%9F%94%A5">Compare Bomb and Fire</a>.</li>
+          <li><strong>Broad ratings:</strong> Crown ranges from 86 to 88 across all four ratings. Dragon offers more Mass, Attack and Speed, but less Endurance. <a class="comparison-link" href="/generator/?emoji=%F0%9F%91%91&amp;rival=%F0%9F%90%89">Compare Crown and Dragon</a>.</li>
+        </ul>
+        <p>Keep arena, power and angles fixed, repeat rounds, then change one setting. Random criticals and Hazard ring-outs can change the outcome. See <a href="/guide/stats/">how ratings work</a>, <a href="/guide/launch-power-angle/">launch experiments</a> and <a href="/guide/boss-streak/">stage Boss bonuses</a>.</p>
+      </section>
 
       <h2>Stat Trade-Offs, Not Guaranteed Counters</h2>
       <p>There is no elemental or rock-paper-scissors counter system. Mass affects collision response and damage received, attack contributes to collision damage, speed affects launch velocity, and endurance reduces passive energy drain. Cosmetic armor does not change collision geometry.</p>

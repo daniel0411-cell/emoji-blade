@@ -303,7 +303,7 @@ assert.equal(invaderBoss.stats.mass, 97);
 assert.equal(invaderBoss.stats.attack, 108);
 console.log('PASS: four-language expansion ratings, all twelve matchup launch links, stage 10 Boss ratings');
 console.log('PASS: 48 result-button cases across languages, modes and outcomes; stage and streak preservation');
-for (const locale of ['zh-hans', 'zh-hant', 'ja']) {
+for (const locale of ['', 'zh-hans', 'zh-hant', 'ja']) {
   for (const route of ['characters', 'tier-list']) {
     const html = fs.readFileSync(path.join(__dirname, '..', locale, route, 'index.html'), 'utf8');
     const rows = [...html.matchAll(/<tr data-preset="([^"]+)">.*?<td>([^<]+)<\/td><td>(\d+)<\/td><td>(\d+)<\/td><td>(\d+)<\/td><td>(\d+)<\/td><\/tr>/g)];
@@ -315,10 +315,12 @@ for (const locale of ['zh-hans', 'zh-hant', 'ja']) {
       assert.deepEqual(numbers.map(Number), [stats.mass, stats.attack, stats.speed, stats.endurance]);
     }
   }
-  const faq = fs.readFileSync(path.join(__dirname, '..', locale, 'faq', 'index.html'), 'utf8');
-  for (const number of ['28%', '7.5', '1.5', '110', '149', '35%', '25%']) assert.ok(faq.includes(number));
+  if (locale) {
+    const faq = fs.readFileSync(path.join(__dirname, '..', locale, 'faq', 'index.html'), 'utf8');
+    for (const number of ['28%', '7.5', '1.5', '110', '149', '35%', '25%']) assert.ok(faq.includes(number));
+  }
 }
-console.log('PASS: localized character/tier tables and FAQ numeric mechanics');
+console.log('PASS: four-language character/tier tables and localized FAQ numeric mechanics');
 (async () => {
   const embedSource = fs.readFileSync(path.join(__dirname, '..', 'embed.js'), 'utf8');
   for (const result of ['success', 'denied', 'missing']) {
