@@ -3,19 +3,19 @@
   <!-- Core Home & Multilingual -->
   <url>
     <loc>https://emojiblade.online/</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-12</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://emojiblade.online/zh-hans/</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-12</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://emojiblade.online/ja/</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-12</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
@@ -97,7 +97,7 @@
   <!-- Compliance & Support -->
   <url>
     <loc>https://emojiblade.online/about/</loc>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-11-12</lastmod>
     <priority>0.5</priority>
   </url>
   <url>
@@ -150,18 +150,18 @@
   <url><loc>https://emojiblade.online/ja/characters/bomb/</loc><lastmod>2026-11-12</lastmod></url>
   <url><loc>https://emojiblade.online/ja/characters/moai/</loc><lastmod>2026-11-12</lastmod></url>
   <url><loc>https://emojiblade.online/ja/characters/oni/</loc><lastmod>2026-11-12</lastmod></url>
-  <url><loc>https://emojiblade.online/ja/vs/diamond-vs-bomb/</loc><lastmod>2026-11-10</lastmod></url>
-  <url><loc>https://emojiblade.online/ja/vs/fire-vs-diamond/</loc><lastmod>2026-11-10</lastmod></url>
+  <url><loc>https://emojiblade.online/ja/vs/diamond-vs-bomb/</loc><lastmod>2026-11-12</lastmod></url>
+  <url><loc>https://emojiblade.online/ja/vs/fire-vs-diamond/</loc><lastmod>2026-11-12</lastmod></url>
   <url><loc>https://emojiblade.online/ja/vs/</loc><lastmod>2026-11-10</lastmod></url>
-  <url><loc>https://emojiblade.online/ja/vs/lightning-vs-fire/</loc><lastmod>2026-11-10</lastmod></url>
-  <url><loc>https://emojiblade.online/ja/vs/lightning-vs-moai/</loc><lastmod>2026-11-10</lastmod></url>
-  <url><loc>https://emojiblade.online/ja/vs/moai-vs-diamond/</loc><lastmod>2026-11-10</lastmod></url>
-  <url><loc>https://emojiblade.online/vs/diamond-vs-bomb/</loc><lastmod>2026-11-10</lastmod></url>
-  <url><loc>https://emojiblade.online/vs/fire-vs-diamond/</loc><lastmod>2026-11-10</lastmod></url>
+  <url><loc>https://emojiblade.online/ja/vs/lightning-vs-fire/</loc><lastmod>2026-11-12</lastmod></url>
+  <url><loc>https://emojiblade.online/ja/vs/lightning-vs-moai/</loc><lastmod>2026-11-12</lastmod></url>
+  <url><loc>https://emojiblade.online/ja/vs/moai-vs-diamond/</loc><lastmod>2026-11-12</lastmod></url>
+  <url><loc>https://emojiblade.online/vs/diamond-vs-bomb/</loc><lastmod>2026-11-12</lastmod></url>
+  <url><loc>https://emojiblade.online/vs/fire-vs-diamond/</loc><lastmod>2026-11-12</lastmod></url>
   <url><loc>https://emojiblade.online/vs/</loc><lastmod>2026-11-10</lastmod></url>
-  <url><loc>https://emojiblade.online/vs/lightning-vs-fire/</loc><lastmod>2026-11-10</lastmod></url>
-  <url><loc>https://emojiblade.online/vs/lightning-vs-moai/</loc><lastmod>2026-11-10</lastmod></url>
-  <url><loc>https://emojiblade.online/vs/moai-vs-diamond/</loc><lastmod>2026-11-10</lastmod></url>
+  <url><loc>https://emojiblade.online/vs/lightning-vs-fire/</loc><lastmod>2026-11-12</lastmod></url>
+  <url><loc>https://emojiblade.online/vs/lightning-vs-moai/</loc><lastmod>2026-11-12</lastmod></url>
+  <url><loc>https://emojiblade.online/vs/moai-vs-diamond/</loc><lastmod>2026-11-12</lastmod></url>
   <url><loc>https://emojiblade.online/zh-hans/characters/crown/</loc><lastmod>2026-11-10</lastmod></url>
   <url><loc>https://emojiblade.online/zh-hans/characters/diamond/</loc><lastmod>2026-11-12</lastmod></url>
   <url><loc>https://emojiblade.online/zh-hans/characters/dragon/</loc><lastmod>2026-11-10</lastmod></url>
@@ -171,17 +171,17 @@
   <url><loc>https://emojiblade.online/zh-hans/characters/bomb/</loc><lastmod>2026-11-12</lastmod></url>
   <url><loc>https://emojiblade.online/zh-hans/characters/moai/</loc><lastmod>2026-11-12</lastmod></url>
   <url><loc>https://emojiblade.online/zh-hans/characters/oni/</loc><lastmod>2026-11-12</lastmod></url>
-  <url><loc>https://emojiblade.online/zh-hans/vs/diamond-vs-bomb/</loc><lastmod>2026-11-10</lastmod></url>
-  <url><loc>https://emojiblade.online/zh-hans/vs/fire-vs-diamond/</loc><lastmod>2026-11-10</lastmod></url>
+  <url><loc>https://emojiblade.online/zh-hans/vs/diamond-vs-bomb/</loc><lastmod>2026-11-12</lastmod></url>
+  <url><loc>https://emojiblade.online/zh-hans/vs/fire-vs-diamond/</loc><lastmod>2026-11-12</lastmod></url>
   <url><loc>https://emojiblade.online/zh-hans/vs/</loc><lastmod>2026-11-10</lastmod></url>
-  <url><loc>https://emojiblade.online/zh-hans/vs/lightning-vs-fire/</loc><lastmod>2026-11-10</lastmod></url>
-  <url><loc>https://emojiblade.online/zh-hans/vs/lightning-vs-moai/</loc><lastmod>2026-11-10</lastmod></url>
-  <url><loc>https://emojiblade.online/zh-hans/vs/moai-vs-diamond/</loc><lastmod>2026-11-10</lastmod></url>
+  <url><loc>https://emojiblade.online/zh-hans/vs/lightning-vs-fire/</loc><lastmod>2026-11-12</lastmod></url>
+  <url><loc>https://emojiblade.online/zh-hans/vs/lightning-vs-moai/</loc><lastmod>2026-11-12</lastmod></url>
+  <url><loc>https://emojiblade.online/zh-hans/vs/moai-vs-diamond/</loc><lastmod>2026-11-12</lastmod></url>
 
   <!-- Traditional Chinese (zh-Hant) -->
   <url>
     <loc>https://emojiblade.online/zh-hant/</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -295,31 +295,31 @@
   </url>
   <url>
     <loc>https://emojiblade.online/zh-hant/vs/diamond-vs-bomb/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://emojiblade.online/zh-hant/vs/fire-vs-diamond/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://emojiblade.online/zh-hant/vs/lightning-vs-fire/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://emojiblade.online/zh-hant/vs/lightning-vs-moai/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://emojiblade.online/zh-hant/vs/moai-vs-diamond/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
