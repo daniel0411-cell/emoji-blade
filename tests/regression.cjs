@@ -207,7 +207,7 @@ context.document.documentElement.lang = 'en';
 for (const [slug, emoji] of Object.entries({ fire: '🔥', bomb: '💣', lightning: '⚡', diamond: '💎', moai: '🗿', rocket: '🚀', skull: '💀', clown: '🤡', pizza: '🍕', tornado: '🌪️' })) {
   const html = fs.readFileSync(path.join(__dirname, '..', 'characters', slug, 'index.html'), 'utf8');
   const stats = computeEmojiStats(emoji);
-  const printed = [...html.matchAll(/<strong>(\d+) \/ 100<\/strong>/g)].map(m => Number(m[1]));
+  const printed = [...html.matchAll(/<strong>(\d+)(?: \/ 100)?<\/strong>/g)].map(m => Number(m[1]));
   assert.deepEqual(printed, [stats.mass, stats.attack, stats.speed, stats.endurance], `${slug} content must match engine`);
 }
 // These published FAQ numbers must be revised if the underlying presets change.
