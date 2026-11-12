@@ -23,7 +23,7 @@
     "inLanguage": "en"
   }
   </script>
-  <link rel="stylesheet" href="/style.css?v=20261023-1">
+  <link rel="stylesheet" href="/style.css?v=20261112-1">
   <link rel="alternate" hreflang="x-default" href="https://emojiblade.online/guide/">
   <link rel="alternate" hreflang="en" href="https://emojiblade.online/guide/">
   <link rel="alternate" hreflang="zh-Hans" href="https://emojiblade.online/zh-hans/guide/">
@@ -56,7 +56,7 @@
   <main class="prose-container">
     <article class="prose-card">
       <span class="sub-badge">TACTICAL ACADEMY</span>
-      <h1>How to Play Emoji Blade: Rules, Controls & Physics</h1>
+      <h1>How to Play Emoji Blade: Rules, Controls & Physics</h1><nav class="guide-directory" aria-label="Find a guide"><h2>Find a guide</h2><section><h3>Launch & controls</h3><ul><li><a href="/guide/launch-power-angle/">Launch power & angle</a></li><li><a href="/guide/dash-critical/">Dash & critical clashes</a></li><li><a href="/2-player-duel/">Local two-player setup</a></li></ul></section><section><h3>Ratings & custom tops</h3><ul><li><a href="/guide/stats/">Mass, attack, speed & endurance</a></li><li><a href="/guide/custom-share/">Custom emoji & shared links</a></li></ul></section><section><h3>Arena rules</h3><ul><li><a href="/guide/hazard-arena/">Hazard pockets & Xtreme rails</a></li></ul></section><section><h3>Progress & saved records</h3><ul><li><a href="/guide/boss-streak/">Boss battles, streaks & saves</a></li></ul></section></nav>
       <p>
         Emoji Blade transforms Unicode characters into spinning tops with dimensional artwork and simplified 2D physics. The objective is simple: <strong>outspin your opponent by depleting their energy</strong>.
       </p>
@@ -83,19 +83,12 @@
       <ul>
         <li><strong>Mass (Weight):</strong> Determines momentum resistance. Heavier tops suffer less recoil when hit, reducing energy loss from collisions.</li>
         <li><strong>Attack:</strong> Contributes to energy damage dealt on direct collision.</li>
-        <li><strong>Speed (Rating):</strong> Affects rotational frequency. Speed also affects launch velocity. Critical hits depend on relative collision speed and a random chance.</li>
+        <li><strong>Speed (Rating):</strong> Affects rotational frequency. Speed also affects launch velocity. Critical hits also depend on Dash, Xtreme boosts, relative collision speed and a random chance.</li>
         <li><strong>Endurance (Stamina):</strong> Governs how slowly your top loses energy over time.</li>
       </ul>
 
-      <h2>3. Landing Critical Clashes (1.5x Damage)</h2>
-      <p>
-        On a closing collision, a <strong>Critical Clash</strong> occurs with a 28% random chance or when relative collision speed exceeds 7.5. It triggers:
-      </p>
-      <ul>
-        <li>1.5x collision damage to both tops;</li>
-        <li>Golden spark shockwaves and severe arena screen shake;</li>
-        <li>Critical hits do not increase the collision impulse; the multiplier affects damage.</li>
-      </ul>
+      <h2>3. Critical Clashes: 1.5x and Xtreme 1.8x</h2>
+      <p>A closing collision is critical during Dash, with a 28% random chance, or above 7.5 relative speed in simulation units. Ordinary critical damage is 1.5x for both tops; an active Xtreme rail boost raises it to 1.8x. These multipliers affect damage, not collision impulse.</p>
 
       <h2>4. Stage Bosses & 2P Local Mode</h2>
       <p>
@@ -107,7 +100,7 @@
       <div style="text-align: center; margin-top: 40px;">
         <a href="/" class="primary-glow-btn" style="text-decoration: none; padding: 14px 28px; display: inline-block;">Launch Your Emoji Top Now 🚀</a>
       </div>
-    <p>Share a device? See the <a href="/2-player-duel/">local two-player duel guide</a> and open the arena with both players ready to configure.</p><section><h2>Mass versus speed: change one variable</h2><p>Mass affects collision response and damage received; speed affects launch movement and visual rotation. Compare Diamond (96 mass, 65 speed) and Lightning (60 mass, 99 speed) under recorded launch settings. They also differ in attack and endurance, so this comparison cannot isolate mass alone or establish a universal best ratio.</p></section><section><h2>Endurance and passive energy drain</h2><p>Passive drain per 60 Hz simulation step is 0.048 + (100 − endurance) × 0.00055. Moai at 100 endurance loses 0.048 energy per step; Fire at 68 loses 0.0656. This excludes collision losses, so it does not predict total survival time. More endurance reduces passive drain, not incoming damage.</p></section><section><h2>Boss and streak checklist</h2><p>The first stage 5 Oni has mass 149 and attack 125; the first stage 10 Invader has mass 97 and attack 108. Only solo progression wins advance the stage and streak. A draw preserves both; a loss resets the current streak but stays on the stage. Local and custom practice do not replace the boosted encounters.</p></section><p><a href="/vs/">Compare preset matchups</a></p></article>
+    <p>Share a device? See the <a href="/2-player-duel/">local two-player duel guide</a> and open the arena with both players ready to configure.</p><section><h2>Mass versus speed: change one variable</h2><p>Mass affects collision response and damage received; speed affects launch movement and visual rotation. Compare Diamond (96 mass, 65 speed) and Lightning (60 mass, 99 speed) under recorded launch settings. They also differ in attack and endurance, so this comparison cannot isolate mass alone or establish a universal best ratio.</p></section><section><h2>Endurance and passive energy drain</h2><p>Passive drain per 60 Hz simulation step is 0.048 + (100 − endurance) × 0.00055. Moai at 100 endurance loses 0.048 energy per step; Fire at 68 loses 0.0656. This excludes collision losses, so it does not predict total survival time. More endurance reduces passive drain, not incoming damage.</p></section><section><h2>Boss and streak checklist</h2><p>The first stage 5 Oni has mass 149 and attack 125; the first stage 10 Invader has mass 97 and attack 108. Only solo progression wins advance the stage and streak. A draw preserves both; a loss resets the current streak but stays on the stage. Local and custom practice do not replace the boosted encounters.</p></section><p><a href="/vs/">Compare preset matchups</a></p><section><h2>Arena modes and Xtreme rails</h2><p>Standard arena walls rebound the tops. In Hazard mode, the left and right pockets can cause a ring-out loss when a top exits at sufficient speed or during Dash or an Xtreme boost; slow pocket contacts rebound.</p><p>The upper and lower rails can grant a short Xtreme speed boost when a spinning top has more than 8 energy and its rail cooldown is ready. The boost spends 3 energy and makes closing collisions deal 1.8x damage to both tops. In Hazard mode, the extra speed also increases the risk of exiting a side pocket.</p></section></article>
   <nav class="section-container player-resource-links" aria-label="Page languages"><a href="/guide/">English</a><a href="/zh-hans/guide/">简体中文</a><a href="/zh-hant/guide/">繁體中文</a><a href="/ja/guide/">日本語</a></nav>
 </main>
 

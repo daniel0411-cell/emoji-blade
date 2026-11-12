@@ -117,6 +117,7 @@ for file in pages:
         assert p.canonicals == [expected], (file, p.canonicals)
         content_route = route.removeprefix('zh-hans/').removeprefix('zh-hant/').removeprefix('ja/')
         expanded_routes = {'vs', 'vs/diamond-vs-bomb', 'vs/lightning-vs-moai', 'vs/fire-vs-diamond',
+                           'guide/launch-power-angle', 'guide/stats', 'guide/hazard-arena', 'guide/boss-streak', 'guide/dash-critical', 'guide/custom-share',
                            'vs/lightning-vs-fire', 'vs/moai-vs-diamond',
                            'characters/crown', 'characters/dragon', 'characters/oni', 'characters/invader',
                            'characters/lightning', 'characters/diamond', 'characters/fire', 'characters/bomb', 'characters/moai'}

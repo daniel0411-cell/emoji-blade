@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>絵文字コマ性能・ステータス計算機 - Emoji Blade</title>
-  <meta name="description" content="任意の絵文字を入力して重量・攻撃力・速度・持久力・Tierをリアルタイム計算。オリジナルコマを作成してアリーナで対戦。">
+  <title>絵文字コマのステータス計算・比較 - Emoji Blade</title>
+  <meta name="description" content="2つの絵文字コマの重量・攻撃・速度・持久力を計算して比較。カスタム絵文字や比較リンクの共有に対応し、両方のコマを選んでローカル2人対戦へ進めます。">
   <link rel="canonical" href="https://emojiblade.online/ja/generator/">
   <link rel="alternate" hreflang="x-default" href="https://emojiblade.online/generator/">
   <link rel="alternate" hreflang="en" href="https://emojiblade.online/generator/">
@@ -12,8 +12,8 @@
   <link rel="alternate" hreflang="zh-Hant" href="https://emojiblade.online/zh-hant/generator/">
   <link rel="alternate" hreflang="ja" href="https://emojiblade.online/ja/generator/">
   <link rel="stylesheet" href="/style.css?v=20261023-1">
-  <meta property="og:title" content="絵文字コマ性能・ステータス計算機 - Emoji Blade">
-  <meta property="og:description" content="任意の絵文字を入力して重量・攻撃力・速度・持久力・Tierをリアルタイム計算。オリジナルコマを作成してアリーナで対戦。">
+  <meta property="og:title" content="絵文字コマのステータス計算・比較 - Emoji Blade">
+  <meta property="og:description" content="2つの絵文字コマの重量・攻撃・速度・持久力を計算して比較。カスタム絵文字や比較リンクの共有に対応し、両方のコマを選んでローカル2人対戦へ進めます。">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://emojiblade.online/ja/generator/">
   <meta property="og:image" content="https://emojiblade.online/social-card.png">
@@ -155,13 +155,13 @@
       text-align: center;
     }
   </style>
-  <link rel="stylesheet" href="/generator.css?v=20261106-1">
+  <link rel="stylesheet" href="/generator.css?v=20261110-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "絵文字コマ性能・ステータス計算機",
-    "description": "任意の絵文字を入力して重量・攻撃力・速度・持久力・Tierをリアルタイム計算。オリジナルコマを作成してアリーナで対戦。",
+    "name": "絵文字コマのステータス計算・比較",
+    "description": "2つの絵文字コマの重量・攻撃・速度・持久力を計算して比較。カスタム絵文字や比較リンクの共有に対応し、両方のコマを選んでローカル2人対戦へ進めます。",
     "url": "https://emojiblade.online/ja/generator/",
     "inLanguage": "ja"
   }
@@ -192,11 +192,17 @@
   <main class="gen-container">
     <article class="gen-card">
       <span class="sub-badge">カスタム工房</span>
-      <h1 style="font-size: 26px; margin: 8px 0 12px;">絵文字コマ性能・ステータス計算機</h1>
+      <h1 style="font-size: 26px; margin: 8px 0 12px;">絵文字コマのステータス計算・比較</h1>
       <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6;">
         任意の Unicode 絵文字を入力すると、ゲーム内エンジンと同じ計算式で重量・攻撃力・速度・持久力と総合Tierをリアルタイムに算出します。
       </p>
 
+      <div class="gen-toolbar">
+        <label class="compare-switch"><input type="checkbox" id="compareToggle" aria-controls="rivalPicker comparePanel">2つのコマを比較</label>
+        <button type="button" id="swapTopsBtn" class="gen-swap" title="コマを入れ替える" aria-label="コマを入れ替える" hidden>⇄</button>
+      </div>
+      <div class="gen-pickers" id="genPickers">
+        <fieldset class="gen-picker"><legend>プレイヤー1</legend>
       <div class="gen-input-row">
         <input type="text" id="calcEmojiInput" class="gen-input" value="🦄" maxlength="128" placeholder="絵文字を入力または貼り付け" aria-label="カスタム絵文字コマを入力">
       </div>
@@ -215,77 +221,91 @@
         <button type="button" class="quick-chip" data-emoji="🦖">🦖</button>
         <button type="button" class="quick-chip" data-emoji="🌶️">🌶️</button>
       </div>
+        </fieldset>
+        <fieldset class="gen-picker" id="rivalPicker" hidden><legend>プレイヤー2</legend>
+          <div class="gen-input-row"><input type="text" id="rivalEmojiInput" class="gen-input" value="💎" maxlength="128" placeholder="絵文字を入力・貼り付け" aria-label="プレイヤー2"></div>
+          <div class="quick-chips"><button type="button" class="quick-chip" data-emoji="💎">💎</button><button type="button" class="quick-chip" data-emoji="🗿">🗿</button><button type="button" class="quick-chip" data-emoji="⚡">⚡</button><button type="button" class="quick-chip" data-emoji="🔥">🔥</button><button type="button" class="quick-chip" data-emoji="💣">💣</button><button type="button" class="quick-chip" data-emoji="👹">👹</button></div>
+        </fieldset>
+      </div>
 
-      <div class="preview-box">
+      <div class="preview-box" id="singlePreview">
         <div class="spinning-top-preview" id="topAvatar">🦄</div>
         <div id="topName" style="font-size: 18px; font-weight: 700; margin-bottom: 6px;">カスタム 🦄</div>
-        <div id="tierPill" class="tier-pill tier-s">S ランク総合評価</div>
+        <div id="tierPill" class="tier-pill tier-b">B ランク</div>
 
         <div class="stat-bars-container">
           <div class="stat-row">
             <div class="stat-labels">
               <span>重量 Mass（反動吸収・ノックバック軽減）</span>
-              <strong id="massVal">85 / 100</strong>
+              <strong id="massVal">86 / 100</strong>
             </div>
             <div class="stat-bar-track">
-              <div class="stat-bar-fill fill-mass" id="massBar" style="width: 85%;"></div>
+              <div class="stat-bar-fill fill-mass" id="massBar" style="width: 86%;"></div>
             </div>
           </div>
 
           <div class="stat-row">
             <div class="stat-labels">
               <span>攻撃 Attack（衝突時のエネルギー削り）</span>
-              <strong id="attackVal">82 / 100</strong>
+              <strong id="attackVal">60 / 100</strong>
             </div>
             <div class="stat-bar-track">
-              <div class="stat-bar-fill fill-attack" id="attackBar" style="width: 82%;"></div>
+              <div class="stat-bar-fill fill-attack" id="attackBar" style="width: 60%;"></div>
             </div>
           </div>
 
           <div class="stat-row">
             <div class="stat-labels">
               <span>速度 Speed（射出初速と回転速度）</span>
-              <strong id="speedVal">90 / 100</strong>
+              <strong id="speedVal">60 / 100</strong>
             </div>
             <div class="stat-bar-track">
-              <div class="stat-bar-fill fill-speed" id="speedBar" style="width: 90%;"></div>
+              <div class="stat-bar-fill fill-speed" id="speedBar" style="width: 60%;"></div>
             </div>
           </div>
 
           <div class="stat-row">
             <div class="stat-labels">
               <span>持久力 Endurance（自然減衰への耐性）</span>
-              <strong id="enduranceVal">88 / 100</strong>
+              <strong id="enduranceVal">90 / 100</strong>
             </div>
             <div class="stat-bar-track">
-              <div class="stat-bar-fill fill-endurance" id="enduranceBar" style="width: 88%;"></div>
+              <div class="stat-bar-fill fill-endurance" id="enduranceBar" style="width: 90%;"></div>
             </div>
           </div>
         </div>
       </div>
 
+      <section id="comparePanel" hidden aria-label="2つのコマを比較">
+        <table class="comparison-table">
+          <caption>ゲームの基本評価であり、実測勝率ではありません。ステージボスの追加補正は含まず、高い値でも勝利は保証されません。</caption>
+          <thead><tr><th scope="col">2つのコマを比較</th><th scope="col">プレイヤー1<span class="compare-avatar" id="compare-left-avatar"></span><span class="compare-name" id="compare-left-name"></span><span class="tier-pill" id="compare-left-tier"></span></th><th scope="col">プレイヤー2<span class="compare-avatar" id="compare-right-avatar"></span><span class="compare-name" id="compare-right-name"></span><span class="tier-pill" id="compare-right-tier"></span></th></tr></thead>
+          <tbody><tr><th scope="row">重量</th><td><strong id="compare-mass-left"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-mass-left-bar"></span></div></td><td><strong id="compare-mass-right"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-mass-right-bar"></span></div></td></tr><tr><th scope="row">攻撃</th><td><strong id="compare-attack-left"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-attack-left-bar"></span></div></td><td><strong id="compare-attack-right"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-attack-right-bar"></span></div></td></tr><tr><th scope="row">速度</th><td><strong id="compare-speed-left"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-speed-left-bar"></span></div></td><td><strong id="compare-speed-right"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-speed-right-bar"></span></div></td></tr><tr><th scope="row">持久力</th><td><strong id="compare-endurance-left"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-endurance-left-bar"></span></div></td><td><strong id="compare-endurance-right"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-endurance-right-bar"></span></div></td></tr></tbody>
+        </table>
+      </section>
+
       <div class="gen-actions">
         <a id="launchArenaBtn" href="/ja/?emoji=%F0%9F%A6%84" class="primary-glow-btn" style="text-decoration: none; padding: 12px 24px;">🦄 でアリーナに出撃 🚀</a>
-        <button type="button" id="copyShareBtn" class="secondary-btn" >📋 構成リンクをコピー</button>
+        <button type="button" id="copyShareBtn" class="secondary-btn" ><span aria-hidden="true">📋</span> <span id="copyShareLabel">構成リンクをコピー</span></button>
       </div>
       <div id="toastNotify" class="toast-notify">リンクをクリップボードにコピーしました！</div>
 
       <section style="margin-top: 40px; border-top: 1px solid var(--bg-card-border); padding-top: 24px;">
         <h2 style="font-size: 20px; margin-bottom: 12px;">物理ステータスの役割</h2>
         <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6; margin-bottom: 12px;">
-          Emoji Blade は決定論的ハッシュアルゴリズムを採用しており、各文字や絵文字のステータスは不変で固定されています：
+          既知のプリセットにはゲームの評価表を使い、それ以外は正規化した文字の決定論的ハッシュで計算します。現在のゲームバージョンでは同じ入力から同じ値が得られます。数値はグラムや実測 RPM ではなく、100を超える場合もあります。ランクは勝率を保証せず、ステージボスの追加補正も含みません。
         </p>
         <ul style="color: var(--text-muted); font-size: 14px; line-height: 1.8; margin-left: 20px; margin-bottom: 16px;">
-          <li><strong>重量 Mass：</strong>重いコマは激しい衝突でも弾かれにくく、クリティカル衝突の反動を吸収します。</li>
-          <li><strong>攻撃 Attack：</strong>相手コマに直撃した際のエネルギー消費量に直結します。</li>
-          <li><strong>速度 Speed：</strong>シュート時の初速と回転アニメーション速度を向上させます。</li>
-          <li><strong>持久力 Endurance：</strong>アリーナ中央で回り続ける際のエネルギー消費を抑えます。</li>
+          <li><strong>重量 Mass：</strong> 重量は衝突時の動きと受ける衝突ダメージに影響します。ヒットストップの長さは減りません。</li>
+          <li><strong>攻撃 Attack：</strong> 攻撃はコマ同士の衝突で相手が失うエネルギーに影響し、壁での反射ダメージは増やしません。</li>
+          <li><strong>速度 Speed：</strong> 速度は初速と回転アニメーションに影響し、完全な角運動量の再現ではありません。</li>
+          <li><strong>持久力 Endurance：</strong> 持久力は時間経過のエネルギー消費を減らしますが、衝突ダメージは減らしません。</li>
         </ul>
         <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6;">
-          公式プリセットの性能は <a href="/ja/characters/" style="color: var(--accent-cyan);">コマ一覧</a> や <a href="/ja/tier-list/" style="color: var(--accent-cyan);">プリセットTier表</a> で確認できます。
+          ゲーム内プリセットの性能は <a href="/ja/characters/" style="color: var(--accent-cyan);">コマ一覧</a> や <a href="/ja/tier-list/" style="color: var(--accent-cyan);">プリセットTier表</a> で確認できます。
         </p>
       </section>
-    </article>
+    <p><a href="/ja/guide/custom-share/">カスタム絵文字と共有リンクのトラブル対処</a></p></article>
   </main>
 
   <footer class="site-footer">
@@ -295,6 +315,6 @@
   </footer>
 
   <script src="/top-stats.js?v=20261106-1"></script>
-  <script src="/generator.js?v=20261106-1"></script>
+  <script src="/generator.js?v=20261110-1"></script>
 </body>
 </html>

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Emoji 陀螺屬性與戰力計算器 - Emoji Blade</title>
-  <meta name="description" content="輸入任意 Emoji 計算專屬重量、攻擊、速度、耐力與戰鬥評級。生成你的自訂表情陀螺並一鍵進入競技場對決。">
+  <title>Emoji 陀螺屬性計算與對比 - Emoji Blade</title>
+  <meta name="description" content="計算並對比兩個表情陀螺的重量、攻擊、速度與持久力。支援自訂表情、分享對比連結，並一鍵選擇雙方進入本地雙人對戰。">
   <link rel="canonical" href="https://emojiblade.online/zh-hant/generator/">
   <link rel="alternate" hreflang="x-default" href="https://emojiblade.online/generator/">
   <link rel="alternate" hreflang="en" href="https://emojiblade.online/generator/">
@@ -12,8 +12,8 @@
   <link rel="alternate" hreflang="zh-Hant" href="https://emojiblade.online/zh-hant/generator/">
   <link rel="alternate" hreflang="ja" href="https://emojiblade.online/ja/generator/">
   <link rel="stylesheet" href="/style.css?v=20261023-1">
-  <meta property="og:title" content="Emoji 陀螺屬性與戰力計算器 - Emoji Blade">
-  <meta property="og:description" content="輸入任意 Emoji 計算專屬重量、攻擊、速度、耐力與戰鬥評級。生成你的自訂表情陀螺並一鍵進入競技場對決。">
+  <meta property="og:title" content="Emoji 陀螺屬性計算與對比 - Emoji Blade">
+  <meta property="og:description" content="計算並對比兩個表情陀螺的重量、攻擊、速度與持久力。支援自訂表情、分享對比連結，並一鍵選擇雙方進入本地雙人對戰。">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://emojiblade.online/zh-hant/generator/">
   <meta property="og:image" content="https://emojiblade.online/social-card.png">
@@ -155,13 +155,13 @@
       text-align: center;
     }
   </style>
-  <link rel="stylesheet" href="/generator.css?v=20261106-1">
+  <link rel="stylesheet" href="/generator.css?v=20261110-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Emoji 陀螺屬性與戰力計算器",
-    "description": "輸入任意 Emoji 計算專屬重量、攻擊、速度、耐力與戰鬥評級。生成你的自訂表情陀螺並一鍵進入競技場對決。",
+    "name": "Emoji 陀螺屬性計算與對比",
+    "description": "計算並對比兩個表情陀螺的重量、攻擊、速度與持久力。支援自訂表情、分享對比連結，並一鍵選擇雙方進入本地雙人對戰。",
     "url": "https://emojiblade.online/zh-hant/generator/",
     "inLanguage": "zh-Hant"
   }
@@ -192,11 +192,17 @@
   <main class="gen-container">
     <article class="gen-card">
       <span class="sub-badge">互動工坊</span>
-      <h1 style="font-size: 26px; margin: 8px 0 12px;">Emoji 陀螺屬性與戰力計算器</h1>
+      <h1 style="font-size: 26px; margin: 8px 0 12px;">Emoji 陀螺屬性計算與對比</h1>
       <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6;">
         輸入或貼上任意 Unicode Emoji 字元，內建演算法將即時計算其四維碰撞屬性（重量、攻擊、速度、耐力）與綜合戰鬥評級。
       </p>
 
+      <div class="gen-toolbar">
+        <label class="compare-switch"><input type="checkbox" id="compareToggle" aria-controls="rivalPicker comparePanel">對比兩個陀螺</label>
+        <button type="button" id="swapTopsBtn" class="gen-swap" title="交換雙方" aria-label="交換雙方" hidden>⇄</button>
+      </div>
+      <div class="gen-pickers" id="genPickers">
+        <fieldset class="gen-picker"><legend>玩家一</legend>
       <div class="gen-input-row">
         <input type="text" id="calcEmojiInput" class="gen-input" value="🦄" maxlength="128" placeholder="輸入或貼上任意 Emoji" aria-label="輸入自訂表情陀螺">
       </div>
@@ -215,77 +221,91 @@
         <button type="button" class="quick-chip" data-emoji="🦖">🦖</button>
         <button type="button" class="quick-chip" data-emoji="🌶️">🌶️</button>
       </div>
+        </fieldset>
+        <fieldset class="gen-picker" id="rivalPicker" hidden><legend>玩家二</legend>
+          <div class="gen-input-row"><input type="text" id="rivalEmojiInput" class="gen-input" value="💎" maxlength="128" placeholder="輸入或貼上表情" aria-label="玩家二"></div>
+          <div class="quick-chips"><button type="button" class="quick-chip" data-emoji="💎">💎</button><button type="button" class="quick-chip" data-emoji="🗿">🗿</button><button type="button" class="quick-chip" data-emoji="⚡">⚡</button><button type="button" class="quick-chip" data-emoji="🔥">🔥</button><button type="button" class="quick-chip" data-emoji="💣">💣</button><button type="button" class="quick-chip" data-emoji="👹">👹</button></div>
+        </fieldset>
+      </div>
 
-      <div class="preview-box">
+      <div class="preview-box" id="singlePreview">
         <div class="spinning-top-preview" id="topAvatar">🦄</div>
         <div id="topName" style="font-size: 18px; font-weight: 700; margin-bottom: 6px;">自訂 🦄</div>
-        <div id="tierPill" class="tier-pill tier-s">S 級綜合評定</div>
+        <div id="tierPill" class="tier-pill tier-b">B 級</div>
 
         <div class="stat-bars-container">
           <div class="stat-row">
             <div class="stat-labels">
               <span>重量 Mass（防反彈與減傷）</span>
-              <strong id="massVal">85 / 100</strong>
+              <strong id="massVal">86 / 100</strong>
             </div>
             <div class="stat-bar-track">
-              <div class="stat-bar-fill fill-mass" id="massBar" style="width: 85%;"></div>
+              <div class="stat-bar-fill fill-mass" id="massBar" style="width: 86%;"></div>
             </div>
           </div>
 
           <div class="stat-row">
             <div class="stat-labels">
               <span>攻擊 Attack（碰撞傷害輸出）</span>
-              <strong id="attackVal">82 / 100</strong>
+              <strong id="attackVal">60 / 100</strong>
             </div>
             <div class="stat-bar-track">
-              <div class="stat-bar-fill fill-attack" id="attackBar" style="width: 82%;"></div>
+              <div class="stat-bar-fill fill-attack" id="attackBar" style="width: 60%;"></div>
             </div>
           </div>
 
           <div class="stat-row">
             <div class="stat-labels">
               <span>速度 Speed（發射初速與轉速）</span>
-              <strong id="speedVal">90 / 100</strong>
+              <strong id="speedVal">60 / 100</strong>
             </div>
             <div class="stat-bar-track">
-              <div class="stat-bar-fill fill-speed" id="speedBar" style="width: 90%;"></div>
+              <div class="stat-bar-fill fill-speed" id="speedBar" style="width: 60%;"></div>
             </div>
           </div>
 
           <div class="stat-row">
             <div class="stat-labels">
               <span>耐力 Endurance（抗自然摩擦衰減）</span>
-              <strong id="enduranceVal">88 / 100</strong>
+              <strong id="enduranceVal">90 / 100</strong>
             </div>
             <div class="stat-bar-track">
-              <div class="stat-bar-fill fill-endurance" id="enduranceBar" style="width: 88%;"></div>
+              <div class="stat-bar-fill fill-endurance" id="enduranceBar" style="width: 90%;"></div>
             </div>
           </div>
         </div>
       </div>
 
+      <section id="comparePanel" hidden aria-label="對比兩個陀螺">
+        <table class="comparison-table">
+          <caption>顯示遊戲基礎評分，不代表實測勝率，不含關卡 Boss 加成。屬性更高不保證獲勝。</caption>
+          <thead><tr><th scope="col">對比兩個陀螺</th><th scope="col">玩家一<span class="compare-avatar" id="compare-left-avatar"></span><span class="compare-name" id="compare-left-name"></span><span class="tier-pill" id="compare-left-tier"></span></th><th scope="col">玩家二<span class="compare-avatar" id="compare-right-avatar"></span><span class="compare-name" id="compare-right-name"></span><span class="tier-pill" id="compare-right-tier"></span></th></tr></thead>
+          <tbody><tr><th scope="row">重量</th><td><strong id="compare-mass-left"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-mass-left-bar"></span></div></td><td><strong id="compare-mass-right"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-mass-right-bar"></span></div></td></tr><tr><th scope="row">攻擊</th><td><strong id="compare-attack-left"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-attack-left-bar"></span></div></td><td><strong id="compare-attack-right"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-attack-right-bar"></span></div></td></tr><tr><th scope="row">速度</th><td><strong id="compare-speed-left"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-speed-left-bar"></span></div></td><td><strong id="compare-speed-right"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-speed-right-bar"></span></div></td></tr><tr><th scope="row">持久力</th><td><strong id="compare-endurance-left"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-endurance-left-bar"></span></div></td><td><strong id="compare-endurance-right"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-endurance-right-bar"></span></div></td></tr></tbody>
+        </table>
+      </section>
+
       <div class="gen-actions">
         <a id="launchArenaBtn" href="/zh-hant/?emoji=%F0%9F%A6%84" class="primary-glow-btn" style="text-decoration: none; padding: 12px 24px;">帶著 🦄 進入競技場 🚀</a>
-        <button type="button" id="copyShareBtn" class="secondary-btn" >📋 複製配置連結</button>
+        <button type="button" id="copyShareBtn" class="secondary-btn" ><span aria-hidden="true">📋</span> <span id="copyShareLabel">複製配置連結</span></button>
       </div>
       <div id="toastNotify" class="toast-notify">配置連結已複製到剪貼簿！</div>
 
       <section style="margin-top: 40px; border-top: 1px solid var(--bg-card-border); padding-top: 24px;">
         <h2 style="font-size: 20px; margin-bottom: 12px;">四維物理屬性說明</h2>
         <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6; margin-bottom: 12px;">
-          Emoji Blade 使用遊戲引擎的原生雜湊演算法，保證每一個字元產生的屬性完全固定、不可作弊：
+          已知預設使用遊戲屬性表，其他輸入由標準化後的字元計算確定性雜湊；目前遊戲版本中，相同輸入得到相同屬性。數值是遊戲評分，不是克數或實測轉速，可能超過 100。等級不保證勝率，也不包含關卡 Boss 加成。
         </p>
         <ul style="color: var(--text-muted); font-size: 14px; line-height: 1.8; margin-left: 20px; margin-bottom: 16px;">
-          <li><strong>重量 Mass：</strong>重型陀螺在發生猛烈碰撞時更不易被撞飛，可大幅降低受到致命衝撞時的硬直。</li>
-          <li><strong>攻擊 Attack：</strong>決定直接撞擊對手時所消耗對方的能量上限。</li>
-          <li><strong>速度 Speed：</strong>決定發射出膛時的移動速度與旋轉動量。</li>
-          <li><strong>耐力 Endurance：</strong>決定空轉時的基礎能耗衰減速度，耐力越高轉得越久。</li>
+          <li><strong>重量 Mass：</strong> 重量影響碰撞響應並減少受到的碰撞傷害，不會縮短碰撞停頓。</li>
+          <li><strong>攻擊 Attack：</strong> 攻擊影響直接撞擊對手時造成的能量損失，不增加撞牆傷害。</li>
+          <li><strong>速度 Speed：</strong> 速度影響發射初速與旋轉動畫，不代表完整的角動量模擬。</li>
+          <li><strong>耐力 Endurance：</strong> 持久力減少持續自然能耗，不減少碰撞傷害。</li>
         </ul>
         <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6;">
           查看預設角色屬性請訪問 <a href="/zh-hant/characters/" style="color: var(--accent-cyan);">角色圖鑑</a> 或查看 <a href="/zh-hant/tier-list/" style="color: var(--accent-cyan);">預設強度天梯榜</a>。
         </p>
       </section>
-    </article>
+    <p><a href="/zh-hant/guide/custom-share/">自訂表情與分享連結排錯</a></p></article>
   </main>
 
   <footer class="site-footer">
@@ -295,6 +315,6 @@
   </footer>
 
   <script src="/top-stats.js?v=20261106-1"></script>
-  <script src="/generator.js?v=20261106-1"></script>
+  <script src="/generator.js?v=20261110-1"></script>
 </body>
 </html>

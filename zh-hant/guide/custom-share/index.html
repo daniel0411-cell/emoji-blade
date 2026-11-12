@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自訂表情與分享連結排錯 - Emoji Blade</title>
+<meta name="description" content="排查表情被截取、數值不同和連結模式不符的問題，區分生成器配置、比較連結、競技場挑戰與本地雙人入口。">
+<link rel="canonical" href="https://emojiblade.online/zh-hant/guide/custom-share/">
+<link rel="alternate" hreflang="x-default" href="https://emojiblade.online/guide/custom-share/">
+<link rel="alternate" hreflang="en" href="https://emojiblade.online/guide/custom-share/">
+<link rel="alternate" hreflang="zh-Hans" href="https://emojiblade.online/zh-hans/guide/custom-share/">
+<link rel="alternate" hreflang="zh-Hant" href="https://emojiblade.online/zh-hant/guide/custom-share/">
+<link rel="alternate" hreflang="ja" href="https://emojiblade.online/ja/guide/custom-share/">
+<link rel="stylesheet" href="/style.css?v=20261112-1">
+<meta property="og:title" content="自訂表情與分享連結排錯 - Emoji Blade"><meta property="og:description" content="排查表情被截取、數值不同和連結模式不符的問題，區分生成器配置、比較連結、競技場挑戰與本地雙人入口。">
+<meta property="og:type" content="website"><meta property="og:url" content="https://emojiblade.online/zh-hant/guide/custom-share/"><meta property="og:image" content="https://emojiblade.online/social-card.png"><meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","name":"自訂表情與分享連結排錯 - Emoji Blade","description":"排查表情被截取、數值不同和連結模式不符的問題，區分生成器配置、比較連結、競技場挑戰與本地雙人入口。","url":"https://emojiblade.online/zh-hant/guide/custom-share/","inLanguage":"zh-Hant","dateModified":"2026-11-12"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Emoji Blade","item":"https://emojiblade.online/zh-hant/"},{"@type":"ListItem","position":2,"name":"玩法指南","item":"https://emojiblade.online/zh-hant/guide/"},{"@type":"ListItem","position":3,"name":"自訂表情與分享連結排錯","item":"https://emojiblade.online/zh-hant/guide/custom-share/"}]}]}</script>
+</head>
+<body>
+<header class="site-header localized-content-header"><div class="header-container"><a class="brand-logo" href="/zh-hant/"><span class="logo-title">EMOJI<span class="accent-text">BLADE</span></span></a><nav class="nav-links"><a class="nav-link" href="/zh-hant/">進入競技場</a><a class="nav-link" href="/zh-hant/guide/">玩法指南</a><a class="nav-link" href="/zh-hant/characters/">角色圖鑑</a><a class="nav-link" href="/zh-hant/vs/">對決比較</a><a class="nav-link" href="/zh-hant/faq/">常見問題</a></nav><div class="lang-switch-links"><a href="/guide/custom-share/">English</a> <a href="/zh-hans/guide/custom-share/">简体中文</a> <a href="/zh-hant/guide/custom-share/">繁體中文</a> <a href="/ja/guide/custom-share/">日本語</a></div></div></header>
+<main class="prose-container"><article class="prose-card">
+<p><a href="/zh-hant/guide/">玩法指南</a></p>
+<h1>自訂表情與分享連結排錯</h1>
+<p><time datetime="2026-11-12">2026-11-12</time></p>
+<p>排查表情被截取、數值不同和連結模式不符的問題，區分生成器配置、比較連結、競技場挑戰與本地雙人入口。</p>
+<section id="part-1"><h2>為何只用了一個表情？</h2><p>遊戲會去掉首尾空白，只取第一個字素叢集，不會把整句話或一排表情組成隊伍。現代瀏覽器中，連接表情與膚色序列可能保留為一個整體；不支援字素分段的瀏覽器會退回第一個 Unicode 碼點，複雜序列可能被截短。建議一次只輸入一個表情，先核對預覽再分享。</p><p>生成器玩家欄清空時預覽獨角獸（🦄），對手欄清空時預覽鑽石（💎）。需要明確還原配置時，請直接填入目標表情。</p></section>
+<section id="part-2"><h2>為何數值或圖案不同？</h2><p>已知預設使用固定基礎數值，其他正規化字元在目前版本中得到確定性數值：重複輸入同一正規化字元，數值相同。外觀相似的符號、變體選擇符或連接序列仍可能是不同輸入。字型與作業系統也可能改變圖案，不能只憑圖案不同斷定字元變了。自訂輸入不支援分別指定質量、攻擊、速度與耐力。</p></section>
+<section id="part-3"><h2>應該分享哪一種連結？</h2><p>根據目的選擇入口。生成器配置連結開啟計算器；比較連結還會還原對手並開啟比較面板。「開始本地雙人對戰」開啟雙方已選好的本地雙人競技場。競技場挑戰連結則開啟自訂對手的單人練習。這些入口都不提供遠端連線，也不會與另一臺裝置同步同一場戰鬥。</p><div class="stats-table-scroll" tabindex="0" role="region" aria-label="應該分享哪一種連結？"><table class="character-stats-table share-link-table"><caption>應該分享哪一種連結？</caption><thead><tr><th scope="col">連結或操作</th><th scope="col">目標與保留設定</th></tr></thead><tbody><tr><th scope="row">生成器配置連結</th><td>計算器：僅玩家表情</td></tr><tr><th scope="row">生成器比較連結</th><td>計算器：雙方表情，開啟比較</td></tr><tr><th scope="row">生成器本地雙人入口</th><td>競技場：雙方表情、本地雙人、標準場地</td></tr><tr><th scope="row">競技場挑戰連結</th><td>競技場：雙方表情、玩家外觀、場地選擇；自訂單人</td></tr></tbody></table></div></section>
+<section id="part-4"><h2>為何開啟後是單人練習？</h2><p>競技場挑戰包含雙方表情、玩家外觀，以及啟用時的危險場地選擇，但不包含本地雙人模式、發射力道、角度、關卡、連勝或 Boss 遭遇加成。生成器比較連結也不攜帶戰鬥參數。同一裝置上一起玩，請用本地雙人入口；返回闖關則需同時選回單人與對手列表中的闖關模式。</p></section>
+<section id="part-5"><h2>複製失敗怎麼辦？</h2><p>剪貼簿權限被拒絕或無法使用時，複製操作會提供含完整連結的對話框，可以手動複製；取消對話框不代表已分享。如果沒有彈窗，可開啟生成器目標頁面，複製包含問號後查詢參數的完整網址。%F0 等編碼是正常 URL 內容，保留整條連結即可。不要在挑戰網址中加入帳號憑據或私密資料。</p></section>
+<section id="part-6"><h2>開戰前如何核對分享設定？</h2><p>在新分頁開啟連結，檢查雙方顯示的表情、頁面類型、模式與場地，再發射。計畫比較的力道與角度要重新輸入，因為連結不保存它們。計算器展示基礎數值，選擇鬼怪不等於進入更大、強化版的關卡 Boss 戰。連結用於參考設定，不是錄影、已保存的結果，也不會轉移最佳連勝與徽章。</p></section>
+<p><a class="primary-glow-btn comparison-link" href="/zh-hant/generator/?emoji=%F0%9F%A6%84&amp;rival=%F0%9F%92%8E">試試自訂比較</a></p>
+<section><h2>相關攻略</h2><ul><li><a href="/zh-hant/guide/launch-power-angle/">發射力道與角度</a></li><li><a href="/zh-hant/guide/stats/">質量、攻擊、速度與耐力</a></li><li><a href="/zh-hant/guide/boss-streak/">Boss、連勝與存檔</a></li><li><a href="/zh-hant/2-player-duel/">本地雙人設定</a></li></ul></section>
+</article></main>
+<footer class="site-footer"><div class="section-container"><p>© 2026 Emoji Blade</p><nav class="player-resource-links"><a href="/zh-hant/guide/">玩法指南</a><a href="/zh-hant/faq/">常見問題</a></nav></div></footer>
+</body></html>

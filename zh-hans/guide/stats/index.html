@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>重量、攻击、速度与耐久详解 - Emoji Blade</title>
+<meta name="description" content="解析 Emoji Blade 四项属性的实际用途，对比钻石与闪电，区分被动消耗、碰撞伤害、自定义陀螺与闯关 Boss 加成。">
+<link rel="canonical" href="https://emojiblade.online/zh-hans/guide/stats/">
+<link rel="alternate" hreflang="x-default" href="https://emojiblade.online/guide/stats/">
+<link rel="alternate" hreflang="en" href="https://emojiblade.online/guide/stats/">
+<link rel="alternate" hreflang="zh-Hans" href="https://emojiblade.online/zh-hans/guide/stats/">
+<link rel="alternate" hreflang="zh-Hant" href="https://emojiblade.online/zh-hant/guide/stats/">
+<link rel="alternate" hreflang="ja" href="https://emojiblade.online/ja/guide/stats/">
+<link rel="stylesheet" href="/style.css?v=20261110-1">
+<meta property="og:title" content="重量、攻击、速度与耐久详解 - Emoji Blade"><meta property="og:description" content="解析 Emoji Blade 四项属性的实际用途，对比钻石与闪电，区分被动消耗、碰撞伤害、自定义陀螺与闯关 Boss 加成。">
+<meta property="og:type" content="website"><meta property="og:url" content="https://emojiblade.online/zh-hans/guide/stats/"><meta property="og:image" content="https://emojiblade.online/social-card.png"><meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","name":"重量、攻击、速度与耐久详解 - Emoji Blade","description":"解析 Emoji Blade 四项属性的实际用途，对比钻石与闪电，区分被动消耗、碰撞伤害、自定义陀螺与闯关 Boss 加成。","url":"https://emojiblade.online/zh-hans/guide/stats/","inLanguage":"zh-Hans","dateModified":"2026-11-12"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Emoji Blade","item":"https://emojiblade.online/zh-hans/"},{"@type":"ListItem","position":2,"name":"玩法指南","item":"https://emojiblade.online/zh-hans/guide/"},{"@type":"ListItem","position":3,"name":"重量、攻击、速度与耐久详解","item":"https://emojiblade.online/zh-hans/guide/stats/"}]}]}</script>
+</head>
+<body>
+<header class="site-header localized-content-header"><div class="header-container"><a class="brand-logo" href="/zh-hans/"><span class="logo-title">EMOJI<span class="accent-text">BLADE</span></span></a><nav class="nav-links"><a class="nav-link" href="/zh-hans/">进入竞技场</a><a class="nav-link" href="/zh-hans/guide/">玩法指南</a><a class="nav-link" href="/zh-hans/characters/">角色图鉴</a><a class="nav-link" href="/zh-hans/vs/">对决比较</a><a class="nav-link" href="/zh-hans/faq/">常见问题</a></nav><div class="lang-switch-links"><a href="/guide/stats/">English</a> <a href="/zh-hans/guide/stats/">简体中文</a> <a href="/zh-hant/guide/stats/">繁體中文</a> <a href="/ja/guide/stats/">日本語</a></div></div></header>
+<main class="prose-container"><article class="prose-card">
+<p><a href="/zh-hans/guide/">玩法指南</a></p>
+<h1>重量、攻击、速度与耐久详解</h1>
+<p><time datetime="2026-11-12">更新于 2026 年 11 月 12 日</time></p>
+<p>解析 Emoji Blade 四项属性的实际用途，对比钻石与闪电，区分被动消耗、碰撞伤害、自定义陀螺与闯关 Boss 加成。</p>
+
+<section id="part-1"><h2>四项评分各管什么</h2><p>属性是游戏评分，不是实测克数或每分钟转速。重量影响碰撞响应，并减少自身受到的碰撞伤害；攻击参与对其他陀螺造成的碰撞伤害；速度影响发射初速与旋转动画；耐久减少被动能量消耗。四项相加不等于经过实测的战力排名。</p></section>
+<section id="part-2"><h2>钻石与闪电的取舍</h2><div class="stats-table-scroll" tabindex="0" role="region" aria-label="预设基础属性对比"><table class="character-stats-table"><caption>基础评分，不含闯关 Boss 加成</caption><thead><tr><th scope="col">属性</th><th scope="col">💎 钻石</th><th scope="col">⚡ 闪电</th></tr></thead><tbody><tr><th scope="row">重量</th><td>96</td><td>60</td></tr><tr><th scope="row">攻击</th><td>72</td><td>88</td></tr><tr><th scope="row">速度</th><td>65</td><td>99</td></tr><tr><th scope="row">耐久</th><td>98</td><td>74</td></tr></tbody></table></div><p>钻石用较低的速度与攻击换取较高的重量和耐久，闪电反之。由于四项均不同，这组对比不能单独证明重量造成了某个结果。</p></section>
+<section id="part-3"><h2>耐久不等于碰撞护甲</h2><p>每个 60 Hz 模拟步的被动消耗为 0.048 + (100 - 耐久) × 0.00055。耐久 100 的摩艾每步消耗 0.048，耐久 68 的烈焰为 0.0656。碰撞、墙面摩擦、冲刺和轨道成本另算，所以不能用这个公式直接预测整局时长。</p></section>
+<section id="part-4"><h2>攻击与重量怎样影响碰撞</h2><p>受到的碰撞伤害包含对手攻击、双方相对速度和自身重量。在其他条件相同时，较高重量会减少这项伤害。普通暴击使双方伤害乘以 1.5，Xtreme 加速中为 1.8。耐久不参与这个碰撞伤害公式，攻击也不增加普通撞墙伤害。</p></section>
+<section id="part-5"><h2>自定义表情和评级</h2><p>已知预设使用固定属性，其他经过规范化的字符使用确定性计算；同一版本中，相同输入得到相同的基础评分。外形和主题不会提供元素克制或专属碰撞形状。评级不保证胜负，数值也可能超过 100，例如鬼怪的基础重量为 110。</p></section>
+<section id="part-6"><h2>Boss 基础值与闯关加成</h2><p>闯关 Boss 的重量乘以 1.35、攻击乘以 1.25，再取整。首次第 5 关鬼怪因此为重量 149、攻击 125，不是计算器展示的基础 110 和 100。本地对战选鬼怪得到基础预设，不附带这些关卡加成。</p></section>
+<p><a class="secondary-btn comparison-link" href="/zh-hans/generator/?emoji=%F0%9F%92%8E&amp;rival=%E2%9A%A1">对比钻石与闪电</a></p>
+<section><h2>继续练习</h2><ul><li><a href="/zh-hans/guide/launch-power-angle/">发射力度与角度实验指南</a></li><li><a href="/zh-hans/guide/stats/">重量、攻击、速度与耐久详解</a></li><li><a href="/zh-hans/guide/hazard-arena/">危险擂台、出界与 Xtreme 轨道指南</a></li></ul></section>
+<p><a href="/zh-hans/guide/boss-streak/">Boss 闯关、连胜与存档指南</a></p></article></main>
+<footer class="site-footer"><div class="section-container"><p>© 2026 Emoji Blade</p><nav class="player-resource-links"><a href="/zh-hans/guide/">玩法指南</a><a href="/zh-hans/faq/">常见问题</a></nav></div></footer>
+</body></html>

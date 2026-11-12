@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Emoji Top Builder &amp; Stat Calculator - Emoji Blade</title>
-  <meta name="description" content="Calculate stats, mass, speed, endurance, attack and battle tier for any custom emoji top. Generate your build and launch into the arena.">
+  <title>Emoji Top Calculator & Comparison - Emoji Blade</title>
+  <meta name="description" content="Calculate and compare mass, attack, speed and endurance for two emoji tops. Share your comparison or select both tops for a local two-player duel.">
   <link rel="canonical" href="https://emojiblade.online/generator/">
   <link rel="alternate" hreflang="x-default" href="https://emojiblade.online/generator/">
   <link rel="alternate" hreflang="en" href="https://emojiblade.online/generator/">
@@ -12,8 +12,8 @@
   <link rel="alternate" hreflang="zh-Hant" href="https://emojiblade.online/zh-hant/generator/">
   <link rel="alternate" hreflang="ja" href="https://emojiblade.online/ja/generator/">
   <link rel="stylesheet" href="/style.css?v=20261023-1">
-  <meta property="og:title" content="Emoji Top Builder &amp; Stat Calculator - Emoji Blade">
-  <meta property="og:description" content="Calculate stats, mass, speed, endurance, attack and battle tier for any custom emoji top. Generate your build and launch into the arena.">
+  <meta property="og:title" content="Emoji Top Calculator & Comparison - Emoji Blade">
+  <meta property="og:description" content="Calculate and compare mass, attack, speed and endurance for two emoji tops. Share your comparison or select both tops for a local two-player duel.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://emojiblade.online/generator/">
   <meta property="og:image" content="https://emojiblade.online/social-card.png">
@@ -155,13 +155,13 @@
       text-align: center;
     }
   </style>
-  <link rel="stylesheet" href="/generator.css?v=20261106-1">
+  <link rel="stylesheet" href="/generator.css?v=20261110-1">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Emoji Top Builder & Stat Calculator",
-    "description": "Calculate stats, mass, speed, endurance, attack and battle tier for any custom emoji top. Generate your build and launch into the arena.",
+    "name": "Emoji Top Calculator & Comparison",
+    "description": "Calculate and compare mass, attack, speed and endurance for two emoji tops. Share your comparison or select both tops for a local two-player duel.",
     "url": "https://emojiblade.online/generator/",
     "applicationCategory": "GameApplication",
     "operatingSystem": "Web browser",
@@ -197,11 +197,17 @@
   <main class="gen-container">
     <article class="gen-card">
       <span class="sub-badge">INTERACTIVE WORKSHOP</span>
-      <h1 style="font-size: 26px; margin: 8px 0 12px;">Emoji Top Builder &amp; Stat Calculator</h1>
+      <h1 style="font-size: 26px; margin: 8px 0 12px;">Emoji Top Calculator & Comparison</h1>
       <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6;">
         Type or paste any Unicode character or emoji below. The official deterministic algorithm calculates your top's Mass, Attack, Speed, Endurance, and Battle Tier in real time.
       </p>
 
+      <div class="gen-toolbar">
+        <label class="compare-switch"><input type="checkbox" id="compareToggle" aria-controls="rivalPicker comparePanel">Compare two tops</label>
+        <button type="button" id="swapTopsBtn" class="gen-swap" title="Swap tops" aria-label="Swap tops" hidden>⇄</button>
+      </div>
+      <div class="gen-pickers" id="genPickers">
+        <fieldset class="gen-picker"><legend>Player 1</legend>
       <div class="gen-input-row">
         <input type="text" id="calcEmojiInput" class="gen-input" value="🦄" maxlength="128" placeholder="Type or paste any emoji" aria-label="Input custom emoji top">
       </div>
@@ -220,77 +226,91 @@
         <button type="button" class="quick-chip" data-emoji="🦖">🦖</button>
         <button type="button" class="quick-chip" data-emoji="🌶️">🌶️</button>
       </div>
+        </fieldset>
+        <fieldset class="gen-picker" id="rivalPicker" hidden><legend>Player 2</legend>
+          <div class="gen-input-row"><input type="text" id="rivalEmojiInput" class="gen-input" value="💎" maxlength="128" placeholder="Type or paste an emoji" aria-label="Player 2"></div>
+          <div class="quick-chips"><button type="button" class="quick-chip" data-emoji="💎">💎</button><button type="button" class="quick-chip" data-emoji="🗿">🗿</button><button type="button" class="quick-chip" data-emoji="⚡">⚡</button><button type="button" class="quick-chip" data-emoji="🔥">🔥</button><button type="button" class="quick-chip" data-emoji="💣">💣</button><button type="button" class="quick-chip" data-emoji="👹">👹</button></div>
+        </fieldset>
+      </div>
 
-      <div class="preview-box">
+      <div class="preview-box" id="singlePreview">
         <div class="spinning-top-preview" id="topAvatar">🦄</div>
         <div id="topName" style="font-size: 18px; font-weight: 700; margin-bottom: 6px;">Custom 🦄</div>
-        <div id="tierPill" class="tier-pill tier-s">S-TIER RATING</div>
+        <div id="tierPill" class="tier-pill tier-b">B TIER</div>
 
         <div class="stat-bars-container">
           <div class="stat-row">
             <div class="stat-labels">
               <span>Mass (Collision Weight)</span>
-              <strong id="massVal">85 / 100</strong>
+              <strong id="massVal">86 / 100</strong>
             </div>
             <div class="stat-bar-track">
-              <div class="stat-bar-fill fill-mass" id="massBar" style="width: 85%;"></div>
+              <div class="stat-bar-fill fill-mass" id="massBar" style="width: 86%;"></div>
             </div>
           </div>
 
           <div class="stat-row">
             <div class="stat-labels">
               <span>Attack (Impact Force)</span>
-              <strong id="attackVal">82 / 100</strong>
+              <strong id="attackVal">60 / 100</strong>
             </div>
             <div class="stat-bar-track">
-              <div class="stat-bar-fill fill-attack" id="attackBar" style="width: 82%;"></div>
+              <div class="stat-bar-fill fill-attack" id="attackBar" style="width: 60%;"></div>
             </div>
           </div>
 
           <div class="stat-row">
             <div class="stat-labels">
               <span>Speed (Velocity &amp; Spin)</span>
-              <strong id="speedVal">90 / 100</strong>
+              <strong id="speedVal">60 / 100</strong>
             </div>
             <div class="stat-bar-track">
-              <div class="stat-bar-fill fill-speed" id="speedBar" style="width: 90%;"></div>
+              <div class="stat-bar-fill fill-speed" id="speedBar" style="width: 60%;"></div>
             </div>
           </div>
 
           <div class="stat-row">
             <div class="stat-labels">
               <span>Endurance (Stamina)</span>
-              <strong id="enduranceVal">88 / 100</strong>
+              <strong id="enduranceVal">90 / 100</strong>
             </div>
             <div class="stat-bar-track">
-              <div class="stat-bar-fill fill-endurance" id="enduranceBar" style="width: 88%;"></div>
+              <div class="stat-bar-fill fill-endurance" id="enduranceBar" style="width: 90%;"></div>
             </div>
           </div>
         </div>
       </div>
 
+      <section id="comparePanel" hidden aria-label="Compare two tops">
+        <table class="comparison-table">
+          <caption>Base game ratings, not measured win rates. Progression Boss bonuses are excluded. Higher ratings do not guarantee a win.</caption>
+          <thead><tr><th scope="col">Compare two tops</th><th scope="col">Player 1<span class="compare-avatar" id="compare-left-avatar"></span><span class="compare-name" id="compare-left-name"></span><span class="tier-pill" id="compare-left-tier"></span></th><th scope="col">Player 2<span class="compare-avatar" id="compare-right-avatar"></span><span class="compare-name" id="compare-right-name"></span><span class="tier-pill" id="compare-right-tier"></span></th></tr></thead>
+          <tbody><tr><th scope="row">Mass</th><td><strong id="compare-mass-left"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-mass-left-bar"></span></div></td><td><strong id="compare-mass-right"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-mass-right-bar"></span></div></td></tr><tr><th scope="row">Attack</th><td><strong id="compare-attack-left"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-attack-left-bar"></span></div></td><td><strong id="compare-attack-right"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-attack-right-bar"></span></div></td></tr><tr><th scope="row">Speed</th><td><strong id="compare-speed-left"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-speed-left-bar"></span></div></td><td><strong id="compare-speed-right"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-speed-right-bar"></span></div></td></tr><tr><th scope="row">Endurance</th><td><strong id="compare-endurance-left"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-endurance-left-bar"></span></div></td><td><strong id="compare-endurance-right"></strong><div class="compare-bar" aria-hidden="true"><span id="compare-endurance-right-bar"></span></div></td></tr></tbody>
+        </table>
+      </section>
+
       <div class="gen-actions">
         <a id="launchArenaBtn" href="/?emoji=%F0%9F%A6%84" class="primary-glow-btn" style="text-decoration: none; padding: 12px 24px;">Battle with 🦄 in Arena 🚀</a>
-        <button type="button" id="copyShareBtn" class="secondary-btn" >📋 Copy Build Link</button>
+        <button type="button" id="copyShareBtn" class="secondary-btn" ><span aria-hidden="true">📋</span> <span id="copyShareLabel">Copy Build Link</span></button>
       </div>
       <div id="toastNotify" class="toast-notify">Build link copied to clipboard!</div>
 
       <section style="margin-top: 40px; border-top: 1px solid var(--bg-card-border); padding-top: 24px;">
         <h2 style="font-size: 20px; margin-bottom: 12px;">How Custom Emoji Physics Work</h2>
         <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6; margin-bottom: 12px;">
-          Emoji Blade utilizes a deterministic hash algorithm directly from the game engine. Every unique character or emoji produces a permanent, unchangeable stat profile across four core attributes:
+          Known presets use the game’s rating table; other inputs use a deterministic hash of the normalized character. The same input produces the same ratings in the current game version. These are game ratings, not measured grams or RPM. Tiers do not guarantee wins, and progression Boss bonuses are not included. Ratings can exceed 100.
         </p>
         <ul style="color: var(--text-muted); font-size: 14px; line-height: 1.8; margin-left: 20px; margin-bottom: 16px;">
-          <li><strong>Mass (Weight):</strong> Heavy tops absorb critical collision recoil and suffer less knockback when hit.</li>
-          <li><strong>Attack (Clash):</strong> Contributes directly to the energy drain inflicted upon the rival top during wall rebounds and direct impacts.</li>
-          <li><strong>Speed (Rating):</strong> Increases launch velocity, arena momentum, and visual spin speed.</li>
-          <li><strong>Endurance (Stamina):</strong> Reduces continuous passive energy dissipation as your top spins in the center bowl.</li>
+          <li><strong>Mass (Weight):</strong> Mass changes collision response and reduces received collision damage; it does not shorten hit-stop effects.</li>
+          <li><strong>Attack (Clash):</strong> Attack contributes to energy damage dealt in top-to-top collisions, not damage from wall rebounds.</li>
+          <li><strong>Speed (Rating):</strong> Speed affects launch velocity and visual spin speed; this is not a full angular-momentum simulation.</li>
+          <li><strong>Endurance (Stamina):</strong> Endurance reduces passive energy drain, not damage from collisions.</li>
         </ul>
         <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6;">
-          Looking for pre-tuned tournament champions? Check our <a href="/tier-list/" style="color: var(--accent-cyan);">Preset Tier List</a> or test specific matchups in the <a href="/vs/" style="color: var(--accent-cyan);">VS Matchup Center</a>.
+          Compare the game’s preset ratings and try repeated battles. Check our <a href="/tier-list/" style="color: var(--accent-cyan);">Preset Tier List</a> or test specific matchups in the <a href="/vs/" style="color: var(--accent-cyan);">VS Matchup Center</a>.
         </p>
       </section>
-    </article>
+    <p><a href="/guide/custom-share/">Custom Emoji &amp; Share Link Troubleshooting</a></p></article>
 
     <nav class="player-resource-links" aria-label="Page languages" style="margin-top: 20px;">
       <a href="/generator/">English</a>
@@ -307,6 +327,6 @@
   </footer>
 
   <script src="/top-stats.js?v=20261106-1"></script>
-  <script src="/generator.js?v=20261106-1"></script>
+  <script src="/generator.js?v=20261110-1"></script>
 </body>
 </html>
