@@ -273,7 +273,7 @@ for (const locale of ['', 'zh-hans/', 'zh-hant/', 'ja/']) {
     const stats = computeEmojiStats(expandedPresets[slug]);
     assert.deepEqual(numbers, [stats.mass, stats.attack, stats.speed, stats.endurance]);
   }
-  for (const slug of ['diamond-vs-bomb', 'lightning-vs-moai', 'fire-vs-diamond', 'crown-vs-diamond']) {
+  for (const slug of (locale ? ['diamond-vs-bomb', 'lightning-vs-moai', 'fire-vs-diamond', 'crown-vs-diamond'] : ['diamond-vs-bomb', 'lightning-vs-moai', 'fire-vs-diamond', 'crown-vs-diamond', 'lightning-vs-fire', 'moai-vs-diamond'])) {
     const html = fs.readFileSync(path.join(__dirname, '..', locale, 'vs', slug, 'index.html'), 'utf8');
     const [left, right] = slug.split('-vs-');
     for (const preset of [left, right]) {
@@ -301,7 +301,33 @@ const invaderBoss = new EmojiTop(false);
 invaderBoss.configure('👾', 'blaze', true);
 assert.equal(invaderBoss.stats.mass, 97);
 assert.equal(invaderBoss.stats.attack, 108);
-console.log('PASS: four-language expansion ratings, all sixteen matchup launch links, stage 10 Boss ratings');
+console.log('PASS: four-language expansion ratings, eighteen matchup launch links, stage 10 Boss ratings');
+// New English practice links must initialize the pair described in the article.
+for (const [route, pairs] of Object.entries({
+  'characters/rocket': [['rocket', 'lightning']],
+  'characters/skull': [['skull', 'fire']],
+  'characters/clown': [['clown', 'pizza']],
+  'characters/tornado': [['tornado', 'lightning']],
+  'characters/pizza': [['pizza', 'diamond']],
+  'tier-list': [['moai', 'diamond'], ['lightning', 'rocket'], ['bomb', 'fire'], ['crown', 'dragon']],
+})) {
+  const html = fs.readFileSync(path.join(__dirname, '..', route, 'index.html'), 'utf8');
+  const links = [...html.matchAll(/href="([^"]*\?mode=2p[^"]*)"/g)].map(m => new URL(m[1].replaceAll('&amp;', '&'), 'https://emojiblade.online'));
+  assert.equal(links.length, pairs.length, route);
+  for (const [i, [left, right]] of pairs.entries()) {
+    context.window.location = { search: links[i].search };
+    const g = game();
+    Object.assign(g, { playerInput: element(), playerTop: new EmojiTop(true),
+      rivalModeSelect: { value: 'progression' }, customEnemyInput: element(), mode2PBtn: element(), modeStreakBtn: element() });
+    g.checkUrlDeepLink();
+    assert.equal(links[i].pathname, '/');
+    assert.equal(g.is2PMode, true);
+    assert.equal(g.playerTop.emoji, expandedPresets[left]);
+    assert.equal(g.customEnemyInput.value, expandedPresets[right]);
+    assert.equal(g.rivalModeSelect.value, 'custom');
+  }
+}
+console.log('PASS: nine English character and goal-selection practice links initialize the promised pair');
 console.log('PASS: 48 result-button cases across languages, modes and outcomes; stage and streak preservation');
 for (const locale of ['', 'zh-hans', 'zh-hant', 'ja']) {
   for (const route of ['characters', 'tier-list']) {

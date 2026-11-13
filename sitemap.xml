@@ -23,19 +23,19 @@
   <!-- Key SEO Subpages -->
   <url>
     <loc>https://emojiblade.online/tier-list/</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://emojiblade.online/guide/</loc>
-    <lastmod>2026-11-12</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://emojiblade.online/characters/</loc>
-    <lastmod>2026-10-14</lastmod>
+    <lastmod>2026-11-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
@@ -156,12 +156,12 @@
   <url><loc>https://emojiblade.online/ja/vs/lightning-vs-fire/</loc><lastmod>2026-11-12</lastmod></url>
   <url><loc>https://emojiblade.online/ja/vs/lightning-vs-moai/</loc><lastmod>2026-11-12</lastmod></url>
   <url><loc>https://emojiblade.online/ja/vs/moai-vs-diamond/</loc><lastmod>2026-11-12</lastmod></url>
-  <url><loc>https://emojiblade.online/vs/diamond-vs-bomb/</loc><lastmod>2026-11-12</lastmod></url>
-  <url><loc>https://emojiblade.online/vs/fire-vs-diamond/</loc><lastmod>2026-11-12</lastmod></url>
+  <url><loc>https://emojiblade.online/vs/diamond-vs-bomb/</loc><lastmod>2026-11-13</lastmod></url>
+  <url><loc>https://emojiblade.online/vs/fire-vs-diamond/</loc><lastmod>2026-11-13</lastmod></url>
   <url><loc>https://emojiblade.online/vs/</loc><lastmod>2026-11-13</lastmod></url>
-  <url><loc>https://emojiblade.online/vs/lightning-vs-fire/</loc><lastmod>2026-11-12</lastmod></url>
-  <url><loc>https://emojiblade.online/vs/lightning-vs-moai/</loc><lastmod>2026-11-12</lastmod></url>
-  <url><loc>https://emojiblade.online/vs/moai-vs-diamond/</loc><lastmod>2026-11-12</lastmod></url>
+  <url><loc>https://emojiblade.online/vs/lightning-vs-fire/</loc><lastmod>2026-11-13</lastmod></url>
+  <url><loc>https://emojiblade.online/vs/lightning-vs-moai/</loc><lastmod>2026-11-13</lastmod></url>
+  <url><loc>https://emojiblade.online/vs/moai-vs-diamond/</loc><lastmod>2026-11-13</lastmod></url>
   <url><loc>https://emojiblade.online/zh-hans/characters/crown/</loc><lastmod>2026-11-13</lastmod></url>
   <url><loc>https://emojiblade.online/zh-hans/characters/diamond/</loc><lastmod>2026-11-13</lastmod></url>
   <url><loc>https://emojiblade.online/zh-hans/characters/dragon/</loc><lastmod>2026-11-10</lastmod></url>

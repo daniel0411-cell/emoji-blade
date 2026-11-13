@@ -69,12 +69,12 @@
   <main class="prose-container">
     <article class="prose-card" style="text-align: center;">
       <div style="font-size: 80px; margin-bottom: 10px;">🤡</div>
-      <span class="sub-badge">B-TIER CHAMPION</span>
+      <span class="sub-badge">B-TIER PRESET</span>
       <h1 style="margin-top: 8px;">Chaos Clown Top Breakdown</h1>
       <p style="text-align: left; font-size: 16px; margin-bottom: 24px;">Chaos Clown uses its preset mass, attack, speed and endurance. There is no special AI confusion or asymmetric collision mechanic; wobble is visual.</p>
 
       <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; margin-bottom: 24px; text-align: left;">
-        <h3 style="color: var(--accent-cyan); margin-bottom: 12px;">Official Attribute Specs</h3>
+        <h3 style="color: var(--accent-cyan); margin-bottom: 12px;">Base Preset Ratings</h3>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-family: var(--font-mono);">
           <div>Mass (Weight): <strong>70 / 100</strong></div>
           <div>Attack (Clash): <strong>76 / 100</strong></div>
@@ -83,19 +83,19 @@
         </div>
       </div>
 
-      <div style="text-align: left; margin-bottom: 30px;">
+      <div class="quick-practice" style="text-align:left"><p><a class="primary-glow-btn" href="/?mode=2p&amp;emoji=%F0%9F%A4%A1&amp;rival=%F0%9F%8D%95">Practice Clown vs Pizza</a></p><p><a class="comparison-link" href="/generator/?emoji=%F0%9F%A4%A1&amp;rival=%F0%9F%8D%95">Compare both sets of ratings</a></p><p><a href="#practice-setup">See the launch setup</a></p><p>Selects both tops on this device; you set both launches before the battle starts.</p></div><section style="text-align:left"><h2>Clown vs Pizza: faster launch, lower endurance</h2><p>Clown’s 84 Speed and 76 Attack exceed Pizza’s 78 and 70, while its 70 Mass and 82 Endurance are below Pizza’s 74 and 86. The 84 rating is Speed, not Endurance. There is no confusion, evasion or asymmetric collision ability.</p><p><a href="/characters/pizza/">Pizza character guide</a></p></section><section style="text-align:left"><h2>Formula examples: what the ratings change</h2><p>Passive drain per physics step is <code>0.048 + (100 - endurance) × 0.00055</code>. Initial movement speed is <code>speed / 100 × 14 × power / 100</code>.</p><div class="stats-table-scroll" tabindex="0" role="region" aria-label="Formula examples, scroll horizontally on small screens"><table class="character-stats-table"><caption>Base presets; isolated calculations, not measured battle results. Scroll sideways on narrow screens.</caption><thead><tr><th scope="col">Calculation</th><th scope="col">Clown</th><th scope="col">Pizza</th></tr></thead><tbody><tr><th scope="row">Passive energy lost over 100 physics steps</th><td>5.790</td><td>5.570</td></tr><tr><th scope="row">Initial speed at 70% power (internal units/step)</th><td>8.232</td><td>7.644</td></tr></tbody></table></div><p>The energy values exclude collisions, wall contacts, Dash and rail costs. Speed changes after launch. Physics steps are not match seconds or measured RPM, and these values do not predict a winner or full spin duration.</p></section>
+<div style="text-align: left; margin-bottom: 30px;">
         <h3>Suggested Matchups</h3><p>These are stat-based suggestions, not measured win rates. Launch settings and random critical hits can change the result.</p>
         <p><strong>Matchups to test:</strong> <a href="/characters/pizza/" style="color:var(--accent-cyan);">🍕 Pizza</a>, Custom rivals</p>
         <p><strong>Also compare:</strong> <a href="/characters/lightning/" style="color:var(--accent-cyan);">⚡ Lightning</a>, <a href="/characters/fire/" style="color:var(--accent-cyan);">🔥 Fire</a></p>
-        <h3>Launch Experiment</h3>
-        <p>Start a same-preset local duel at 70% power and mirrored inward angles. Repeat rounds, then change one launch input. Clown artwork does not add a special wobble or collision ability. <a href="/guide/launch-power-angle/">See the angle setup and recording method</a>.</p>
+        <h3>Launch Experiment</h3><p>First compare routes with fewer contacts, then change only one launch angle to investigate more contact. Separate passive energy loss from collision losses, rather than attributing a random critical hit or wobble animation to a Clown skill. <a href="/guide/launch-power-angle/">Launch setup and recording method</a>.</p>
       </div>
 
       <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:20px;">
         <a href="/?emoji=🤡" class="primary-glow-btn" style="text-decoration: none; padding: 14px 28px;">Battle with 🤡 in Arena 🚀</a>
         <a href="/generator/?emoji=🤡" class="secondary-btn" style="text-decoration: none; padding: 14px 24px; display:inline-block;">Analyze 🤡 in Top Builder 🛠️</a>
       </div>
-      <section style="text-align: left;" aria-label="Character FAQ">
+      <section id="practice-setup" style="text-align:left"><h2>Set up a fair local comparison</h2><p>Choose the standard arena. Set Player 1 to 70% power and -35°, then Player 2 to 70% and -145°. Start without Dash, repeat rounds, then swap the tops between left and right and mirror the angles. Restore the starting setup before changing only Player 1 power to 85%. These are experiment settings, not an optimized build.</p><p>Record the game version, both tops and sides, arena, power, angles, Dash use, rail contacts, critical hits, remaining energy and outcome. Keep Hazard trials separate; local practice does not advance solo stages or streaks. <a href="/guide/launch-power-angle/">Full launch experiment guide</a>.</p></section><section style="text-align: left;" aria-label="Character FAQ">
         <h2>Frequently Asked Questions</h2>
         <h3>What are Chaos Clown's attributes in Emoji Blade?</h3>
         <p>Chaos Clown features an all-round stat profile of 70 Mass, 76 Attack, 84 Speed, and 82 Endurance, making it a balanced benchmark for launch experiments.</p>

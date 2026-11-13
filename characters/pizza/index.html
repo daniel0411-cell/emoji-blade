@@ -74,7 +74,7 @@
       <p style="text-align: left; font-size: 16px; margin-bottom: 24px;">Pizza Wheel trades raw attack for 86 Endurance. Its 74 Mass and 78 Speed make it a moderate-speed endurance option. Choose a lower launch power to compare wall-contact losses against a harder opening shot. The pizza artwork has no special collision geometry.</p>
 
       <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; margin-bottom: 24px; text-align: left;">
-        <h3 style="color: var(--accent-cyan); margin-bottom: 12px;">Official Attribute Specs</h3>
+        <h3 style="color: var(--accent-cyan); margin-bottom: 12px;">Base Preset Ratings</h3>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-family: var(--font-mono);">
           <div>Mass (Weight): <strong>74 / 100</strong></div>
           <div>Attack (Clash): <strong>70 / 100</strong></div>
@@ -83,8 +83,9 @@
         </div>
       </div>
 
-      <div style="text-align: left; margin-bottom: 30px;">
-        <h3>Launch Experiments</h3><p>Compare 50%, 70%, and 90% power while keeping the angle unchanged. Wall contact drains energy, and random critical hits can change the winner. Repeat battles rather than treating one result as a guaranteed matchup.</p>
+      <div class="quick-practice" style="text-align:left"><p><a class="primary-glow-btn" href="/?mode=2p&amp;emoji=%F0%9F%8D%95&amp;rival=%F0%9F%92%8E">Practice Pizza vs Diamond</a></p><p><a class="comparison-link" href="/generator/?emoji=%F0%9F%8D%95&amp;rival=%F0%9F%92%8E">Compare both sets of ratings</a></p><p><a href="#practice-setup">See the launch setup</a></p><p>Selects both tops on this device; you set both launches before the battle starts.</p></div><section style="text-align:left"><h2>Pizza vs Diamond: quicker initial movement, less mass and endurance</h2><p>Pizza has 78 Speed compared with Diamond’s 65, but lower Mass (74 vs 96), Attack (70 vs 72) and Endurance (86 vs 98). It offers a faster launch rather than a miniature version of Diamond’s defensive profile. All tops use circular collision geometry; the pizza artwork adds no shield.</p><p><a href="/characters/diamond/">Diamond character guide</a></p></section><section style="text-align:left"><h2>Formula examples: what the ratings change</h2><p>Passive drain per physics step is <code>0.048 + (100 - endurance) × 0.00055</code>. Initial movement speed is <code>speed / 100 × 14 × power / 100</code>.</p><div class="stats-table-scroll" tabindex="0" role="region" aria-label="Formula examples, scroll horizontally on small screens"><table class="character-stats-table"><caption>Base presets; isolated calculations, not measured battle results. Scroll sideways on narrow screens.</caption><thead><tr><th scope="col">Calculation</th><th scope="col">Pizza</th><th scope="col">Diamond</th></tr></thead><tbody><tr><th scope="row">Passive energy lost over 100 physics steps</th><td>5.570</td><td>4.910</td></tr><tr><th scope="row">Initial speed at 70% power (internal units/step)</th><td>7.644</td><td>6.370</td></tr></tbody></table></div><p>The energy values exclude collisions, wall contacts, Dash and rail costs. Speed changes after launch. Physics steps are not match seconds or measured RPM, and these values do not predict a winner or full spin duration.</p></section>
+<div style="text-align: left; margin-bottom: 30px;">
+        <h3>Launch Experiments</h3><p>Compare time and route to first contact, then note energy lost at that collision. Keep both power settings fixed before testing a different angle. A quicker start does not cancel the larger received-damage factor associated with Pizza’s lower mass.</p>
         <p><strong>Suggested Matchups:</strong> Test against <a href="/characters/fire/" style="color:var(--accent-cyan);">🔥 Fire</a> or <a href="/characters/clown/" style="color:var(--accent-cyan);">🤡 Clown</a>.</p>
       </div>
 
@@ -92,7 +93,7 @@
         <a href="/?emoji=🍕" class="primary-glow-btn" style="text-decoration: none; padding: 14px 28px;">Battle with 🍕 in Arena 🚀</a>
         <a href="/generator/?emoji=🍕" class="secondary-btn" style="text-decoration: none; padding: 14px 24px; display:inline-block;">Analyze 🍕 in Top Builder 🛠️</a>
       </div>
-      <section style="text-align: left;" aria-label="Character FAQ">
+      <section id="practice-setup" style="text-align:left"><h2>Set up a fair local comparison</h2><p>Choose the standard arena. Set Player 1 to 70% power and -35°, then Player 2 to 70% and -145°. Start without Dash, repeat rounds, then swap the tops between left and right and mirror the angles. Restore the starting setup before changing only Player 1 power to 85%. These are experiment settings, not an optimized build.</p><p>Record the game version, both tops and sides, arena, power, angles, Dash use, rail contacts, critical hits, remaining energy and outcome. Keep Hazard trials separate; local practice does not advance solo stages or streaks. <a href="/guide/launch-power-angle/">Full launch experiment guide</a>.</p></section><section style="text-align: left;" aria-label="Character FAQ">
         <h2>Frequently Asked Questions</h2>
         <h3>What is Pizza Wheel's main combat profile in Emoji Blade?</h3>
         <p>Pizza Wheel trades high attack for 86 Endurance, 74 Mass, and 78 Speed, making it a reliable stamina top that outlasts glass-cannon attackers.</p>

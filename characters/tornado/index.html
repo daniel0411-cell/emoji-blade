@@ -28,7 +28,7 @@
           "name": "How does Vortex Tornado perform in long matches?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "With 94 Speed and 94 Endurance, Vortex Tornado outspins most opponents in low-contact matches, though its 65 Mass makes heavy clashes risky."
+            "text": "With 94 Endurance, Vortex Tornado loses 5.130 passive energy over 100 physics steps, excluding contact and ability costs. Its 94 Speed gives a fast launch, but its 65 Mass increases the received-damage factor compared with heavier tops. These ratings do not establish a win rate."
           }
         },
         {
@@ -74,7 +74,7 @@
       <p style="text-align: left; font-size: 16px; margin-bottom: 24px;">Vortex Tornado combines 94 Speed and 94 Endurance with only 65 Mass. It starts quickly and drains spin energy slowly, but low mass increases damage received from collisions. There is no stamina-steal ability: its advantage comes from the shared endurance formula.</p>
 
       <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; margin-bottom: 24px; text-align: left;">
-        <h3 style="color: var(--accent-cyan); margin-bottom: 12px;">Official Attribute Specs</h3>
+        <h3 style="color: var(--accent-cyan); margin-bottom: 12px;">Base Preset Ratings</h3>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-family: var(--font-mono);">
           <div>Mass (Weight): <strong>65 / 100</strong></div>
           <div>Attack (Clash): <strong>78 / 100</strong></div>
@@ -83,8 +83,9 @@
         </div>
       </div>
 
-      <div style="text-align: left; margin-bottom: 30px;">
-        <h3>Launch Experiments</h3><p>Compare 50%, 70%, and 90% power while keeping the angle unchanged. Wall contact drains energy, and random critical hits can change the winner. Repeat battles rather than treating one result as a guaranteed matchup.</p>
+      <div class="quick-practice" style="text-align:left"><p><a class="primary-glow-btn" href="/?mode=2p&amp;emoji=%F0%9F%8C%AA%EF%B8%8F&amp;rival=%E2%9A%A1">Practice Tornado vs Lightning</a></p><p><a class="comparison-link" href="/generator/?emoji=%F0%9F%8C%AA%EF%B8%8F&amp;rival=%E2%9A%A1">Compare both sets of ratings</a></p><p><a href="#practice-setup">See the launch setup</a></p><p>Selects both tops on this device; you set both launches before the battle starts.</p></div><section style="text-align:left"><h2>Tornado vs Lightning: endurance without maximum speed</h2><p>Tornado combines 94 Speed and 94 Endurance with 65 Mass and 78 Attack. Lightning launches faster at 99 Speed and has 88 Attack, but only 74 Endurance and 60 Mass. Tornado’s lower passive drain is a specific formula advantage, not evidence that it outspins most opponents.</p><p><a href="/characters/lightning/">Lightning character guide</a></p></section><section style="text-align:left"><h2>Formula examples: what the ratings change</h2><p>Passive drain per physics step is <code>0.048 + (100 - endurance) × 0.00055</code>. Initial movement speed is <code>speed / 100 × 14 × power / 100</code>.</p><div class="stats-table-scroll" tabindex="0" role="region" aria-label="Formula examples, scroll horizontally on small screens"><table class="character-stats-table"><caption>Base presets; isolated calculations, not measured battle results. Scroll sideways on narrow screens.</caption><thead><tr><th scope="col">Calculation</th><th scope="col">Tornado</th><th scope="col">Lightning</th></tr></thead><tbody><tr><th scope="row">Passive energy lost over 100 physics steps</th><td>5.130</td><td>6.230</td></tr><tr><th scope="row">Initial speed at 70% power (internal units/step)</th><td>9.212</td><td>9.702</td></tr></tbody></table></div><p>The energy values exclude collisions, wall contacts, Dash and rail costs. Speed changes after launch. Physics steps are not match seconds or measured RPM, and these values do not predict a winner or full spin duration.</p></section>
+<div style="text-align: left; margin-bottom: 30px;">
+        <h3>Launch Experiments</h3><p>Record both the quiet intervals and the energy jumps at contact. Tornado’s 94 Endurance reduces passive drain; it does not reduce incoming collision damage. Neither top steals energy, and both remain vulnerable to Hazard ring-outs.</p>
         <p><strong>Suggested Matchups:</strong> Test against <a href="/characters/skull/" style="color:var(--accent-cyan);">💀 Skull</a> or <a href="/characters/bomb/" style="color:var(--accent-cyan);">💣 Bomb</a>.</p>
       </div>
 
@@ -92,10 +93,10 @@
         <a href="/?emoji=🌪️" class="primary-glow-btn" style="text-decoration: none; padding: 14px 28px;">Battle with 🌪️ in Arena 🚀</a>
         <a href="/generator/?emoji=🌪️" class="secondary-btn" style="text-decoration: none; padding: 14px 24px; display:inline-block;">Analyze 🌪️ in Top Builder 🛠️</a>
       </div>
-      <section style="text-align: left;" aria-label="Character FAQ">
+      <section id="practice-setup" style="text-align:left"><h2>Set up a fair local comparison</h2><p>Choose the standard arena. Set Player 1 to 70% power and -35°, then Player 2 to 70% and -145°. Start without Dash, repeat rounds, then swap the tops between left and right and mirror the angles. Restore the starting setup before changing only Player 1 power to 85%. These are experiment settings, not an optimized build.</p><p>Record the game version, both tops and sides, arena, power, angles, Dash use, rail contacts, critical hits, remaining energy and outcome. Keep Hazard trials separate; local practice does not advance solo stages or streaks. <a href="/guide/launch-power-angle/">Full launch experiment guide</a>.</p></section><section style="text-align: left;" aria-label="Character FAQ">
         <h2>Frequently Asked Questions</h2>
         <h3>How does Vortex Tornado perform in long matches?</h3>
-        <p>With 94 Speed and 94 Endurance, Vortex Tornado outspins most opponents in low-contact matches, though its 65 Mass makes heavy clashes risky.</p>
+        <p>With 94 Endurance, Vortex Tornado loses 5.130 passive energy over 100 physics steps, excluding contact and ability costs. Its 94 Speed gives a fast launch, but its 65 Mass increases the received-damage factor compared with heavier tops. These ratings do not establish a win rate.</p>
         <h3>Does Vortex Tornado have a vacuum or stamina-stealing ability?</h3>
         <p>No. There are no elemental or magical siphon mechanics. Its stamina advantage stems strictly from low passive decay under the game's endurance formula.</p>
       </section>
