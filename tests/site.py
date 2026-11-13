@@ -86,7 +86,7 @@ for file in pages:
     localized_character = (len(relative.parts) == 4
                            and relative.parts[0] in ('zh-hans', 'zh-hant', 'ja')
                            and relative.parts[1] == 'characters'
-                           and relative.parts[2] in ('bomb', 'diamond', 'fire', 'lightning', 'moai'))
+                           and relative.parts[2] in ('bomb', 'diamond', 'fire', 'lightning', 'moai', 'rocket', 'skull', 'clown', 'tornado', 'pizza'))
     if 'vs' in relative.parts or localized_character:
         assert '1.5' in ''.join(p.body_text) and '1.8' in ''.join(p.body_text), (file, 'missing critical damage distinction')
         assert any(word in ''.join(p.body_text) for word in ('Hazard', '危险擂台', '危險擂台', 'ハザード')), (file, 'missing arena mode distinction')
@@ -120,7 +120,7 @@ for file in pages:
                            'guide/launch-power-angle', 'guide/stats', 'guide/hazard-arena', 'guide/boss-streak', 'guide/dash-critical', 'guide/custom-share',
                            'vs/lightning-vs-fire', 'vs/moai-vs-diamond',
                            'characters/crown', 'characters/dragon', 'characters/oni', 'characters/invader',
-                           'characters/lightning', 'characters/diamond', 'characters/fire', 'characters/bomb', 'characters/moai'}
+                           'characters/lightning', 'characters/diamond', 'characters/fire', 'characters/bomb', 'characters/moai', 'characters/rocket', 'characters/skull', 'characters/clown', 'characters/tornado', 'characters/pizza', 'vs/crown-vs-diamond'}
         if content_route in expanded_routes:
             assert p.alternates == {
                 'x-default': base+'/'+content_route+'/', 'en': base+'/'+content_route+'/',
@@ -158,9 +158,9 @@ for prefix in ('', 'zh-hans/', 'zh-hant/', 'ja/'):
     characters = (root/prefix/'characters/index.html').read_text()
     matchups = (root/prefix/'vs/index.html').read_text()
     assert f'href="/{prefix}vs/"' in home, (prefix, 'matchup hub missing from home')
-    for slug in ('crown', 'dragon', 'oni', 'invader', 'lightning', 'diamond', 'fire', 'bomb', 'moai'):
+    for slug in ('crown', 'dragon', 'oni', 'invader', 'lightning', 'diamond', 'fire', 'bomb', 'moai', 'rocket', 'skull', 'clown', 'tornado', 'pizza'):
         assert f'href="/{prefix}characters/{slug}/"' in characters, (prefix, slug, 'detail missing from library')
-    for slug in ('diamond-vs-bomb', 'lightning-vs-moai', 'fire-vs-diamond', 'lightning-vs-fire', 'moai-vs-diamond'):
+    for slug in ('diamond-vs-bomb', 'lightning-vs-moai', 'fire-vs-diamond', 'lightning-vs-fire', 'moai-vs-diamond', 'crown-vs-diamond'):
         assert f'href="/{prefix}vs/{slug}/"' in matchups, (prefix, slug, 'matchup missing from hub')
 assert (root/'404.html').exists()
 for prefix, lang in (('', 'en'), ('zh-hans/', 'zh-Hans'), ('zh-hant/', 'zh-Hant'), ('ja/', 'ja')):
