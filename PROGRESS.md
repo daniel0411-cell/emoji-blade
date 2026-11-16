@@ -1,5 +1,11 @@
 # 更新检查点
 
+## 2026-11-16（结构化目录第二阶段，本地待发布）
+
+- 将挑战目录链接接入英文 Characters、Tier List、Matchups 三个入口，减少攻略与实际玩法之间的跳转距离。
+- 新增 `/guide/challenges/record-sheet/` 对局记录模板，记录浏览器、视口、双方设置、首次碰撞、暴击/Xtreme、剩余能量和重复结果；不收集或上传用户数据。
+- 目录增加记录模板卡片，sitemap 增至 157 个页面。`npm test` 通过；尚未提交、推送或部署。
+
 ## 2026-11-16（结构化目录第一阶段，本地待发布）
 
 - 依据参考站点审阅结果，在英文 `/guide/challenges/` 建立挑战／场景目录，加入 All、Progression、Arena rules、Matchups、Local play 筛选按钮。
