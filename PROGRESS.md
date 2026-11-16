@@ -1,10 +1,12 @@
 # 更新检查点
 
-## 2026-11-16（结构化目录第二阶段，本地待发布）
+## 2026-11-16（结构化目录第二阶段，已发布）
 
 - 将挑战目录链接接入英文 Characters、Tier List、Matchups 三个入口，减少攻略与实际玩法之间的跳转距离。
 - 新增 `/guide/challenges/record-sheet/` 对局记录模板，记录浏览器、视口、双方设置、首次碰撞、暴击/Xtreme、剩余能量和重复结果；不收集或上传用户数据。
 - 目录增加记录模板卡片，sitemap 增至 157 个页面。`npm test` 通过；尚未提交、推送或部署。
+- 提交 `3f6cac4a59515f8c5e6cb6fb5932666a5a1840a` 已推送 GitHub main。Cloudflare Production 部署 `5fe365c4-a696-42b1-8ede-05e90a21bd77`，来源 `3f6cac4`，预览地址 `https://5fe365c4.emoji-blade.pages.dev`，正式域名为 `https://emojiblade.online`。
+- 发布后核验挑战目录、记录模板、Characters、Tier List、Matchups 与 sitemap 均 HTTP 200；未运行成功本轮视觉测试，不将其声称为通过。
 
 ## 2026-11-16（结构化目录第一阶段，本地待发布）
 
