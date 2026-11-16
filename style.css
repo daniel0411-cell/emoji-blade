@@ -1589,6 +1589,15 @@ input[type="range"] {
 .guide-directory > h2 { grid-column: 1 / -1; margin: 0; }
 .guide-directory h3 { margin: 0 0 8px; }
 .guide-directory ul { margin-bottom: 0; }
+.scenario-directory { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 24px 0 32px; }
+.scenario-card { display: flex; flex-direction: column; gap: 8px; padding: 18px; border: 1px solid var(--bg-card-border); border-radius: 14px; background: rgba(255,255,255,.68); }
+.scenario-card h3 { margin: 0; font-size: 18px; }
+.scenario-card p { margin: 0; color: var(--text-muted); font-size: 14px; line-height: 1.6; }
+.scenario-card a { margin-top: auto; font-weight: 700; }
+.scenario-filter-note { color: var(--text-muted); font-size: 14px; }
+.scenario-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 4px; }
+.scenario-filter { border: 1px solid var(--bg-card-border); border-radius: 999px; padding: 7px 12px; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+.scenario-filter[aria-pressed="true"], .scenario-filter:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
 @media (min-width: 640px) {
   .guide-directory { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

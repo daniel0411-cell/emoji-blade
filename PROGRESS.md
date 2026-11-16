@@ -1,8 +1,16 @@
 # 更新检查点
 
+## 2026-11-16（结构化目录第一阶段，本地待发布）
+
+- 依据参考站点审阅结果，在英文 `/guide/challenges/` 建立挑战／场景目录，加入 All、Progression、Arena rules、Matchups、Local play 筛选按钮。
+- 新增 5 个可复现场景页：Boss 5 Oni、Boss 10 Invader、Hazard 出界口、Moai vs Diamond、同设备双人基线。每页统一提供开始条件、重复设置、记录字段和结果复盘；明确这些是实验与练习路线，不是胜率或必胜配置。
+- 目录与 5 页均使用独立 canonical、英文 x-default/en 标记、CollectionPage/Article JSON-LD，并加入 sitemap；未批量创建不存在的多语言替代页。
+- `npm test` 通过，静态站从 150 页增至 156 页。`npm run test:visual` 本次启动 Chrome 时出现浏览器进程 SIGABRT，属于运行环境故障，未据此声称视觉测试通过；此前页面视觉测试仍保留在上一轮回执中。
+- 本阶段尚未提交、推送或部署，保留本地发布回执文档改动，待用户决定继续补充内容或发布。
+
 ## 2026-11-16
 
-### 第十二轮：依据 GSC / Bing 审计深化既有入口（待发布）
+### 第十二轮：依据 GSC / Bing 审计深化既有入口（已发布）
 
 - 用户授权实施并直接部署。重新 fetch、查询远程 HEAD，main 跟踪 origin/main，默认 main；三者均为 dc7130f019e26be86c03599da3799814828fb5bf，独有提交 0/0。保留并一同发布上轮 9 页、两张 SVG 与审计记录。
 - 本轮更新 10 个既有页面：日文首页、指南、角色目录与 Tier List 增加第一场操作和按目标选角路径；繁体首页、指南、角色目录、FAQ、模拟器说明澄清即玩/自订工具/本地双人并修正不自然术语；英文角色目录为已发现未索引的四角色增加相关内链。共计 19 个产品页面，无新增 URL 或游戏机制。
@@ -10,6 +18,10 @@
 - npm test 通过（150 HTML 页面与游戏回归）；10 页在 320/390/1440 像素共 30 组浏览器检查通过，无横向溢出、破图、运行错误，已检查日文与繁体手机截图及新摩艾/钻石双人预选入口。四语言五档视口视觉测试、单人/双人取消发射、冲刺与本地化反馈测试亦通过。
 - Cloudflare 生产部署记录确认旧版为 0c7a9d85-0d8e-4a84-a0df-d11dd9b20cb3，来源 dc7130f。发布前线上四语言 24 个核心入口均通过响应、canonical、索引指令、robots 和 sitemap 检查，随机缺失页返回 404；地图 149 个 URL。
 - 尚未取得生产 WAF/抓取日志，不能判定 Bingbot 被拦截。一次普通 urllib UA 请求 403 不代表真实 Bingbot 状态；发布核验 UA 正常。日文流量下降原因和 Bing 未爬取仍待观察，不能宣称已恢复。
+- 发布回执：提交 `053d91ecd561ba9a22c087e46ad6c6a0972f068c` 已推送 GitHub main；Regression checks 成功（https://github.com/daniel0411-cell/emoji-blade/actions/runs/43789093718）。推送与部署前分别再次 fetch，部署时 HEAD/origin/main 为同一提交、关系 0/0、工作区干净。
+- Cloudflare Production 部署 `31f7245c-a1fc-4d05-8b7d-202a21389306`，Source=053d91e、Branch=main。正式域名 19 页 HTML 仅移除 Cloudflare 注入的统计 beacon 后与提交完全一致；两张 SVG、game.js、sitemap.xml、robots.txt 原始 SHA256 一致，共 24 文件通过。
+- 发布后 2026-11-16T01:57:38Z 四语言 24 核心入口的响应、canonical、robots、索引指令与 sitemap 均通过，地图仍 149 URL、随机缺失页 404。向 Bing IndexNow 仅通知本次 19 个变更规范 URL，HTTP 200 接收；不代表已抓取或已收录。
+- 本发布回执在部署核验后写入本地维护文档，未另行提交；生产内容与 GitHub 对应上述提交。
 - 后续以原审计口径在发布后 7/14/28 天比较，真实对局采样留作下一阶段，未虚构胜率。
 
 ## 2026-11-15
