@@ -10,7 +10,8 @@ import urllib.robotparser
 import xml.etree.ElementTree as ET
 
 BASE = 'https://emojiblade.online'
-CORE = ['/', '/2-player-duel/', '/spinning-top-simulator/', '/guide/', '/characters/', '/tier-list/']
+CORE = [prefix + route for prefix in ('', '/ja', '/zh-hans', '/zh-hant')
+        for route in ('/', '/2-player-duel/', '/spinning-top-simulator/', '/guide/', '/characters/', '/tier-list/')]
 KEY = '18550ac5f1541580aaa3344d2f70a385'
 
 
@@ -72,7 +73,15 @@ def audit():
         raise SystemExit('FAIL: core-page release checks')
 
 
-def submit_indexnow():
+def submit_indexnow(routes):
+    if not routes:
+        raise SystemExit('Specify the changed canonical paths with --routes before notifying IndexNow')
+    if len(set(routes)) != len(routes) or any(not route.startswith('/') or route.startswith('//') or any(char in route for char in ('?', '#', '\\')) for route in routes):
+        raise SystemExit('Use unique canonical paths only, without parameters or fragments')
+    _, _, _, xml = fetch(BASE + '/sitemap.xml')
+    published = {node.text for node in ET.fromstring(xml).findall('{*}url/{*}loc')}
+    if any(BASE + route not in published for route in routes):
+        raise SystemExit('Every notification URL must be in the published sitemap')
     # The public verification file must already be deployed before notifying the engine.
     _, _, _, published_key = fetch(f'{BASE}/{KEY}.txt')
     if published_key.strip() != KEY:
@@ -81,7 +90,7 @@ def submit_indexnow():
     if local != KEY:
         raise SystemExit('Local IndexNow verification file does not match')
     body = {'host': 'emojiblade.online', 'key': KEY, 'keyLocation': f'{BASE}/{KEY}.txt',
-            'urlList': [BASE + route for route in CORE]}
+            'urlList': [BASE + route for route in routes]}
     request = urllib.request.Request('https://www.bing.com/indexnow',
                                      data=json.dumps(body).encode(),
                                      headers={'Content-Type': 'application/json'}, method='POST')
@@ -93,8 +102,9 @@ def submit_indexnow():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--submit-indexnow', action='store_true')
+    parser.add_argument('--routes', nargs='+', help='Changed canonical paths for an explicit IndexNow notification')
     args = parser.parse_args()
     if args.submit_indexnow:
-        submit_indexnow()
+        submit_indexnow(args.routes)
     else:
         audit()
